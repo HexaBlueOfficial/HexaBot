@@ -29,7 +29,7 @@ class Core(commands.Cog):
     async def info(self, ctx):
         """Shows information about Earth."""
 
-        e = discord.Embed(title="About Earth", description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
+        e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developer", value="<@450678229192278036>")
@@ -51,7 +51,7 @@ class Core(commands.Cog):
         except asyncio.TimeoutError:
             return
         else:
-            await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author}!")
+            await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
 
 def setup(bot):
     bot.add_cog(Core(bot))
