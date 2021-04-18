@@ -7,6 +7,10 @@ class Utility(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.bot.launch_time = datetime.utcnow()
     
     @commands.command(name="uptime", aliases=["up", "upt"])
     async def uptime(self, ctx):
