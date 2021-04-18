@@ -1,5 +1,6 @@
 import discord
 import random
+import asyncio
 from discord.ext import commands, tasks
 
 class Core(commands.Cog):
@@ -23,6 +24,34 @@ class Core(commands.Cog):
     @presence.before_loop
     async def before_presence(self):
         await self.bot.wait_until_ready()
+    
+    @commands.command(name="info")
+    async def info(self, ctx):
+        """Shows information about Earth."""
+
+        e = discord.Embed(title="About Earth", description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Developer", value="<@450678229192278036>")
+        e.add_field(name="Versions", value=f"Earth: v0.0.2 (Alpha 2)\ndiscord.py: v{discord.__version__}")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+    
+    @commands.command(name="arth", hidden=True)
+    async def arth(self, ctx):
+        """???"""
+
+        await ctx.send("hello there")
+
+        def check(m):
+            return m.content.lower() == "general kenobi" and m.channel == ctx.channel
+        
+        try:
+            waitfor = await self.bot.wait_for("message", check=check, timeout=30.0)
+        except asyncio.TimeoutError:
+            return
+        else:
+            await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author}!")
 
 def setup(bot):
     bot.add_cog(Core(bot))

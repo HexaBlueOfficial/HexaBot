@@ -11,7 +11,7 @@ tracemalloc.start()
 @bot.event
 async def on_ready():
     channel = bot.get_channel(832658141274439690)
-    await channel.send(f"Earth is ready and running on discord.py {discord.__version__}!")
+    await channel.send(f"Earth is ready and running on discord.py v{discord.__version__}!")
 
 @bot.event
 async def on_command_error(ctx, error):
