@@ -25,16 +25,6 @@ class Core(commands.Cog):
     async def before_presence(self):
         await self.bot.wait_until_ready()
     
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        e = discord.Embed(title=f"Welcome to {member.guild.name}!", color=0x00a8ff, description=f"Welcome to {member.guild.name}, {member.mention}!\nMake sure to read the rules in <#832657623458381911> and equip some roles in <#832658940676014100>.\nWe hope you'll have a great time saving the Earth with us!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-
-        channel = self.bot.get_channel(832677639944667186)
-        await channel.send(embed=e)
-    
     @commands.command(name="info")
     async def info(self, ctx):
         """Shows information about Earth."""
