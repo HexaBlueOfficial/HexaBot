@@ -33,7 +33,7 @@ class Core(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developer", value="<@450678229192278036>")
-        e.add_field(name="Versions", value=f"Earth: v0.0.2 (Alpha 2)\ndiscord.py: v{discord.__version__}")
+        e.add_field(name="Versions", value=f"Earth: v0.0.3 (Alpha 3)\ndiscord.py: v{discord.__version__}")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
