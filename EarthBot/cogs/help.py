@@ -17,7 +17,7 @@ class HelpCommand(commands.MinimalHelpCommand): # pylint: disable=all
 
     async def send_bot_help(self, mapping):
         ctx = self.context
-        embed = discord.Embed(title="Earth's Commands", color=0x00a8ff, description="The following is a list of commands for Earth.\nCredit to <@598325949808771083> for giving a template.")
+        embed = discord.Embed(title="Earth's Commands", color=0x00a8ff, description="The following is a list of commands for Earth.")
         embed.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         embed.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         bot = self.context.bot
