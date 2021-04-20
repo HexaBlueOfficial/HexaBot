@@ -3,7 +3,10 @@ import tracemalloc
 import asyncio
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."))
+intents = discord.Intents.default()
+intents.members = True
+intents.presence = True
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=intents)
 bot.remove_command("help")
 
 tracemalloc.start()
