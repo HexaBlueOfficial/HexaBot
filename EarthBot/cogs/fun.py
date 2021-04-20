@@ -10,7 +10,7 @@ class Fun(commands.Cog):
     @flags.add_flag("-m", default="I think you haven't understood how flags work: your message needs to go in the `-m` flag.")
     @flags.add_flag("-a", action="store_true")
     @flags.add_flag("-u", type=discord.User, default=None)
-    @flags.add_flag("-c", type=discord.Channel, default=None)
+    @flags.add_flag("-c", type=discord.TextChannel, default=None)
     @flags.command(name="say")
     async def say(self, ctx, **flags):
         """The bot will say what you tell him to.\n\nFlags:\n`-m` - Message flag. Whatever you put after this flag and before the next flag will be the message repeated by the bot. If your message has more than a word, use quotation marks.\n`-a` - Anonymization flag. Makes your message (`-m` flag content) anonymous.\n`-u` - User flag. Makes it look like another user sent your message (`-m` flag content). Works with username, username#discriminator, @mention and ID. Users outside this server will not work.\n`-c` - Channel flag."""
