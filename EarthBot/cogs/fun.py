@@ -15,6 +15,11 @@ class Fun(commands.Cog):
     async def say(self, ctx, **flags):
         """The bot will say what you tell him to.\n\nFlags:\n`-m` - Message flag. Whatever you put after this flag and before the next flag will be the message repeated by the bot.\n`-a` - Anonymization flag. Makes your message (`-m` flag content) anonymous.\n`-u` - User flag. Makes it look like another user sent your message (`-m` flag content). Works with username, username#discriminator, @mention and ID. Users outside this server will not work.\n`-c` - Channel flag."""
 
+        if "@everyone" in flags["m"].lower():
+            await ctx.author.send("Don't even try, idiot. You think I'm so stupid not to make a check?")
+        if "@here" in flags["m"].lower():
+            await ctx.author.send("Don't even try, idiot. You think I'm so stupid not to make a check?")
+        
         if flags["a"]:
             if flags["c"] is None:
                 avatar = await self.bot.user.avatar_url.read()
