@@ -29,7 +29,10 @@ class Core(commands.Cog):
     async def on_message(self, message):
         channels = [832658521731498005, 832659080841134110, 832659031847993344, 832659442213453871, 832660792397791262, 832661047398760450, 832671013753454602]
         if message.channel.id in channels:
-            await message.publish()
+            if message.author.id == 338222603829510164:
+                return
+            else:
+                await message.publish()
     
     @commands.command(name="info")
     async def info(self, ctx):
