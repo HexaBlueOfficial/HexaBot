@@ -194,7 +194,7 @@ class Utility(commands.Cog):
     async def nitro(self, ctx, emojiname):
         """Sends animated emojis (from this server) with your name."""
 
-        emoji = await discord.utils.get(ctx.guild.emojis, name=emojiname)
+        emoji = discord.utils.get(ctx.guild.emojis, name=emojiname)
 
         avatar = await ctx.author.avatar_url.read()
         webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Nitro command.")
