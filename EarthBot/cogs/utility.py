@@ -189,6 +189,19 @@ class Utility(commands.Cog):
         e.add_field(name="Roles", value=string)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await fetching.edit(content=None, embed=e)
+    
+    @commands.command(name="nitro")
+    async def nitro(self, ctx, emojiname):
+        """Sends animated emojis (from this server) with your name."""
+
+        emoji = await discord.utils.get(ctx.guild.emojis, name=emojiname)
+
+        avatar = await ctx.author.avatar_url.read()
+        webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Nitro command.")
+
+        await webhook.send(f"<a:{emoji.name}:{emoji.id}>")
+        await ctx.message.delete()
+        await webhook.delete()
 
 def setup(bot):
     bot.add_cog(Utility(bot))
