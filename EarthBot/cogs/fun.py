@@ -47,7 +47,7 @@ class Fun(commands.Cog):
         await webhook.delete()
     
     @commands.command(name="uwu")
-    async def uwu(self, ctx, sentence: str):
+    async def uwu(self, ctx, *, sentence: str):
         """Reject English, evolve to Furry."""
 
         uwu = sentence.lower()
