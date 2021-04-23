@@ -28,24 +28,8 @@ class Core(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         channels = [832658521731498005, 832659080841134110, 832659031847993344, 832659442213453871, 832660792397791262, 832661047398760450, 832671013753454602]
-        if message.channel.id == 832660792397791262:
-            role = message.guild.get_role(833421078239510528)
-            await role.edit(mentionable=True)
-            await message.channel.send("<@&833421078239510528>")
-            await role.edit(mentionable=False)
-        elif message.channel.id == 832661047398760450:
-            role = message.guild.get_role(833421049587564655)
-            await role.edit(mentionable=True)
-            await message.channel.send("<@&833421049587564655>")
-            await role.edit(mentionable=False)
-        elif message.channel.id == 832671013753454602:
-            role = message.guild.get_role(833420855282237453)
-            await role.edit(mentionable=True)
-            await message.channel.send("<@&833420855282237453>")
-            await role.edit(mentionable=False)
         if message.channel.id in channels:
-            if message.author.id != 833038899306692639:
-                await message.publish()
+            await message.publish()
     
     @commands.command(name="info")
     async def info(self, ctx):
