@@ -29,10 +29,17 @@ class Core(commands.Cog):
     async def on_message(self, message):
         channels = [832658521731498005, 832659080841134110, 832659031847993344, 832659442213453871, 832660792397791262, 832661047398760450, 832671013753454602]
         if message.channel.id in channels:
-            if message.author.id == 338222603829510164:
+            if message.author.id == 833038899306692639:
                 return
             else:
                 await message.publish()
+        if message.channel.id == channels[4]:
+            role = message.guild.get_role(833421078239510528)
+        elif message.channel.id == channels[5]:
+            role = message.guild.get_role(833421049587564655)
+        elif message.channel.id == channels[6]:
+            role = message.guild.get_role(833420855282237453)
+        await message.channel.send(f"<@&{role.id}>")
     
     @commands.command(name="info")
     async def info(self, ctx):
