@@ -35,11 +35,13 @@ class Core(commands.Cog):
                 await message.publish()
         if message.channel.id == channels[4]:
             role = message.guild.get_role(833421078239510528)
+            await message.channel.send(f"<@&{role.id}>")
         elif message.channel.id == channels[5]:
             role = message.guild.get_role(833421049587564655)
+            await message.channel.send(f"<@&{role.id}>")
         elif message.channel.id == channels[6]:
             role = message.guild.get_role(833420855282237453)
-        await message.channel.send(f"<@&{role.id}>")
+            await message.channel.send(f"<@&{role.id}>")
     
     @commands.command(name="info")
     async def info(self, ctx):
