@@ -1,4 +1,5 @@
 import discord
+import aiohttp
 from discord.ext import commands, flags
 
 class Fun(commands.Cog):
@@ -13,6 +14,9 @@ class Fun(commands.Cog):
         uwu = uwu.replace("r", "w")
         uwu = uwu.replace("th", "d")
         return f"{uwu}, uwu *rawr* XD!"
+    
+    def loading(self, sentence):
+        return f"<a:aLoading:833070225334206504> {sentence}"
     
     @flags.add_flag("-m", default="https://discord.gg/GFkEMD45xg")
     @flags.add_flag("--uwu", action="store_true")
@@ -62,6 +66,60 @@ class Fun(commands.Cog):
         """Reject English, evolve to Furry."""
 
         await ctx.send(self.uwufy(sentence))
+    
+    @commands.command(name="cat")
+    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
+    async def cat(self, ctx):
+        """Shows a random image of a cat."""
+
+        fetching = await ctx.send(self.loading("Finding a cute cat to show you..."))
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://api.thecatapi.com/v1/images/search/") as response:
+                cat = await response.json()
+                catpic = cat[0]["url"]
+        
+        e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=0x00a8ff, description="Check out TheCatAPI [here](https://thecatapi.com)!")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_image(url=catpic)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await fetching.edit(content=None, embed=e)
+    
+    @commands.command(name="dog")
+    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
+    async def dog(self, ctx):
+        """Shows a random image of a dog."""
+
+        fetching = await ctx.send(self.loading("Finding a cute dog to show you..."))
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://api.thedogapi.com/v1/images/search/") as response:
+                dog = await response.json()
+                dogpic = dog[0]["url"]
+        
+        e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=0x00a8ff, description="Check out TheDogAPI [here](https://thedogapi.com)!")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_image(url=dogpic)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await fetching.edit(content=None, embed=e)
+    
+    @commands.command(name="fox")
+    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
+    async def fox(self, ctx):
+        """Shows a random image of a fox."""
+
+        fetching = await ctx.send(self.loading("Finding a cute fox to show you..."))
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://randomfox.ca/floof/") as response:
+                fox = await response.json()
+                foxpic = fox["image"]
+        
+        e = discord.Embed(title="Random Dog (from Random Fox by xinitrc)", color=0x00a8ff, description="Check out Random Fox [here](https://randomfox.ca)!")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_image(url=foxpic)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await fetching.edit(content=None, embed=e)
 
 def setup(bot):
     bot.add_cog(Fun(bot))

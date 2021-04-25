@@ -19,9 +19,9 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        handled = await ctx.send("The command was not found. You may want to run `e.help` for a list of commands.")
+        handled = await ctx.send("<:No:833293106198872094> The command was not found. You may want to run `e.help` for a list of commands.")
     else:
-        handled = await ctx.send(f"{error}")
+        handled = await ctx.send(f"<:No:833293106198872094> {error}")
     await ctx.message.delete()
     await asyncio.sleep(5.0)
     await handled.delete()

@@ -8,7 +8,7 @@ class Utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    async def loading(self, sentence):
+    def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> {sentence}"
 
     @commands.Cog.listener()
