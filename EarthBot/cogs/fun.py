@@ -68,7 +68,6 @@ class Fun(commands.Cog):
         await ctx.send(self.uwufy(sentence))
     
     @commands.command(name="cat")
-    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
     async def cat(self, ctx):
         """Shows a random image of a cat."""
 
@@ -86,7 +85,6 @@ class Fun(commands.Cog):
         await fetching.edit(content=None, embed=e)
     
     @commands.command(name="dog")
-    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
     async def dog(self, ctx):
         """Shows a random image of a dog."""
 
@@ -104,7 +102,6 @@ class Fun(commands.Cog):
         await fetching.edit(content=None, embed=e)
     
     @commands.command(name="fox")
-    @commands.cooldown(rate=2, per=5.0, type=commands.BucketType)
     async def fox(self, ctx):
         """Shows a random image of a fox."""
 
