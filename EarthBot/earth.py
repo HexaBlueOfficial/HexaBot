@@ -31,4 +31,4 @@ extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.utility", "jishaku"]
 for extension in extensions:
     bot.load_extension(extension)
 
-bot.run("ODMzMDM4ODk5MzA2NjkyNjM5.YHsh7g.GSbwwFAfyiEXJLzSBSAclR6_2lo")
+bot.run("ODMzMDM4ODk5MzA2NjkyNjM5.YHsh7g.3PteM-7LoByOHBNW3wJ-OppRHYI")
