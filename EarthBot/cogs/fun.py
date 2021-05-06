@@ -27,7 +27,7 @@ class Fun(commands.Cog):
         slash.utils.manage_commands.create_option("channel", "Include this to send your message in a channel that isn't the Context channel.", 7, False),
         slash.utils.manage_commands.create_option("user", "Include this to send the message as another user.", 6, False)
         ])
-    async def _say(self, ctx, message="https://discord.gg/GFkEMD45xg", anonymous=False, uwu=False, channel=None, user=None):
+    async def _say(self, ctx: slash.SlashContext, message="https://discord.gg/GFkEMD45xg", anonymous=False, uwu=False, channel=None, user=None):
         """The bot will say what you tell it to."""
 
         words = ["@everyone", "@here", "<@&832657099312857124>"]
