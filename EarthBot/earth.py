@@ -1,4 +1,5 @@
 import discord
+import discord_slash
 import tracemalloc
 import asyncio
 from discord.ext import commands
@@ -7,6 +8,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=intents)
+slash = discord_slash.SlashCommand(bot, override_type=True)
 bot.remove_command("help")
 
 tracemalloc.start()
