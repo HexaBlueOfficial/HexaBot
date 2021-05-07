@@ -1,5 +1,5 @@
 import discord
-import discord_slash
+import discord_slash as slasher
 import tracemalloc
 import asyncio
 from discord.ext import commands
@@ -8,7 +8,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=intents)
-slash = discord_slash.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True)
+slash = slasher.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True)
 bot.remove_command("help")
 
 tracemalloc.start()
@@ -29,7 +29,7 @@ async def on_command_error(ctx, error):
     await handled.delete()
     raise error
 
-extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.utility", "jishaku"]
+extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility", "jishaku"]
 for extension in extensions:
     bot.load_extension(extension)
 
