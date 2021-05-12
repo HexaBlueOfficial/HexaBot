@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class HelpCommand(commands.MinimalHelpCommand): # pylint: disable=all
+class HelpCommand(commands.MinimalHelpCommand):
     def __init__(self):
         super().__init__(command_attrs={'hidden': True})
 

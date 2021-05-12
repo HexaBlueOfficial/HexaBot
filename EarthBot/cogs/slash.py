@@ -27,10 +27,10 @@ class Slash(commands.Cog):
     async def on_ready(self):
         self.bot.launch_time = datetime.utcnow()
     
-    @slashcog.cog_slash(name="info", description="Shows information about Earth.")
+    @slashcog.cog_slash(name="info", description="Shows information about Earth.", guild_ids=[832594030264975420])
     async def _info(self, ctx: slash.SlashContext):
         luckyint = random.randint(1, 100)
-
+        
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")

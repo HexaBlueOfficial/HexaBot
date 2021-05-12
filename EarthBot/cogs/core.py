@@ -8,7 +8,7 @@ class Core(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.presence.start() # pylint: disable=no-member
+        self.presence.start()
     
     @tasks.loop(seconds=60.0)
     async def presence(self):
