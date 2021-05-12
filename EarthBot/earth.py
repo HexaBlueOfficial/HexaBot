@@ -8,7 +8,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=intents)
-slash = slasher.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True, auto_register=True)
+slash = slasher.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True)
 bot.remove_command("help")
 
 tracemalloc.start()
