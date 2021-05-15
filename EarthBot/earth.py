@@ -29,7 +29,7 @@ async def on_command_error(ctx, error):
     await handled.delete()
     raise error
 
-extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility", "jishaku"]
+extensions = ["cogs.slash", "cogs.core", "cogs.fun", "cogs.help", "cogs.utility", "jishaku"]
 for extension in extensions:
     bot.load_extension(extension)
 
