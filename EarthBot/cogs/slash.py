@@ -172,8 +172,8 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    @slashcog.cog_slash(name="userinfo", description="Retrieves information about a user. Thanks to API calls, it works even if the person you search for is outside the server!", options=[
-        slash.utils.manage_commands.create_option("user", "The user to find. You can select from the popup list, use @mention, username, username#discriminator, or an ID.", 6, False)
+    @slashcog.cog_slash(name="userinfo", description="Retrieves information about a user.", options=[
+        slash.utils.manage_commands.create_option("user", "The user to find. You can select from the popup list, type their username, or their ID.", 6, False)
     ])
     async def _userinfo(self, ctx: slash.SlashContext, user=None):
         if user is None:
