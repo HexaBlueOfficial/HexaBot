@@ -1,5 +1,7 @@
 import discord
+import json
 import aiohttp
+import random
 from discord.ext import commands, flags
 
 class Fun(commands.Cog):
@@ -7,6 +9,8 @@ class Fun(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        with open("./EarthBot/misc/hug.json") as hugs:
+            self.huglines = json.load(hugs)
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
@@ -18,7 +22,7 @@ class Fun(commands.Cog):
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> {sentence}"
 
-    @flags.add_flag("-m", default="https://discord.gg/GFkEMD45xg")
+    @flags.add_flag("-m", default="https://discord.gg/DsARcGwwdM")
     @flags.add_flag("--uwu", action="store_true")
     @flags.add_flag("-a", action="store_true")
     @flags.add_flag("-u", type=discord.User, default=None)
@@ -58,7 +62,7 @@ class Fun(commands.Cog):
             await webhook.send(flags["m"])
         else:
             await webhook.send(self.uwufy(flags["m"]))
-        await ctx.flags["m"].delete()
+        await ctx.message.delete()
         await webhook.delete()
     
     @commands.command(name="uwu")
@@ -117,6 +121,22 @@ class Fun(commands.Cog):
         e.set_image(url=foxpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await fetching.edit(content=None, embed=e)
+
+    @commands.command(name="hug")
+    async def hug(self, ctx, member: discord.Member, *, message=None):
+        """Hugs the user you want."""
+
+        huglineint = random.randint(0, 9)
+        halfpoint = self.huglines[str(huglineint)].replace("author", ctx.author.mention)
+        hugline = halfpoint.replace("member", member.mention)
+        
+        e = discord.Embed(title="Hug", color=0x00a8ff, description=f"{hugline}")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        if message is not None:
+            e.add_field(name=f"{ctx.author.name} included a message! He said...", value=f"{message}", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+        await ctx.message.delete()
 
 def setup(bot):
     bot.add_cog(Fun(bot))

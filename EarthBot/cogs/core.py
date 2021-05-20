@@ -52,10 +52,10 @@ class Core(commands.Cog):
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
+        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
         if luckyint == 69:
-            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.1.2\ndiscord.py: v{discord.__version__}", inline=False)
+            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.1.3\ndiscord.py: v{discord.__version__}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
