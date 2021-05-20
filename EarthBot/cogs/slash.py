@@ -16,7 +16,7 @@ class Slash(commands.Cog):
         with open("./Earth/EarthBot/misc/hug.json") as hugs:
             self.huglines = json.load(hugs)
         with open("./Earth/EarthBot/misc/kill.json") as kills:
-            self.killines = json.load(kills)
+            self.killlines = json.load(kills)
         with open("./Earth/EarthBot/misc/gay.json") as gays:
             self.gaylines = json.load(gays)
         with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
