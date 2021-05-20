@@ -269,7 +269,7 @@ class Slash(commands.Cog):
     ])
     async def _eightball(self, ctx: slash.SlashContext, question):
         balllineint = random.randint(0, 4)
-        ballline = self.balllines[balllineint]
+        ballline = self.balllines[str(balllineint)]
 
         e = discord.Embed(title="Gay Percentage", color=0x00a8ff)
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
