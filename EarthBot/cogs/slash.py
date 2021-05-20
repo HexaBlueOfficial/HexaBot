@@ -271,7 +271,7 @@ class Slash(commands.Cog):
         balllineint = random.randint(0, 4)
         ballline = self.balllines[str(balllineint)]
 
-        e = discord.Embed(title="Gay Percentage", color=0x00a8ff)
+        e = discord.Embed(title="Magic 8 Ball", color=0x00a8ff)
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Your Question", value=f"{question}", inline=False)
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
