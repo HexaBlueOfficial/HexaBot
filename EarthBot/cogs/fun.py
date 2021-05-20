@@ -9,7 +9,7 @@ class Fun(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        with open("./EarthBot/misc/hug.json") as hugs:
+        with open("./Earth/EarthBot/misc/hug.json") as hugs:
             self.huglines = json.load(hugs)
     
     def uwufy(self, sentence: str):
