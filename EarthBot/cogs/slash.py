@@ -15,6 +15,12 @@ class Slash(commands.Cog):
         self.bot = bot
         with open("./Earth/EarthBot/misc/hug.json") as hugs:
             self.huglines = json.load(hugs)
+        with open("./Earth/EarthBot/misc/kill.json") as kills:
+            self.killines = json.load(kills)
+        with open("./Earth/EarthBot/misc/gay.json") as gays:
+            self.gaylines = json.load(gays)
+        with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
+            self.balllines = json.load(eightballs)
     
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> {sentence}"
@@ -40,7 +46,7 @@ class Slash(commands.Cog):
         e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
         if luckyint == 69:
             e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.1.3\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.2.0\ndiscord.py: v{discord.__version__}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
@@ -152,6 +158,123 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         if message is not None:
             e.add_field(name=f"{ctx.author.name} included a message! He said...", value=f"{message}", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+    
+    @slashcog.cog_slash(name="kill", description="Kills the user you want.", options=[
+        slash.utils.manage_commands.create_option("member", "The user you want to kill. You can select from the popup list, type their username, or their ID.", 6, True)
+    ])
+    async def _kill(self, ctx: slash.SlashContext, member):
+        killlineint = random.randint(0, 4)
+        halfpoint = self.killlines[str(killlineint)].replace("author", ctx.author.mention)
+        killline = halfpoint.replace("member", member.mention)
+        
+        e = discord.Embed(title="Murder", color=0x00a8ff, description=f"{killline}")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+        await ctx.message.delete()
+    
+    @slashcog.cog_slash(name="gaypercent", description="Wanna find out how gay something is? This command is for you.", options=[
+        slash.utils.manage_commands.create_option("thing", "The thing you want to see the gay% of. Can be a user.", 3, False)
+    ])
+    async def _gaypercent(self, ctx: slash.SlashContext, thing=None):
+        gay = random.randint(0, 100)
+        supergay = random.randint(1, 10)
+
+        def makeline(jsonline):
+            halfpoint = self.gaylines[jsonline].replace("thing", thing)
+            gayliner = halfpoint.replace("gaypercent", f"{gay}%")
+            return gayliner
+        
+        if thing is None:
+            thing = ctx.author.mention
+
+            if supergay == 8:
+                gay = gay * 10
+            
+            if gay == 0:
+                gayline = makeline("0")
+            elif gay <= 25:
+                gayline = makeline("1to25")
+            elif gay <= 50:
+                gayline = makeline("26to50")
+            elif gay <= 75:
+                gayline = makeline("51to75")
+            elif gay <= 99:
+                gayline = makeline("76to99")
+            elif gay == 100:
+                gayline = makeline("100")
+            elif gay > 100:
+                gayline = makeline("over100")
+            
+            e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
+            e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+            e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+            await ctx.send(embed=e)
+        else:
+            try:
+                gayid = int(thing)
+            except:
+                if supergay == 8:
+                    gay = gay * 10
+            
+                if gay == 0:
+                    gayline = makeline("0")
+                elif gay <= 25:
+                    gayline = makeline("1to25")
+                elif gay <= 50:
+                    gayline = makeline("26to50")
+                elif gay <= 75:
+                    gayline = makeline("51to75")
+                elif gay <= 99:
+                    gayline = makeline("76to99")
+                elif gay == 100:
+                    gayline = makeline("100")
+                elif gay > 100:
+                    gayline = makeline("over100")
+            
+                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
+                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                await ctx.send(embed=e)
+            else:
+                thing = self.bot.fetch_user(gayid)
+
+                if supergay == 8:
+                    gay = gay * 10
+            
+                if gay == 0:
+                    gayline = makeline("0")
+                elif gay <= 25:
+                    gayline = makeline("1to25")
+                elif gay <= 50:
+                    gayline = makeline("26to50")
+                elif gay <= 75:
+                    gayline = makeline("51to75")
+                elif gay <= 99:
+                   gayline = makeline("76to99")
+                elif gay == 100:
+                    gayline = makeline("100")
+                elif gay > 100:
+                    gayline = makeline("over100")
+            
+                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
+                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                await ctx.send(embed=e)
+    
+    @slashcog.cog_slash(name="8ball", description="Seek an answer from the Magic 8 Ball.", options=[
+        slash.utils.manage_commands.create_option("question", "What you want to ask the Magic 8 Ball.", 3, True)
+    ])
+    async def _eightball(self, ctx: slash.SlashContext, question):
+        balllineint = random.randint(0, 4)
+        ballline = self.balllines[balllineint]
+
+        e = discord.Embed(title="Gay Percentage", color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Your Question", value=f"{question}", inline=False)
+        e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
