@@ -157,7 +157,6 @@ class Fun(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
-        await ctx.message.delete()
     
     @commands.command(name="gaypercent", aliases=["gay", "howgay"])
     async def gaypercent(self, ctx, *, thing=None):

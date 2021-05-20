@@ -173,7 +173,6 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
-        await ctx.message.delete()
     
     @slashcog.cog_slash(name="gaypercent", description="Wanna find out how gay something is? This command is for you.", options=[
         slash.utils.manage_commands.create_option("thing", "The thing you want to see the gay% of. Can be a user.", 3, False)
