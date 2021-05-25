@@ -2,7 +2,7 @@ import discord
 import discord_slash as slasher
 import tracemalloc
 import asyncio
-import os
+import json
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -34,4 +34,7 @@ extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility"
 for extension in extensions:
     bot.load_extension(extension)
 
-bot.run(os.getenv("TOKEN"))
+with open("./Earth/EarthBot/token.json") as tokenfile:
+    tokendict = json.load(tokenfile)
+token = tokendict["token"]
+bot.run(token)
