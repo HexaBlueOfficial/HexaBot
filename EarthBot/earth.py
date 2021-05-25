@@ -34,4 +34,5 @@ extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility"
 for extension in extensions:
     bot.load_extension(extension)
 
+envvar = "./token.env"
 bot.run(decouple.config("TOKEN"))
