@@ -9,7 +9,7 @@ class Utility(commands.Cog):
         self.bot = bot
     
     def loading(self, sentence):
-        return f"<a:aLoading:833070225334206504> {sentence}"
+        return f"<a:aLoading:833070225334206504> **{sentence}**"
 
     @commands.Cog.listener()
     async def on_ready(self):

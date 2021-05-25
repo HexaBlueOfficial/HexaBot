@@ -23,7 +23,7 @@ class Slash(commands.Cog):
             self.balllines = json.load(eightballs)
     
     def loading(self, sentence):
-        return f"<a:aLoading:833070225334206504> {sentence}"
+        return f"<a:aLoading:833070225334206504> **{sentence}**"
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
@@ -43,9 +43,9 @@ class Slash(commands.Cog):
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
+        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
         if luckyint == 69:
-            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.cat`, `e.dog`, `e.fox`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.uwu` (Inspired by <@788483848127905844>'s old code, coded by <@450678229192278036>), `e.jishaku` (External Extension).", inline=False)
+            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth` (no Slash version available), `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro`.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
         e.add_field(name="Versions", value=f"Earth: v1.2.0\ndiscord.py: v{discord.__version__}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
@@ -157,7 +157,7 @@ class Slash(commands.Cog):
         e = discord.Embed(title="Hug", color=0x00a8ff, description=f"{hugline}")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         if message is not None:
-            e.add_field(name=f"{ctx.author.name} included a message! He said...", value=f"{message}", inline=False)
+            e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
@@ -300,7 +300,7 @@ class Slash(commands.Cog):
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="userinfo", description="Retrieves information about a user.", options=[
-        slash.utils.manage_commands.create_option("user", "The user to find. You can select from the popup list, type their username, or their ID.", 6, False)
+        slash.utils.manage_commands.create_option("user", "The user to find.", 3, False)
     ])
     async def _userinfo(self, ctx: slash.SlashContext, user=None):
         if user is None:
@@ -330,7 +330,18 @@ class Slash(commands.Cog):
             e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
             await fetching.edit(content=None, embed=e)
         else:
-            if user in ctx.guild.members:
+            try:
+                user = int(user)
+            except:
+                user = str(user).lstrip("<@!")
+                user = user.rstrip(">")
+                user = int(user)
+
+                user = self.bot.get_user(user)
+
+                if user in ctx.guild.members:
+                    user = ctx.guild.get_member(user.id)
+
                 fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
 
                 string = ""
@@ -357,17 +368,48 @@ class Slash(commands.Cog):
                 e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
                 await fetching.edit(content=None, embed=e)
             else:
-                fetching = await ctx.send("<a:aEarthLoading:734878543967813652> **Retrieving data for the requested User. Please wait.**")
+                user = await self.bot.fetch_user(user)
 
-                e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_thumbnail(url=user.avatar_url)
-                e.add_field(name="Username", value=f"{user.name}")
-                e.add_field(name="Discriminator", value=f"{user.discriminator}")
-                e.add_field(name="ID", value=f"{user.id}")
-                e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                await fetching.edit(content=None, embed=e)
+                if user in ctx.guild.members:
+                    user = ctx.guild.get_member(user.id)
+
+                    fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
+
+                    string = ""
+                    for role in user.roles:
+                        if role == ctx.guild.default_role:
+                            continue
+                        string = string + f"{role.mention} "
+
+                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
+                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_thumbnail(url=user.avatar_url)
+                    e.add_field(name="Username", value=f"{user.name}")
+                    e.add_field(name="Discriminator", value=f"{user.discriminator}")
+                    e.add_field(name="ID", value=f"{user.id}")
+                    if user.nick is not None:
+                        e.add_field(name="Nickname", value=f"{user.nick}")
+                    e.add_field(name="Status", value=f"{user.status}")
+                    if user.activity is not None:
+                        e.add_field(name="Activity", value=f"{user.activity}")
+                    e.add_field(name="Color", value=f"{user.color}")
+                    e.add_field(name="Joined At", value="{} UTC".format(user.joined_at.strftime("%A, %d %B %Y at %H:%M")))
+                    e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
+                    e.add_field(name="Roles", value=string)
+                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    await fetching.edit(content=None, embed=e)
+                else:
+                    fetching = await ctx.send("<a:aEarthLoading:734878543967813652> **Retrieving data for the requested User. Please wait.**")
+
+                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
+                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_thumbnail(url=user.avatar_url)
+                    e.add_field(name="Username", value=f"{user.name}")
+                    e.add_field(name="Discriminator", value=f"{user.discriminator}")
+                    e.add_field(name="ID", value=f"{user.id}")
+                    e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
+                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    await fetching.edit(content=None, embed=e)
     
     @slashcog.cog_slash(name="serverinfo", description="Shows information about the Context Guild.")
     async def serverinfo(self, ctx: slash.SlashContext):

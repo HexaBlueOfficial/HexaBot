@@ -3,7 +3,6 @@ import json
 import aiohttp
 import random
 from discord.ext import commands, flags
-from discord.ext.commands.core import command
 
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
@@ -27,7 +26,7 @@ class Fun(commands.Cog):
         return f"{uwu}, uwu *rawr* XD!"
     
     def loading(self, sentence):
-        return f"<a:aLoading:833070225334206504> {sentence}"
+        return f"<a:aLoading:833070225334206504> **{sentence}**"
 
     @flags.add_flag("-m", default="https://discord.gg/DsARcGwwdM")
     @flags.add_flag("--uwu", action="store_true")
@@ -140,7 +139,7 @@ class Fun(commands.Cog):
         e = discord.Embed(title="Hug", color=0x00a8ff, description=f"{hugline}")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         if message is not None:
-            e.add_field(name=f"{ctx.author.name} included a message! He said...", value=f"{message}", inline=False)
+            e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
         await ctx.message.delete()

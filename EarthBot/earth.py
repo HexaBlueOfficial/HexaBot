@@ -2,6 +2,7 @@ import discord
 import discord_slash as slasher
 import tracemalloc
 import asyncio
+import os
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -33,4 +34,4 @@ extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility"
 for extension in extensions:
     bot.load_extension(extension)
 
-bot.run("ODMzMDM4ODk5MzA2NjkyNjM5.YHsh7g.3PteM-7LoByOHBNW3wJ-OppRHYI")
+bot.run(os.getenv("TOKEN"))
