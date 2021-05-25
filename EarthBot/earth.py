@@ -2,7 +2,7 @@ import discord
 import discord_slash as slasher
 import tracemalloc
 import asyncio
-import decouple
+import os
 from discord.ext import commands
 
 intents = discord.Intents.default()
@@ -34,4 +34,4 @@ extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility"
 for extension in extensions:
     bot.load_extension(extension)
 
-bot.run(decouple.config("TOKEN"))
+bot.run(os.getenv("TOKEN"))
