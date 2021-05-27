@@ -67,7 +67,7 @@ class Slash(commands.Cog):
         await ctx.send("https://discord.gg/DsARcGwwdM")
     
     @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False, options=[
-        slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, False, choices=[
+        slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[
             slash.utils.manage_commands.create_choice("all", "all"),
             slash.utils.manage_commands.create_choice("name", "name"),
             slash.utils.manage_commands.create_choice("id", "ID"),
@@ -76,7 +76,7 @@ class Slash(commands.Cog):
         ])
     ])
     @commands.is_owner()
-    async def _guilds(self, ctx: slash.SlashContext, datatype="all"):
+    async def _guilds(self, ctx: slash.SlashContext, datatype):
         typex = datatype
         
         data = f""
