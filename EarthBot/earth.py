@@ -5,10 +5,7 @@ import asyncio
 import json
 from discord.ext import commands
 
-intents = discord.Intents.default()
-intents.members = True
-intents.presences = True
-bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=discord.Intents.all())
 slash = slasher.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True)
 bot.remove_command("help")
 

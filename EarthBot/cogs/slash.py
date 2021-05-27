@@ -8,6 +8,9 @@ from datetime import datetime
 from discord_slash import cog_ext as slashcog
 from discord.ext import commands
 
+class TypeNotRecognised(Exception):
+    pass
+
 class Slash(commands.Cog):
     """Slash commands."""
 
@@ -21,6 +24,9 @@ class Slash(commands.Cog):
             self.gaylines = json.load(gays)
         with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
             self.balllines = json.load(eightballs)
+        with open("./token.json") as tokenfile:
+            tokendict = json.load(tokenfile)
+        self.token = tokendict["token"]
     
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
@@ -59,6 +65,58 @@ class Slash(commands.Cog):
     @slashcog.cog_slash(name="support", description="Join the Planet Earth server for support with the bot.")
     async def _support(self, ctx: slash.SlashContext):
         await ctx.send("https://discord.gg/DsARcGwwdM")
+    
+    @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False, options=[
+        slash.utils.manage_commands.create_option("type", "Data to find.", 3, False, choices=[
+            slash.utils.manage_commands.create_choice("all", "all"),
+            slash.utils.manage_commands.create_choice("name", "name"),
+            slash.utils.manage_commands.create_choice("id", "ID"),
+            slash.utils.manage_commands.create_choice("owner", "owner"),
+            slash.utils.manage_commands.create_choice("invite", "invite")
+        ])
+    ], permissions={
+        832594030264975420: [
+            slash.utils.manage_commands.create_permission(450678229192278036, slash.model.SlashCommandPermissionType.USER, True)
+        ]
+    })
+    async def _guilds(self, ctx: slash.SlashContext, type="all"):
+        typex = type
+        
+        data = f""
+        for guild in self.bot.guilds:
+            if typex == "name":
+                data += f"{guild.name}\n"
+            elif typex == "id":
+                data += f"{guild.id}\n"
+            elif typex == "owner":
+                data += f"{str(guild.owner)}\n"
+            elif typex == "invite":
+                invite = guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
+                data += f"{invite.url}\n"
+            elif typex == "all":
+                invite = guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
+                data += f"{guild.name} | {guild.id} | {str(guild.owner)} | {invite.url}\n"
+            else:
+                raise TypeNotRecognised
+        data = data.rstrip()
+        
+        e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=0x00a8ff, description=data)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+    
+    @slashcog.cog_slash(name="restart", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False, permissions={
+        832594030264975420: [
+            slash.utils.manage_commands.create_permission(450678229192278036, slash.model.SlashCommandPermissionType.USER, True)
+        ]
+    })
+    async def _restart(self, ctx: slash.SlashContext):
+        restarting = await ctx.send(self.loading("Restarting..."))
+
+        await self.bot.logout()
+        await self.bot.login(self.token)
+
+        await restarting.edit(content="<:Yes:833293078197829642> **Successfully restarted!**")
     
     @slashcog.cog_slash(name="say", description="The bot will say what you tell it to.", options=[
         slash.utils.manage_commands.create_option("message", "Whatever you type after this option will be what is going to be said.", 3, False), 
