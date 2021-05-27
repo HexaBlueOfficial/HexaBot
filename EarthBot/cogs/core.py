@@ -52,10 +52,11 @@ class Core(commands.Cog):
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
+        e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.gaypercent`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
         if luckyint == 69:
-            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents. **`e.arth` is not available as Slash!**\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.2.0\ndiscord.py: v{discord.__version__}", inline=False)
+            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.gaypercent`, `e.8ball`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents. **`e.arth` is not available as Slash!**\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.2.1\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
@@ -74,6 +75,18 @@ class Core(commands.Cog):
             return
         else:
             await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
+    
+    @commands.command(name="invite")
+    async def invite(self, ctx):
+        """Invite Earth to your server!"""
+
+        await ctx.send("**Coming soon...**")
+    
+    @commands.command(name="support")
+    async def support(self, ctx):
+        """Join the Planet Earth server for support with the bot."""
+
+        await ctx.send("https://discord.gg/DsARcGwwdM")
 
 def setup(bot):
     bot.add_cog(Core(bot))

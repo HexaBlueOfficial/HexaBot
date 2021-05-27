@@ -23,6 +23,7 @@ class Fun(commands.Cog):
         uwu = uwu.replace("l", "w")
         uwu = uwu.replace("r", "w")
         uwu = uwu.replace("th", "d")
+        uwu = uwu.replace("ove", "uv")
         return f"{uwu}, uwu *rawr* XD!"
     
     def loading(self, sentence):
