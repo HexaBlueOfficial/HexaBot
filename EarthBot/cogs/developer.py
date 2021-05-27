@@ -17,7 +17,7 @@ class Developer(commands.Cog):
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
     
-    @flags.add_flag("--type", type=int, default="all")
+    @flags.add_flag("--type", type=str, default="all")
     @flags.command(name="guilds", hidden=True)
     @commands.is_owner()
     async def guilds(self, ctx, **flags):
