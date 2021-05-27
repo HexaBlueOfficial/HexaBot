@@ -76,7 +76,7 @@ class Slash(commands.Cog):
         ])
     ])
     @commands.is_owner()
-    async def _guilds(self, ctx: slash.SlashContext, datatype):
+    async def _guilds(self, ctx: slash.SlashContext, datatype: str):
         typex = datatype
         
         data = f""
