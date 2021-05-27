@@ -74,11 +74,8 @@ class Slash(commands.Cog):
             slash.utils.manage_commands.create_choice("owner", "owner"),
             slash.utils.manage_commands.create_choice("invite", "invite")
         ])
-    ], permissions={
-        832594030264975420: [
-            slash.utils.manage_commands.create_permission(450678229192278036, slash.model.SlashCommandPermissionType.USER, True)
-        ]
-    })
+    ])
+    @commands.is_owner()
     async def _guilds(self, ctx: slash.SlashContext, datatype="all"):
         typex = datatype
         
@@ -105,11 +102,8 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    @slashcog.cog_slash(name="restart", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False, permissions={
-        832594030264975420: [
-            slash.utils.manage_commands.create_permission(450678229192278036, slash.model.SlashCommandPermissionType.USER, True)
-        ]
-    })
+    @slashcog.cog_slash(name="restart", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False)
+    @commands.is_owner()
     async def _restart(self, ctx: slash.SlashContext):
         restarting = await ctx.send(self.loading("Restarting..."))
 
