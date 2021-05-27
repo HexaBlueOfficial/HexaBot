@@ -91,7 +91,7 @@ class Slash(commands.Cog):
             elif typex == "owner":
                 data += f"{str(guild.owner)}\n"
             elif typex == "invite":
-                invite = guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
+                invite = await guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
                 data += f"{invite.url}\n"
             elif typex == "all":
                 invite = guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
