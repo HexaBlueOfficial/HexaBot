@@ -7,7 +7,7 @@ from discord.ext import commands, flags
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open("./Earth/EarthBot/misc/hug.json") as hugs:
             self.huglines = json.load(hugs)
@@ -35,8 +35,8 @@ class Fun(commands.Cog):
     @flags.add_flag("-u", type=discord.User, default=None)
     @flags.add_flag("-c", type=discord.TextChannel, default=None)
     @flags.command(name="say")
-    async def say(self, ctx, **flags):
-        """The bot will say what you tell him to. If you find this command too confusing, type `/` into the chat and use the Slash Command version instead.\n\nFlags:\n`-m` - Message flag. Whatever you put after this flag and before the next flag will be the message repeated by the bot. If your message has more than a word, use quotation marks.\n`--uwu` - Turns your message into the UwU language.\n`-a` - Anonymization flag. Makes your message (`-m` flag content) anonymous.\n`-u` - User flag. Makes it look like another user sent your message (`-m` flag content). Works with username, username#discriminator, @mention and ID. Users outside this server will not work.\n`-c` - Channel flag. Sends the message in the channel you specify.\n\nExample command: `e.say -m "Insert cool message here." --uwu -a`.\nOutput: `insewt coow message hewe, uwu rawr XD!` (sent by Anonymous)."""
+    async def say(self, ctx: commands.Context, **flags):
+        """The bot will say what you tell him to. If you find this command too confusing, use the Slash Command version (`/say`) instead.\n\nFlags:\n`-m` - Message flag. Whatever you put after this flag and before the next flag will be the message repeated by the bot. If your message has more than a word, use quotation marks (\" \").\n`--uwu` - Turns your message into the UwU language.\n`-a` - Anonymization flag. Makes your message (`-m` flag content) anonymous.\n`-u` - User flag. Makes it look like another user sent your message (`-m` flag content). Works with username, username#discriminator, @mention and ID. Users outside this server will not work.\n`-c` - Channel flag. Sends the message in the channel you specify.\n\nExample command: `e.say -m "Insert cool message here." --uwu -a`.\nOutput: `insewt coow message hewe, uwu rawr XD!` (sent by Anonymous)."""
 
         words = ["@everyone", "@here", "<@&832657099312857124>"]
         for word in words:
@@ -73,13 +73,13 @@ class Fun(commands.Cog):
         await webhook.delete()
     
     @commands.command(name="uwu")
-    async def uwu(self, ctx, *, sentence: str):
+    async def uwu(self, ctx: commands.Context, *, sentence: str):
         """Reject English, evolve to Furry."""
 
         await ctx.send(self.uwufy(sentence))
     
     @commands.command(name="cat")
-    async def cat(self, ctx):
+    async def cat(self, ctx: commands.Context):
         """Shows a random image of a cat."""
 
         fetching = await ctx.send(self.loading("Finding a cute cat to show you..."))
@@ -96,7 +96,7 @@ class Fun(commands.Cog):
         await fetching.edit(content=None, embed=e)
     
     @commands.command(name="dog")
-    async def dog(self, ctx):
+    async def dog(self, ctx: commands.Context):
         """Shows a random image of a dog."""
 
         fetching = await ctx.send(self.loading("Finding a cute dog to show you..."))
@@ -113,7 +113,7 @@ class Fun(commands.Cog):
         await fetching.edit(content=None, embed=e)
     
     @commands.command(name="fox")
-    async def fox(self, ctx):
+    async def fox(self, ctx: commands.Context):
         """Shows a random image of a fox."""
 
         fetching = await ctx.send(self.loading("Finding a cute fox to show you..."))
@@ -130,7 +130,7 @@ class Fun(commands.Cog):
         await fetching.edit(content=None, embed=e)
 
     @commands.command(name="hug")
-    async def hug(self, ctx, member: discord.Member, *, message=None):
+    async def hug(self, ctx: commands.Context, member: discord.Member, *, message=None):
         """Hugs the user you want."""
 
         huglineint = random.randint(0, 9)
@@ -146,7 +146,7 @@ class Fun(commands.Cog):
         await ctx.message.delete()
     
     @commands.command(name="kill")
-    async def kill(self, ctx, member: discord.Member):
+    async def kill(self, ctx: commands.Context, member: discord.Member):
         """Kills the user you want."""
 
         killlineint = random.randint(0, 4)
@@ -159,7 +159,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=e)
     
     @commands.command(name="gaypercent", aliases=["gay", "howgay"])
-    async def gaypercent(self, ctx, *, thing=None):
+    async def gaypercent(self, ctx: commands.Context, *, thing=None):
         """Wanna find out how gay something is? This command is for you."""
 
         gay = random.randint(0, 100)
@@ -248,7 +248,7 @@ class Fun(commands.Cog):
                 await ctx.send(embed=e)
     
     @commands.command(name="8ball", aliases=["eightball"])
-    async def eightball(self, ctx, *, question):
+    async def eightball(self, ctx: commands.Context, *, question):
         """Seek an answer from the Magic 8 Ball."""
 
         balllineint = random.randint(0, 4)
@@ -260,6 +260,12 @@ class Fun(commands.Cog):
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
+    
+    @commands.command(name="poll")
+    async def poll(self, ctx: commands.Context):
+        """This command is only available in Slash. Use `/poll`."""
 
-def setup(bot):
+        await ctx.send("This command is only available in Slash. Use `/poll`.")
+
+def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))

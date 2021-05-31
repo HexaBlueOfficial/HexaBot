@@ -8,7 +8,7 @@ class TypeNotRecognised(Exception):
 class Developer(commands.Cog):
     """Developer stuff."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open("./token.json") as tokenfile:
             tokendict = json.load(tokenfile)
@@ -20,7 +20,7 @@ class Developer(commands.Cog):
     @flags.add_flag("--type", type=str, default="all")
     @flags.command(name="guilds", hidden=True)
     @commands.is_owner()
-    async def guilds(self, ctx, **flags):
+    async def guilds(self, ctx: commands.Context, **flags):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
         
         typex = flags["type"]
@@ -50,7 +50,7 @@ class Developer(commands.Cog):
     
     @commands.command(name="restart")
     @commands.is_owner()
-    async def restart(self, ctx):
+    async def restart(self, ctx: commands.Context):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
 
         restarting = await ctx.send(self.loading("Restarting..."))
@@ -60,5 +60,5 @@ class Developer(commands.Cog):
 
         await restarting.edit(content="<:Yes:833293078197829642> **Successfully restarted!**")
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(Developer(bot))

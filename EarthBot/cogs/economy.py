@@ -6,7 +6,7 @@ from discord.ext import commands
 class Economy(commands.Cog):
     """The cog for Earth's EarthCoins economy."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
     
     async def pgexecute(self, sql):
@@ -17,13 +17,13 @@ class Economy(commands.Cog):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
     
     @commands.group(name="coins", aliases=["earths", "earthcoins", "economy", "ec"], invoke_without_command=True)
-    async def coins(self, ctx):
+    async def coins(self, ctx: commands.Context):
         """Base command. Runs `e.coins profile` if without subcommands."""
 
         await self.profile(ctx)
     
     @coins.group(name="profile", invoke_without_command=True)
-    async def profile(self, ctx, user=None):
+    async def profile(self, ctx: commands.Context, user=None):
         """Views your profile, or another's."""
 
         if user is None:
@@ -95,7 +95,7 @@ class Economy(commands.Cog):
                     await ctx.send(embed=e)
     
     @profile.command(name="create")
-    async def create(self, ctx):
+    async def create(self, ctx: commands.Context):
         """Creates your EarthCoins profile."""
 
         creating = await ctx.send(self.loading("Creating your EarthCoins profile..."))
@@ -117,8 +117,8 @@ class Economy(commands.Cog):
             await creating.edit(content="<:No:833293106198872094> You already have an EarthCoins profile. If you were looking for a user named \"create\", note that usernames won't work. Use the ID or mention them.")
     
     @commands.command(name="work")
-    async def work(self, ctx):
+    async def work(self, ctx: commands.Context):
         """Earn EarthCoins by legally working!"""
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(Economy(bot))

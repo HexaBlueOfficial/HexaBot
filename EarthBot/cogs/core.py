@@ -6,7 +6,7 @@ from discord.ext import commands, tasks
 class Core(commands.Cog):
     """The cog for Earth's core commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.presence.start()
     
@@ -26,7 +26,7 @@ class Core(commands.Cog):
         await self.bot.wait_until_ready()
     
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         channels = [832658521731498005, 832659080841134110, 832659031847993344, 832659442213453871, 832660792397791262, 832661047398760450, 832671013753454602]
         if message.channel.id in channels:
             if message.author.id == 833038899306692639:
@@ -44,7 +44,7 @@ class Core(commands.Cog):
             await message.channel.send(f"<@&{role.id}>")
     
     @commands.command(name="info")
-    async def info(self, ctx):
+    async def info(self, ctx: commands.Context):
         """Shows information about Earth."""
 
         luckyint = random.randint(1, 100)
@@ -61,7 +61,7 @@ class Core(commands.Cog):
         await ctx.send(embed=e)
     
     @commands.command(name="arth", hidden=True)
-    async def arth(self, ctx):
+    async def arth(self, ctx: commands.Context):
         """???"""
 
         await ctx.send("hello there")
@@ -77,16 +77,16 @@ class Core(commands.Cog):
             await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
     
     @commands.command(name="invite")
-    async def invite(self, ctx):
+    async def invite(self, ctx: commands.Context):
         """Invite Earth to your server!"""
 
         await ctx.send("**Coming soon...**")
     
     @commands.command(name="support")
-    async def support(self, ctx):
+    async def support(self, ctx: commands.Context):
         """Join the Planet Earth server for support with the bot."""
 
         await ctx.send("https://discord.gg/DsARcGwwdM")
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(Core(bot))

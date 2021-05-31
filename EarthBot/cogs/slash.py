@@ -1,9 +1,10 @@
 import discord
 import discord_slash as slash
+import json
 import random
 import asyncio
 import aiohttp
-import json
+import discord_components as components
 from datetime import datetime
 from discord_slash import cog_ext as slashcog
 from discord.ext import commands
@@ -14,7 +15,7 @@ class TypeNotRecognised(Exception):
 class Slash(commands.Cog):
     """Slash commands."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open("./Earth/EarthBot/misc/hug.json") as hugs:
             self.huglines = json.load(hugs)
@@ -339,6 +340,33 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
+    @slashcog.cog_slash(name="poll", description="Create a poll. Currently only supports double choice polls.", options=[
+        slash.utils.manage_commands.create_option("name", "The poll's name.", 3, True),
+        slash.utils.manage_commands.create_option("option1", "The first option.", 3, True),
+        slash.utils.manage_commands.create_option("option2", "The second option.", 3, True)
+    ])
+    async def _poll(self, ctx: slash.SlashContext, name, option1, option2):
+        vote1 = 0
+        vote2 = 0
+
+        e = discord.Embed(title=f"{name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and pick your option.")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Votes", value=f"**{option1} (1st Option)**: {vote1}\n**{option2} (2nd Option)**: {vote2}", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        message = await ctx.send(embed=e, components=[
+            components.Button(label="1st Option", style=components.ButtonStyle.blue),
+            components.Button(label="2nd Option", style=components.ButtonStyle.blue)
+        ])
+
+        waitfor1 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("1st"))
+        if waitfor1.channel == ctx.channel:
+            vote1 += 1
+            await message.edit(content=None, embed=e)
+        waitfor2 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("2nd"))
+        if waitfor2.channel == ctx.channel:
+            vote2 += 1
+            await message.edit(content=None, embed=e)
+    
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
         delta_uptime = datetime.utcnow() - self.bot.launch_time
@@ -521,5 +549,5 @@ class Slash(commands.Cog):
         await ctx.message.delete()
         await webhook.delete()
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(Slash(bot))

@@ -5,7 +5,7 @@ from discord.ext import commands
 class Utility(commands.Cog):
     """The cog for Earth's utilities."""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
     
     def loading(self, sentence):
@@ -16,7 +16,7 @@ class Utility(commands.Cog):
         self.bot.launch_time = datetime.utcnow()
     
     @commands.command(name="uptime", aliases=["up", "upt"])
-    async def uptime(self, ctx):
+    async def uptime(self, ctx: commands.Context):
         """Shows an Embed with Earth's uptime."""
 
         delta_uptime = datetime.utcnow() - self.bot.launch_time
@@ -31,7 +31,7 @@ class Utility(commands.Cog):
         await ctx.send(embed=e)
     
     @commands.command(name="ping", aliases=["latency", "lat"])
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         """Shows an Embed with Earth's ping latency."""
 
         ping = self.bot.latency * 1000
@@ -42,7 +42,7 @@ class Utility(commands.Cog):
         await ctx.send(embed=e)
     
     @commands.command(name="userinfo", aliases=["ui", "memberinfo", "mi"])
-    async def userinfo(self, ctx, user=None):
+    async def userinfo(self, ctx: commands.Context, user=None):
         """Retrieves information about a user. Thanks to API calls, it works even if the person you search for is outside the server!"""
 
         if user is None:
@@ -154,7 +154,7 @@ class Utility(commands.Cog):
                     await fetching.edit(content=None, embed=e)
     
     @commands.command(name="serverinfo", aliases=["si", "guildinfo", "gi"])
-    async def serverinfo(self, ctx):
+    async def serverinfo(self, ctx: commands.Context):
         """Shows information about the Context Guild."""
 
         fetching = await ctx.send(self.loading("Retrieving data for this Guild. Please wait."))
@@ -191,7 +191,7 @@ class Utility(commands.Cog):
         await fetching.edit(content=None, embed=e)
     
     @commands.command(name="nitro")
-    async def nitro(self, ctx, emojiname):
+    async def nitro(self, ctx: commands.Context, emojiname):
         """Sends animated emojis (from this server) with your name."""
 
         emoji = discord.utils.get(ctx.guild.emojis, name=emojiname)
@@ -203,5 +203,5 @@ class Utility(commands.Cog):
         await ctx.message.delete()
         await webhook.delete()
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(Utility(bot))
