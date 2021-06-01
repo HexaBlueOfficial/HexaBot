@@ -265,7 +265,7 @@ class Fun(commands.Cog):
     async def poll(self, ctx: commands.Context):
         """This command is only available in Slash. Use `/poll`."""
 
-        await ctx.send("This command is only available in Slash. Use `/poll`.")
+        await ctx.send("This command is only available in Slash. Use `/poll`.\nIt isn't available yet because of a problem with my host.")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))

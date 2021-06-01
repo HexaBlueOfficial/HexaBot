@@ -1,6 +1,5 @@
 import discord
 import discord_slash as slasher
-import discord_components as components
 import tracemalloc
 import asyncio
 import json
@@ -14,8 +13,6 @@ tracemalloc.start()
 
 @bot.event
 async def on_ready():
-    components.DiscordComponents(bot)
-
     channel = bot.get_channel(832677639944667186)
     await channel.send(f"Earth is ready and running on discord.py v{discord.__version__}!")
 
