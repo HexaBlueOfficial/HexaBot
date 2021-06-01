@@ -80,7 +80,7 @@ class Slash(commands.Cog):
         typex = datatype
         
         data = f""
-        for guild in self.bot.guilds:
+        for guild in self.bot.guilds.sort():
             if typex == "name":
                 data += f"{guild.name}\n"
             elif typex == "id":
