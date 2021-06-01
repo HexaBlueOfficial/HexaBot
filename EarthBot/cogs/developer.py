@@ -26,7 +26,8 @@ class Developer(commands.Cog):
         typex = flags["type"]
         
         data = f""
-        for guild in self.bot.guilds.sort():
+        names = []
+        for guild in self.bot.guilds:
             if typex == "name":
                 data += f"{guild.name}\n"
             elif typex == "id":
