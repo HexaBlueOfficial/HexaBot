@@ -1,4 +1,6 @@
 import discord
+import json
+import asyncpg
 import random
 import asyncio
 from discord.ext import commands, tasks
@@ -8,7 +10,14 @@ class Core(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open("./postgres.json") as postgresfile:
+            postgresdict = json.load(postgresfile)
+        self.postgres = postgresdict["creds"]
         self.presence.start()
+    
+    async def pgexecute(self, sql):
+        db = await asyncpg.connect(self.postgres)
+        await db.execute(f'''{sql}''')
     
     @tasks.loop(seconds=60.0)
     async def presence(self):
@@ -27,21 +36,18 @@ class Core(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        channels = [832658521731498005, 832659080841134110, 832659031847993344, 832659442213453871, 832660792397791262, 832661047398760450, 832671013753454602]
-        if message.channel.id in channels:
-            if message.author.id == 833038899306692639:
+        if message.channel.type == discord.ChannelType.news:
+            if message.author.bot:
                 return
             else:
-                await message.publish()
-        if message.channel.id == channels[4]:
-            role = message.guild.get_role(833421078239510528)
-            await message.channel.send(f"<@&{role.id}>")
-        elif message.channel.id == channels[5]:
-            role = message.guild.get_role(833421049587564655)
-            await message.channel.send(f"<@&{role.id}>")
-        elif message.channel.id == channels[6]:
-            role = message.guild.get_role(833420855282237453)
-            await message.channel.send(f"<@&{role.id}>")
+                message.publish()
+        
+        q = await self.pgexecute(f"SELECT {message.guild.id} FROM ping")
+        for ping in q:
+            channel = message.guild.get_channel(ping.splitlines()[0])
+            if message.channel == channel:
+                role = ping.splitlines()[1]
+                await channel.send(f"<@&{role}>")
     
     @commands.command(name="info")
     async def info(self, ctx: commands.Context):
@@ -80,7 +86,11 @@ class Core(commands.Cog):
     async def invite(self, ctx: commands.Context):
         """Invite Earth to your server!"""
 
-        await ctx.send("**Coming soon...**")
+        e = discord.Embed(title="Invite Earth!", color=0x00a8ff, description="Click the link in the **Invite** field below to add **Earth** to your server.")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Invite", value="https://discord.com/api/oauth2/authorize?client_id=833038899306692639&permissions=305491009&scope=bot%20applications.commands", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
     
     @commands.command(name="support")
     async def support(self, ctx: commands.Context):

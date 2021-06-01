@@ -60,7 +60,11 @@ class Slash(commands.Cog):
     
     @slashcog.cog_slash(name="invite", description="Invite Earth to your server!")
     async def _invite(self, ctx: slash.SlashContext):
-        await ctx.send("**Coming soon...**")
+        e = discord.Embed(title="Invite Earth!", color=0x00a8ff, description="Click the link in the **Invite** field below to add **Earth** to your server.")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Invite", value="https://discord.com/api/oauth2/authorize?client_id=833038899306692639&permissions=305491009&scope=bot%20applications.commands", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="support", description="Join the Planet Earth server for support with the bot.")
     async def _support(self, ctx: slash.SlashContext):

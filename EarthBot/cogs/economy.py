@@ -1,6 +1,10 @@
 import discord
+import json
 import asyncpg
+import discord_slash as slash
+import random
 from datetime import datetime
+from discord_slash import cog_ext as slashcog
 from discord.ext import commands
 
 class Economy(commands.Cog):
@@ -8,24 +12,27 @@ class Economy(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open("./postgres.json") as postgresfile:
+            postgresdict = json.load(postgresfile)
+        self.postgres = postgresdict["creds"]
+        with open("./Earth/EarthBot/misc/economy/work.json") as jobs:
+            self.worklines = json.load(jobs)
     
     async def pgexecute(self, sql):
-        db = await asyncpg.connect("postgres://tkhpexvxkfisim:14897b63a93fc0792007cc08660e4d451a0cf466c5c2490d8a2fae650da4dedf@ec2-23-23-128-222.compute-1.amazonaws.com:5432/d83ilreftm12s3")
+        db = await asyncpg.connect(self.postgres)
         await db.execute(f'''{sql}''')
     
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
     
-    @commands.group(name="coins", aliases=["earths", "earthcoins", "economy", "ec"], invoke_without_command=True)
-    async def coins(self, ctx: commands.Context):
-        """Base command. Runs `e.coins profile` if without subcommands."""
-
+    @slashcog.cog_slash(name="coins", description="Base command. Runs `e.coins profile` if without subcommands.")
+    async def _coins(self, ctx: slash.SlashContext):
         await self.profile(ctx)
     
-    @coins.group(name="profile", invoke_without_command=True)
-    async def profile(self, ctx: commands.Context, user=None):
-        """Views your profile, or another's."""
-
+    @slashcog.cog_subcommand(base="coins", name="profile", description="Views your profile, or another's.", options=[
+        slash.utils.manage_commands.create_option("user", "The user you want to see the profile of.", 3, False)
+    ])
+    async def _profile(self, ctx: slash.SlashContext, user=None):
         if user is None:
             try:
                 creationdate = await self.pgexecute(f"SELECT cdate FROM economy WHERE cdate = '{ctx.author.id}\n%'").strftime("%A, %d %B %Y at %H:%M")
@@ -94,10 +101,8 @@ class Economy(commands.Cog):
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
                     await ctx.send(embed=e)
     
-    @profile.command(name="create")
-    async def create(self, ctx: commands.Context):
-        """Creates your EarthCoins profile."""
-
+    @slashcog.cog_subcommand(base="coins", subcommand_group="profile", name="create", description="Creates your EarthCoins profile.")
+    async def _create(self, ctx: slash.SlashContext):
         creating = await ctx.send(self.loading("Creating your EarthCoins profile..."))
 
         try:
@@ -114,11 +119,42 @@ class Economy(commands.Cog):
             e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
             await creating.edit(content=None, embed=e)
         else:
-            await creating.edit(content="<:No:833293106198872094> You already have an EarthCoins profile. If you were looking for a user named \"create\", note that usernames won't work. Use the ID or mention them.")
+            await creating.edit(content="<:No:833293106198872094> You already have an EarthCoins profile.")
     
-    @commands.command(name="work")
-    async def work(self, ctx: commands.Context):
-        """Earn EarthCoins by legally working!"""
+    @slashcog.cog_slash(name="work", description="Earn EarthCoins by legally working!")
+    async def _work(self, ctx: slash.SlashContext):
+        goodorbad = random.randint(0, 100)
+        lineindex = str(random.randint(0, 9))
+        
+        mode = await self.pgexecute(f"SELECT mode FROM economy WHERE mode = '{ctx.guild.id}\n%'").splitlines()[1]
+        if mode == "capi":
+            modex = "Capitalism"
+        elif mode == "comm":
+            modex = "Communism"
+        elif mode == "marx":
+            modex = "Marxism"
+        
+        if goodorbad <= 75:
+            if mode == "capi":
+                earning = random.randint(50, 300)
+                line = self.worklines["good"][lineindex].replace("earning", earning)
+            elif mode == "comm":
+                line = self.worklines["good"][lineindex].replace("earning", "50")
+            elif mode == "marx":
+                line = self.worklines["good"][lineindex].replace("earning", "300")
+        else:
+            if mode == "capi":
+                loss = random.randint(10, 70)
+                line = self.worklines["bad"][lineindex].replace("loss", loss)
+            elif mode == "comm":
+                line = self.worklines["bad"][lineindex].replace("loss", "70")
+            elif mode == "marx":
+                line = self.worklines["bad"][lineindex].replace("loss", "10")
+        
+        e = discord.Embed(title=f"Work ({modex} Mode)", color=0x00a8ff, description=line)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Economy(bot))
