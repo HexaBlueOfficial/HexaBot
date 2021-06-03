@@ -11,12 +11,11 @@ class Core(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open("./postgres.json") as postgresfile:
-            postgresdict = json.load(postgresfile)
-        self.postgres = postgresdict["creds"]
+            self.postgres = json.load(postgresfile)
         self.presence.start()
     
-    async def pgexecute(self, sql):
-        db = await asyncpg.connect(self.postgres)
+    async def pgexecute(self, db, sql):
+        db = await asyncpg.connect(self.postgres[db])
         await db.execute(f'''{sql}''')
     
     @tasks.loop(seconds=60.0)
@@ -42,7 +41,7 @@ class Core(commands.Cog):
             else:
                 message.publish()
         
-        q = await self.pgexecute(f"SELECT {message.guild.id} FROM ping")
+        q = await self.pgexecute("planet", f"SELECT {message.guild.id} FROM ping")
         for ping in q:
             channel = message.guild.get_channel(ping.splitlines()[0])
             if message.channel == channel:
