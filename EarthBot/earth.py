@@ -6,7 +6,7 @@ import json
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=discord.Intents.all())
-slash = slasher.SlashCommand(bot, override_type=True, sync_commands=True, sync_on_cog_reload=True)
+slash = slasher.SlashCommand(bot, True, False, True, True)
 bot.remove_command("help")
 
 tracemalloc.start()
