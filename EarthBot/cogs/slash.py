@@ -1,3 +1,4 @@
+from asyncio.tasks import wait_for
 import discord
 import discord_slash as slash
 import json
@@ -342,7 +343,34 @@ class Slash(commands.Cog):
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
-    
+
+    @slashcog.cog_slash(name="poll", description="Create a poll. Currently only supports two options.", options=[
+        slash.utils.manage_commands.create_option("name", "The poll's name.", 3, True),
+        slash.utils.manage_commands.create_option("option1", "The first option to vote on.", 3, True),
+        slash.utils.manage_commands.create_option("option2", "The second option to vote on.", 3, True)
+    ])
+    async def _poll(self, ctx: slash.SlashContext, name: str, option1: str, option2: str):
+        vote1 = 0
+        vote2 = 0
+
+        e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose. You cannot change your answer.")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Votes", value=f"`{option1} (1)`: {vote1}\n`{option2} (2)`: {vote2}", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        poll = await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option"),
+            slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option")
+        ])
+
+        waitfor1 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("1st"))
+        if waitfor1.channel == ctx.channel:
+            vote1 += 1
+            await poll.edit(content=None, embed=e)
+        waitfor2 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("2nd"))
+        if waitfor2.channel == ctx.channel:
+            vote2 += 1
+            await poll.edit(content=None, embed=e)
+
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
         delta_uptime = datetime.utcnow() - self.bot.launch_time
