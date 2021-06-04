@@ -1,5 +1,6 @@
 import discord
 import random
+import platform
 import asyncio
 from discord.ext import commands, tasks
 
@@ -55,7 +56,7 @@ class Core(commands.Cog):
         e.add_field(name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.gaypercent`, `e.8ball`, `e.poll`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
         if luckyint == 69:
             e.set_field_at(0, name="Developers", value="<@450678229192278036>: `e.info`, AutoPublish, AutoPing, `e.arth`, `e.say`, `e.uwu`, `e.cat`, `e.dog`, `e.fox`, `e.hug`, `e.kill`, `e.gaypercent`, `e.8ball`, `e.poll`, `e.ping`, `e.uptime`, `e.userinfo`, `e.serverinfo`, `e.nitro` and their Slash equivalents. **`e.arth` is not available as Slash!**\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.2.2\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.2.2\nPython: {platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)

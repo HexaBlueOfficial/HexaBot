@@ -2,6 +2,7 @@ import discord
 import discord_slash as slash
 import json
 import random
+import platform
 import asyncio
 import aiohttp
 from datetime import datetime
@@ -53,7 +54,7 @@ class Slash(commands.Cog):
         e.add_field(name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent`, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
         if luckyint == 69:
             e.set_field_at(0, name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `e.arth`, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.2.2\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.2.2\nPython: {platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)

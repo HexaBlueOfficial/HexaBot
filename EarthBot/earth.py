@@ -32,6 +32,5 @@ for extension in extensions:
     bot.load_extension(extension)
 
 with open("./token.json") as tokenfile:
-    tokendict = json.load(tokenfile)
-token = tokendict["token"]
-bot.run(token)
+    token = json.load(tokenfile)
+bot.run(token["token"])
