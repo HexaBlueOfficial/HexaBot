@@ -343,14 +343,13 @@ class Slash(commands.Cog):
             )
         ])
 
-        waitfor1 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "1")
-        if waitfor1.channel == ctx.channel:
-            e.set_field_at(0, value=f"{int(e.fields[0].value) + 1}")
-            await poll.edit(content=None, embed=e)
-        waitfor2 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "2")
-        if waitfor2.channel == ctx.channel:
-            e.set_field_at(1, value=f"{int(e.fields[1].value) + 1}")
-            await poll.edit(content=None, embed=e)
+        while 0 == 0:
+            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.message_id == poll.id)
+            if waitfor.custom_id == "1":
+                e.set_field_at(0, value=f"{int(e.fields[0].value) + 1}")
+            elif waitfor.custom_id == "2":
+                e.set_field_at(1, value=f"{int(e.fields[1].value) + 1}")
+            await waitfor.edit_origin(content=None, embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
     async def _skittles(self, ctx: slash.SlashContext):
