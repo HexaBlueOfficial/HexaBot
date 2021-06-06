@@ -331,12 +331,10 @@ class Slash(commands.Cog):
         slash.utils.manage_commands.create_option("option2", "The second option to vote on.", 3, True)
     ])
     async def _poll(self, ctx: slash.SlashContext, name: str, option1: str, option2: str):
-        vote1 = 0
-        vote2 = 0
-
         e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Votes", value=f"`{option1} (1st Option)`: {vote1}\n`{option2} (2nd Option)`: {vote2}", inline=False)
+        e.add_field(name=option1, value="0", inline=False)
+        e.add_field(name=option2, value="0", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
@@ -347,11 +345,11 @@ class Slash(commands.Cog):
 
         waitfor1 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "1")
         if waitfor1.channel == ctx.channel:
-            vote1 += 1
+            e.set_field_at(0, value=f"{int(e.fields[0].value) + 1}")
             await poll.edit(content=None, embed=e)
         waitfor2 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "2")
         if waitfor2.channel == ctx.channel:
-            vote2 += 1
+            e.set_field_at(1, value=f"{int(e.fields[1].value) + 1}")
             await poll.edit(content=None, embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
