@@ -334,22 +334,22 @@ class Slash(commands.Cog):
         vote1 = 0
         vote2 = 0
 
-        e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose. You cannot change your answer.")
+        e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Votes", value=f"`{option1} (1)`: {vote1}\n`{option2} (2)`: {vote2}", inline=False)
+        e.add_field(name="Votes", value=f"`{option1} (1st Option)`: {vote1}\n`{option2} (2nd Option)`: {vote2}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option")
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option", None, "1"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option", None, "2")
             )
         ])
 
-        waitfor1 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("1st"))
+        waitfor1 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "1")
         if waitfor1.channel == ctx.channel:
             vote1 += 1
             await poll.edit(content=None, embed=e)
-        waitfor2 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("2nd"))
+        waitfor2 = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "2")
         if waitfor2.channel == ctx.channel:
             vote2 += 1
             await poll.edit(content=None, embed=e)
@@ -527,6 +527,27 @@ class Slash(commands.Cog):
         e.add_field(name="Roles", value=string)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
+    
+    @slashcog.cog_slash(name="getupdates", description="Get updates about the Earth!", options=[
+        slash.utils.manage_commands.create_option("updates", "The updates you want.", 4, True, choices=[
+            slash.utils.manage_commands.create_choice(832660792397791262, "Global Warming Updates"),
+            slash.utils.manage_commands.create_choice(832661047398760450, "Endangered Species Updates"),
+            slash.utils.manage_commands.create_choice(832671013753454602, "Evil Companies Updates")
+        ]),
+        slash.utils.manage_commands.create_option("to", "Where to get the news.", 7, True)
+    ])
+    @commands.has_guild_permissions(manage_guild=True)
+    async def _getupdates(self, ctx: slash.SlashContext, updates: int, to: discord.TextChannel):
+        tofollow = self.bot.get_channel(updates)
+        await tofollow.follow(destination=to, reason="GetUpdates command.")
+
+        if updates == 832660792397791262:
+            followed = "Global Warming Updates"
+        elif updates == 832661047398760450:
+            followed = "Endangered Species Updates"
+        elif updates == 832671013753454602:
+            followed = "Evil Companies Updates"
+        await ctx.send(f"Successfully followed {followed}.")
     
     @slashcog.cog_slash(name="nitro", description="Sends animated emojis (from this server) with your name.", options=[
         slash.utils.manage_commands.create_option("emojiname", "The emoji (from this server) that you want to use's name.", 3, True)

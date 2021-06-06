@@ -190,6 +190,12 @@ class Utility(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
+    @commands.command(name="getupdates")
+    async def getupdates(self, ctx: commands.Context):
+        """As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`."""
+
+        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`.")
+    
     @commands.command(name="nitro")
     async def nitro(self, ctx: commands.Context, emojiname):
         """Sends animated emojis (from this server) with your name."""
