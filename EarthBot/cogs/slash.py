@@ -354,7 +354,7 @@ class Slash(commands.Cog):
             elif waitfor.custom_id == "2":
                 vote2 += 1
                 e.set_field_at(1, value=f"{vote2}")
-            await waitfor.edit_origin(embed=e)
+            await waitfor.edit_origin(content=None, embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
     async def _skittles(self, ctx: slash.SlashContext):
