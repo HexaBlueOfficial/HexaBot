@@ -46,7 +46,7 @@ class Utility(commands.Cog):
         """Retrieves information about a user. Thanks to API calls, it works even if the person you search for is outside the server!"""
 
         if user is None:
-            fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
+            await ctx.trigger_typing()
 
             string = ""
             for role in ctx.author.roles:
@@ -70,7 +70,7 @@ class Utility(commands.Cog):
             e.add_field(name="Created At", value="{} UTC".format(ctx.author.created_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Roles", value=string)
             e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-            await fetching.edit(content=None, embed=e)
+            await ctx.send(embed=e)
         else:
             try:
                 user = int(user)
@@ -84,7 +84,7 @@ class Utility(commands.Cog):
                 if user in ctx.guild.members:
                     user = ctx.guild.get_member(user.id)
 
-                fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
+                await ctx.trigger_typing()
 
                 string = ""
                 for role in user.roles:
@@ -108,14 +108,14 @@ class Utility(commands.Cog):
                 e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Roles", value=string)
                 e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                await fetching.edit(content=None, embed=e)
+                await ctx.send(embed=e)
             else:
                 user = await self.bot.fetch_user(user)
 
                 if user in ctx.guild.members:
                     user = ctx.guild.get_member(user.id)
 
-                    fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
+                    await ctx.trigger_typing()
 
                     string = ""
                     for role in user.roles:
@@ -139,9 +139,9 @@ class Utility(commands.Cog):
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Roles", value=string)
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                    await fetching.edit(content=None, embed=e)
+                    await ctx.send(embed=e)
                 else:
-                    fetching = await ctx.send("<a:aEarthLoading:734878543967813652> **Retrieving data for the requested User. Please wait.**")
+                    await ctx.trigger_typing()
 
                     e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
                     e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
@@ -151,13 +151,13 @@ class Utility(commands.Cog):
                     e.add_field(name="ID", value=f"{user.id}")
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                    await fetching.edit(content=None, embed=e)
+                    await ctx.send(embed=e)
     
     @commands.command(name="serverinfo", aliases=["si", "guildinfo", "gi"])
     async def serverinfo(self, ctx: commands.Context):
         """Shows information about the Context Guild."""
 
-        fetching = await ctx.send(self.loading("Retrieving data for this Guild. Please wait."))
+        await ctx.trigger_typing()
             
         memberCount = 0
         botCount = 0
@@ -188,7 +188,7 @@ class Utility(commands.Cog):
         e.add_field(name="Created At", value="{} UTC".format(ctx.guild.created_at.strftime("%A, %d %B %Y at %H:%M")))
         e.add_field(name="Roles", value=string)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @commands.command(name="nitro")
     async def nitro(self, ctx: commands.Context, emojiname):

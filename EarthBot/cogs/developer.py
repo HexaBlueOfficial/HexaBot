@@ -26,7 +26,6 @@ class Developer(commands.Cog):
         typex = flags["type"]
         
         data = f""
-        names = []
         for guild in self.bot.guilds:
             if typex == "name":
                 data += f"{guild.name}\n"

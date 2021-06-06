@@ -29,9 +29,6 @@ class Slash(commands.Cog):
             tokendict = json.load(tokenfile)
         self.token = tokendict["token"]
     
-    def loading(self, sentence):
-        return f"<a:aLoading:833070225334206504> **{sentence}**"
-    
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
         uwu = uwu.replace("l", "w")
@@ -54,7 +51,7 @@ class Slash(commands.Cog):
         e.add_field(name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent`, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
         if luckyint == 69:
             e.set_field_at(0, name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `e.arth`, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.2.2\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.2.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
@@ -152,7 +149,7 @@ class Slash(commands.Cog):
             await webhook.send(message)
         else:
             await webhook.send(self.uwufy(message))
-        await webhook.delete()
+        webhook.delete()
         slashbug = await ctx.send("Successfully executed command!")
         await asyncio.sleep(1.0)
         await slashbug.delete()
@@ -165,8 +162,6 @@ class Slash(commands.Cog):
     
     @slashcog.cog_slash(name="cat", description="Shows a random image of a cat.")
     async def _cat(self, ctx: slash.SlashContext):
-        fetching = await ctx.send(self.loading("Finding a cute cat to show you..."))
-
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.thecatapi.com/v1/images/search/") as response:
                 cat = await response.json()
@@ -176,12 +171,10 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=catpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="dog", description="Shows a random image of a dog.")
     async def _dog(self, ctx: slash.SlashContext):
-        fetching = await ctx.send(self.loading("Finding a cute dog to show you..."))
-
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.thedogapi.com/v1/images/search/") as response:
                 dog = await response.json()
@@ -191,12 +184,10 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=dogpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="fox", description="Shows a random image of a fox.")
     async def _fox(self, ctx: slash.SlashContext):
-        fetching = await ctx.send(self.loading("Finding a cute fox to show you..."))
-
         async with aiohttp.ClientSession() as session:
             async with session.get("https://randomfox.ca/floof/") as response:
                 fox = await response.json()
@@ -206,7 +197,7 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=foxpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="hug", description="Hugs the user you want.", options=[
         slash.utils.manage_commands.create_option("member", "The user you want to hug. You can select from the popup list, type their username, or their ID.", 6, True),
@@ -354,8 +345,10 @@ class Slash(commands.Cog):
         e.add_field(name="Votes", value=f"`{option1} (1)`: {vote1}\n`{option2} (2)`: {vote2}", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
-            slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option"),
-            slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option")
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option")
+            )
         ])
 
         waitfor1 = await self.bot.wait_for("button_click", check=lambda r: r.component.label.startswith("1st"))
@@ -366,6 +359,21 @@ class Slash(commands.Cog):
         if waitfor2.channel == ctx.channel:
             vote2 += 1
             await poll.edit(content=None, embed=e)
+        
+    @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
+    async def _skittles(self, ctx: slash.SlashContext):
+        skittleint = random.randint(0, 4)
+        skittle = self.skittles[str(skittleint)]
+        
+        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_thumbnail(url=skittle["thumbnail"])
+        e.add_field(name="Color", value=skittle["color"], inline=False)
+        e.add_field(name="Flavor", value=skittle["flavor"], inline=False)
+        e.add_field(name="Developer's Rating", value=skittle["devrate"], inline=False)
+        e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
@@ -394,8 +402,6 @@ class Slash(commands.Cog):
     ])
     async def _userinfo(self, ctx: slash.SlashContext, user=None):
         if user is None:
-            fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
-
             string = ""
             for role in ctx.author.roles:
                 if role == ctx.guild.default_role:
@@ -418,7 +424,7 @@ class Slash(commands.Cog):
             e.add_field(name="Created At", value="{} UTC".format(ctx.author.created_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Roles", value=string)
             e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-            await fetching.edit(content=None, embed=e)
+            await ctx.send(embed=e)
         else:
             try:
                 user = int(user)
@@ -431,8 +437,6 @@ class Slash(commands.Cog):
 
                 if user in ctx.guild.members:
                     user = ctx.guild.get_member(user.id)
-
-                fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
 
                 string = ""
                 for role in user.roles:
@@ -456,14 +460,12 @@ class Slash(commands.Cog):
                 e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Roles", value=string)
                 e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                await fetching.edit(content=None, embed=e)
+                await ctx.send(embed=e)
             else:
                 user = await self.bot.fetch_user(user)
 
                 if user in ctx.guild.members:
                     user = ctx.guild.get_member(user.id)
-
-                    fetching = await ctx.send(self.loading("Retrieving data for the requested User. Please wait."))
 
                     string = ""
                     for role in user.roles:
@@ -487,10 +489,8 @@ class Slash(commands.Cog):
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Roles", value=string)
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                    await fetching.edit(content=None, embed=e)
+                    await ctx.send(embed=e)
                 else:
-                    fetching = await ctx.send("<a:aEarthLoading:734878543967813652> **Retrieving data for the requested User. Please wait.**")
-
                     e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
                     e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
                     e.set_thumbnail(url=user.avatar_url)
@@ -499,12 +499,10 @@ class Slash(commands.Cog):
                     e.add_field(name="ID", value=f"{user.id}")
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-                    await fetching.edit(content=None, embed=e)
+                    await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="serverinfo", description="Shows information about the Context Guild.")
     async def serverinfo(self, ctx: slash.SlashContext):
-        fetching = await ctx.send(self.loading("Retrieving data for this Guild. Please wait."))
-            
         memberCount = 0
         botCount = 0
         for member in ctx.guild.members:
@@ -534,7 +532,7 @@ class Slash(commands.Cog):
         e.add_field(name="Created At", value="{} UTC".format(ctx.guild.created_at.strftime("%A, %d %B %Y at %H:%M")))
         e.add_field(name="Roles", value=string)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="nitro", description="Sends animated emojis (from this server) with your name.", options=[
         slash.utils.manage_commands.create_option("emojiname", "The emoji (from this server) that you want to use's name.", 3, True)

@@ -17,6 +17,8 @@ class Fun(commands.Cog):
             self.gaylines = json.load(gays)
         with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
             self.balllines = json.load(eightballs)
+        with open("./Earth/EarthBot/misc/skittles.json") as skittles:
+            self.skittles = json.load(skittles)
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
@@ -25,9 +27,6 @@ class Fun(commands.Cog):
         uwu = uwu.replace("th", "d")
         uwu = uwu.replace("ove", "uv")
         return f"{uwu}, uwu *rawr* XD!"
-    
-    def loading(self, sentence):
-        return f"<a:aLoading:833070225334206504> **{sentence}**"
 
     @flags.add_flag("-m", default="https://discord.gg/DsARcGwwdM")
     @flags.add_flag("--uwu", action="store_true")
@@ -70,7 +69,7 @@ class Fun(commands.Cog):
         else:
             await webhook.send(self.uwufy(flags["m"]))
         await ctx.message.delete()
-        await webhook.delete()
+        webhook.delete()
     
     @commands.command(name="uwu")
     async def uwu(self, ctx: commands.Context, *, sentence: str):
@@ -82,7 +81,7 @@ class Fun(commands.Cog):
     async def cat(self, ctx: commands.Context):
         """Shows a random image of a cat."""
 
-        fetching = await ctx.send(self.loading("Finding a cute cat to show you..."))
+        await ctx.trigger_typing()
 
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.thecatapi.com/v1/images/search/") as response:
@@ -93,13 +92,13 @@ class Fun(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=catpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @commands.command(name="dog")
     async def dog(self, ctx: commands.Context):
         """Shows a random image of a dog."""
 
-        fetching = await ctx.send(self.loading("Finding a cute dog to show you..."))
+        await ctx.trigger_typing()
 
         async with aiohttp.ClientSession() as session:
             async with session.get("https://api.thedogapi.com/v1/images/search/") as response:
@@ -110,13 +109,13 @@ class Fun(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=dogpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
     
     @commands.command(name="fox")
     async def fox(self, ctx: commands.Context):
         """Shows a random image of a fox."""
 
-        fetching = await ctx.send(self.loading("Finding a cute fox to show you..."))
+        await ctx.trigger_typing()
 
         async with aiohttp.ClientSession() as session:
             async with session.get("https://randomfox.ca/floof/") as response:
@@ -127,7 +126,7 @@ class Fun(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_image(url=foxpic)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await fetching.edit(content=None, embed=e)
+        await ctx.send(embed=e)
 
     @commands.command(name="hug")
     async def hug(self, ctx: commands.Context, member: discord.Member, *, message=None):
@@ -266,6 +265,25 @@ class Fun(commands.Cog):
         """This command is only available in Slash. Use `/poll`."""
 
         await ctx.send("This command is only available in Slash. Use `/poll`.")
+    
+    @commands.command(name="skittles", aliases=["skittleinfo", "skittlesinfo", "skittle"])
+    async def skittles(self, ctx: commands.Context):
+        """Gets info about a random Skittle.\nRequested by `skittlez#8168`."""
+
+        await ctx.trigger_typing()
+
+        skittleint = random.randint(0, 4)
+        skittle = self.skittles[str(skittleint)]
+        
+        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_thumbnail(url=skittle["thumbnail"])
+        e.add_field(name="Color", value=skittle["color"], inline=False)
+        e.add_field(name="Flavor", value=skittle["flavor"], inline=False)
+        e.add_field(name="Developer's Rating", value=skittle["devrate"], inline=False)
+        e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
