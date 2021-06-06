@@ -1,5 +1,6 @@
 import discord
 import json
+import asyncio
 from discord.ext import commands, flags
 
 class TypeNotRecognised(Exception):
@@ -54,11 +55,11 @@ class Developer(commands.Cog):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
 
         restarting = await ctx.send(self.loading("Restarting..."))
+        await asyncio.sleep(2.0)
+        await restarting.edit(content="**See you in a bit!**")
 
-        await self.bot.logout()
+        await self.bot.close()
         await self.bot.login(self.token)
-
-        await restarting.edit(content="<:Yes:833293078197829642> **Successfully restarted!**")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Developer(bot))

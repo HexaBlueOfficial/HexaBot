@@ -25,6 +25,8 @@ class Slash(commands.Cog):
             self.gaylines = json.load(gays)
         with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
             self.balllines = json.load(eightballs)
+        with open("./Earth/EarthBot/misc/skittles.json") as skittles:
+            self.skittles = json.load(skittles)
         with open("./token.json") as tokenfile:
             tokendict = json.load(tokenfile)
         self.token = tokendict["token"]
@@ -43,18 +45,20 @@ class Slash(commands.Cog):
     
     @slashcog.cog_slash(name="info", description="Shows information about Earth.")
     async def _info(self, ctx: slash.SlashContext):
-        luckyint = random.randint(1, 100)
+        luckyint = random.randint(1, 20)
         
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent`, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        if luckyint == 69:
-            e.set_field_at(0, name="Developers", value="<@450678229192278036>: `/info`, AutoPublish, AutoPing, `e.arth`, `/say`, `/uwu`, `/cat`, `/dog`, `/fox`, `/hug`, `/kill`, `/gaypercent, `/8ball`, `/poll`, `/ping`, `/uptime`, `/userinfo`, `/serverinfo`, `/nitro`.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
+        e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
         e.add_field(name="Versions", value=f"Earth: v1.2.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
+
+        if luckyint == 8:
+            await ctx.author.send("Hey!")
+            await ctx.author.send("You should try running `e.arth`!")
     
     @slashcog.cog_slash(name="invite", description="Invite Earth to your server!")
     async def _invite(self, ctx: slash.SlashContext):
@@ -64,13 +68,13 @@ class Slash(commands.Cog):
     async def _support(self, ctx: slash.SlashContext):
         await ctx.send("https://discord.gg/DsARcGwwdM")
     
-    @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False, options=[
+    @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], options=[
         slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[
-            slash.utils.manage_commands.create_choice("all", "all"),
-            slash.utils.manage_commands.create_choice("name", "name"),
-            slash.utils.manage_commands.create_choice("id", "ID"),
-            slash.utils.manage_commands.create_choice("owner", "owner"),
-            slash.utils.manage_commands.create_choice("invite", "invite")
+            slash.utils.manage_commands.create_choice("all", "Everything"),
+            slash.utils.manage_commands.create_choice("name", "Guild Names"),
+            slash.utils.manage_commands.create_choice("id", "Guild IDs"),
+            slash.utils.manage_commands.create_choice("owner", "Guild Owners' Username and Discriminator"),
+            slash.utils.manage_commands.create_choice("invite", "Guild Invites")
         ])
     ])
     @commands.is_owner()
@@ -99,16 +103,6 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
-    
-    @slashcog.cog_slash(name="restart", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], default_permission=False)
-    @commands.is_owner()
-    async def _restart(self, ctx: slash.SlashContext):
-        restarting = await ctx.send(self.loading("Restarting..."))
-
-        await self.bot.logout()
-        await self.bot.login(self.token)
-
-        await restarting.edit(content="<:Yes:833293078197829642> **Successfully restarted!**")
     
     @slashcog.cog_slash(name="say", description="The bot will say what you tell it to.", options=[
         slash.utils.manage_commands.create_option("message", "Whatever you type after this option will be what is going to be said.", 3, False), 
