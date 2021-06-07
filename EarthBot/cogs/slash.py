@@ -331,10 +331,13 @@ class Slash(commands.Cog):
         slash.utils.manage_commands.create_option("option2", "The second option to vote on.", 3, True)
     ])
     async def _poll(self, ctx: slash.SlashContext, name: str, option1: str, option2: str):
+        vote1 = 0
+        vote2 = 0
+        
         e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name=option1, value="0", inline=False)
-        e.add_field(name=option2, value="0", inline=False)
+        e.add_field(name=option1, value=f"{vote1}")
+        e.add_field(name=option2, value=f"{vote2}")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
@@ -346,11 +349,13 @@ class Slash(commands.Cog):
         while 0 == 0:
             waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == poll.id)
             if waitfor.custom_id == "1":
-                vote = int(e.fields[0].value) + 1
-                e.set_field_at(0, value=f"{vote}")
+                e.remove_field(0)
+                vote1 += 1
+                e.add_field(name=option1, value=f"{vote1}")
             elif waitfor.custom_id == "2":
-                vote = int(e.fields[1].value) + 1
-                e.set_field_at(1, value=f"{vote}")
+                e.remove_field(1)
+                vote2 += 1
+                e.add_field(name=option2, value=f"{vote2}")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
@@ -533,11 +538,17 @@ class Slash(commands.Cog):
             slash.utils.manage_commands.create_choice(832661047398760450, "Endangered Species Updates"),
             slash.utils.manage_commands.create_choice(832671013753454602, "Evil Companies Updates")
         ]),
-        slash.utils.manage_commands.create_option("to", "Where to get the news.", 7, True)
+        slash.utils.manage_commands.create_option("to", "The channel to get the news at.", 3, True)
     ])
     @commands.has_guild_permissions(manage_guild=True)
-    async def _getupdates(self, ctx: slash.SlashContext, updates: int, to: discord.TextChannel):
+    async def _getupdates(self, ctx: slash.SlashContext, updates: int, to: str):
         tofollow = self.bot.get_channel(updates)
+        try:
+            to = int(to)
+        except:
+            to = to.lstrip("<#")
+            to = to.rstrip(">")
+        to = self.bot.get_channel(to)
         await tofollow.follow(destination=to, reason="GetUpdates command.")
 
         if updates == 832660792397791262:
