@@ -69,7 +69,7 @@ class Core(commands.Cog):
         
         while 0 == 0:
             waitfor = await self.bot.wait_for("button_click", check=lambda r: r.component.id == "invite")
-            await waitfor.respond("**Coming soon...**")
+            await waitfor.respond(content="**Coming soon...**")
     
     @commands.command(name="arth", hidden=True)
     async def arth(self, ctx: commands.Context):
