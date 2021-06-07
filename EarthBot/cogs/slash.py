@@ -350,8 +350,8 @@ class Slash(commands.Cog):
                 vote1 += 1
             elif waitfor.custom_id == "2":
                 vote2 += 1
-            e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}%")
-            e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}%")
+            e.add_field(name=option1, value=f"{vote1} / {round((vote1 * 100) / (vote1 + vote2), 1)}%")
+            e.add_field(name=option2, value=f"{vote2} / {round((vote2 * 100) / (vote1 + vote2), 1)}%")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
