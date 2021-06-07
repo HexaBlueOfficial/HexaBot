@@ -66,9 +66,8 @@ class Slash(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component")
-            if waitfor.custom_id == "invite":
-                await waitfor.send("**Coming soon...**", hidden=True)
+            waitfor = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "invite")
+            await waitfor.send("**Coming soon...**", hidden=True)
     
     @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], options=[
         slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[

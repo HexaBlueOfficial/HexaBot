@@ -68,9 +68,8 @@ class Core(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("button_click")
-            if waitfor.id == "invite":
-                await waitfor.respond("**Coming soon...**")
+            waitfor = await self.bot.wait_for("button_click", check=lambda r: r.component.id == "invite")
+            await waitfor.respond("**Coming soon...**")
     
     @commands.command(name="arth", hidden=True)
     async def arth(self, ctx: commands.Context):
