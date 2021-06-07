@@ -348,14 +348,14 @@ class Slash(commands.Cog):
 
         while 0 == 0:
             waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == poll.id)
+            e.remove_field(0)
+            e.remove_field(1)
             if waitfor.custom_id == "1":
-                e.remove_field(0)
                 vote1 += 1
-                e.add_field(name=option1, value=f"{vote1}")
             elif waitfor.custom_id == "2":
-                e.remove_field(1)
                 vote2 += 1
-                e.add_field(name=option2, value=f"{vote2}")
+            e.add_field(name=option1, value=f"{vote1}")
+            e.add_field(name=option2, value=f"{vote2}")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
