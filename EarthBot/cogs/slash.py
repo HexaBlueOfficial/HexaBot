@@ -348,8 +348,7 @@ class Slash(commands.Cog):
 
         while 0 == 0:
             waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == poll.id)
-            e.remove_field(0)
-            e.remove_field(1)
+            e.clear_fields()
             if waitfor.custom_id == "1":
                 vote1 += 1
             elif waitfor.custom_id == "2":
