@@ -1,6 +1,7 @@
 import discord
 import random
 import platform
+import discord_components as components
 import asyncio
 from discord.ext import commands, tasks
 
@@ -57,11 +58,19 @@ class Core(commands.Cog):
         e.add_field(name="Versions", value=f"Earth: v1.2.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e)
+        await ctx.send(embed=e, components=[
+            components.Button(label="Invite", id="invite"),
+            components.Button(label="Support", style=components.ButtonStyle.URL, id="support", url="https://discord.gg/DsARcGwwdM")
+        ])
 
         if luckyint == 8:
             await ctx.author.send("Hey!")
             await ctx.author.send("You should try running `e.arth`!")
+        
+        while 0 == 0:
+            waitfor = await self.bot.wait_for("button_click")
+            if waitfor.id == "invite":
+                await waitfor.respond("**Coming soon...**")
     
     @commands.command(name="arth", hidden=True)
     async def arth(self, ctx: commands.Context):
@@ -78,18 +87,6 @@ class Core(commands.Cog):
             return
         else:
             await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
-    
-    @commands.command(name="invite")
-    async def invite(self, ctx: commands.Context):
-        """Invite Earth to your server!"""
-
-        await ctx.send("**Coming soon...**")
-    
-    @commands.command(name="support")
-    async def support(self, ctx: commands.Context):
-        """Join the Planet Earth server for support with the bot."""
-
-        await ctx.send("https://discord.gg/DsARcGwwdM")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Core(bot))
