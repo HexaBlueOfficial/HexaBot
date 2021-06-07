@@ -54,19 +54,16 @@ class Slash(commands.Cog):
         e.add_field(name="Versions", value=f"Earth: v1.2.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e)
+        await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, "support", "https://discord.gg/DsARcGwwdM")
+            )
+        ])
 
         if luckyint == 8:
             await ctx.author.send("Hey!")
             await ctx.author.send("You should try running `e.arth`!")
-    
-    @slashcog.cog_slash(name="invite", description="Invite Earth to your server!")
-    async def _invite(self, ctx: slash.SlashContext):
-        await ctx.send("**Coming soon...**")
-    
-    @slashcog.cog_slash(name="support", description="Join the Planet Earth server for support with the bot.")
-    async def _support(self, ctx: slash.SlashContext):
-        await ctx.send("https://discord.gg/DsARcGwwdM")
     
     @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], options=[
         slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[
@@ -336,8 +333,8 @@ class Slash(commands.Cog):
         
         e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name=option1, value=f"{vote1}")
-        e.add_field(name=option2, value=f"{vote2}")
+        e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}")
+        e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
@@ -353,8 +350,8 @@ class Slash(commands.Cog):
                 vote1 += 1
             elif waitfor.custom_id == "2":
                 vote2 += 1
-            e.add_field(name=option1, value=f"{vote1}")
-            e.add_field(name=option2, value=f"{vote2}")
+            e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}")
+            e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
