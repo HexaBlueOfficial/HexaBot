@@ -333,8 +333,8 @@ class Slash(commands.Cog):
         
         e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}")
-        e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}")
+        e.add_field(name=option1, value=f"{vote1} / 0%")
+        e.add_field(name=option2, value=f"{vote2} / 0%")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
@@ -350,8 +350,8 @@ class Slash(commands.Cog):
                 vote1 += 1
             elif waitfor.custom_id == "2":
                 vote2 += 1
-            e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}")
-            e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}")
+            e.add_field(name=option1, value=f"{vote1} / {(vote1 * 100) / (vote1 + vote2)}%")
+            e.add_field(name=option2, value=f"{vote2} / {(vote2 * 100) / (vote1 + vote2)}%")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
