@@ -60,7 +60,7 @@ class Core(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e, components=[
             components.Button(label="Invite", id="invite"),
-            components.Button(label="Support", style=components.ButtonStyle.URL, id="support", url="https://discord.gg/DsARcGwwdM")
+            components.Button(label="Support", style=components.ButtonStyle.URL, url="https://discord.gg/DsARcGwwdM")
         ])
 
         if luckyint == 8:

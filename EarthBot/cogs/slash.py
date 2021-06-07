@@ -57,7 +57,7 @@ class Slash(commands.Cog):
         await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, "support", "https://discord.gg/DsARcGwwdM")
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, None, "https://discord.gg/DsARcGwwdM")
             )
         ])
 
