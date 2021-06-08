@@ -596,7 +596,8 @@ class Slash(commands.Cog):
         except:
             to = to.lstrip("<#")
             to = to.rstrip(">")
-        to = self.bot.get_channel(to)
+            to = int(to)
+        to = ctx.guild.get_channel(to)
         await tofollow.follow(destination=to, reason="GetUpdates command.")
 
         if updates == 832660792397791262:
