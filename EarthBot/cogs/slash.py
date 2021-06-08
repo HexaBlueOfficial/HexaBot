@@ -142,9 +142,9 @@ class Slash(commands.Cog):
                 webhook = await channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Say command.")
 
         if not uwu:
-            await webhook.send(message)
+            webhook.send(message)
         else:
-            await webhook.send(self.uwufy(message))
+            webhook.send(self.uwufy(message))
         webhook.delete()
         slashbug = await ctx.send("Successfully executed command!")
         await asyncio.sleep(1.0)
@@ -607,7 +607,6 @@ class Slash(commands.Cog):
             followed = "Endangered Species Updates"
         elif updates == 832671013753454602:
             followed = "Evil Companies Updates"
-        webhook.edit(name=followed, reason="GetUpdates command.")
         await ctx.send(f"Successfully followed {followed}.")
     
     @slashcog.cog_slash(name="nitro", description="Sends animated emojis (from this server) with your name.", options=[
