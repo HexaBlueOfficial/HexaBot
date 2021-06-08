@@ -601,11 +601,11 @@ class Slash(commands.Cog):
         webhook = await tofollow.follow(destination=to, reason="GetUpdates command.")
 
         followed = ""
-        if updates == 832660792397791262:
+        if updates == "832660792397791262":
             followed = "Global Warming Updates"
-        elif updates == 832661047398760450:
+        elif updates == "832661047398760450":
             followed = "Endangered Species Updates"
-        elif updates == 832671013753454602:
+        elif updates == "832671013753454602":
             followed = "Evil Companies Updates"
         await ctx.send(f"Successfully followed {followed}.")
     
