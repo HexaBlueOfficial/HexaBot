@@ -589,7 +589,8 @@ class Slash(commands.Cog):
     ])
     @commands.has_guild_permissions(manage_guild=True)
     async def _getupdates(self, ctx: slash.SlashContext, updates: str, to: str):
-        tofollow = await self.bot.fetch_channel(int(updates))
+        earthnet = self.bot.get_guild(832594030264975420)
+        tofollow = earthnet.get_channel(int(updates))
         try:
             to = int(to)
         except:
