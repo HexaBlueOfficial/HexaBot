@@ -1,8 +1,8 @@
+from os import error
 import discord
 import discord_slash as slasher
 import tracemalloc
 import discord_components as components
-import asyncio
 import json
 from discord.ext import commands
 
@@ -25,6 +25,11 @@ async def on_command_error(ctx: commands.Context, error):
         await ctx.send("<:No:833293106198872094> The command was not found. You may want to run `e.help` for a list of commands.")
     else:
         await ctx.send(f"<:No:833293106198872094> {error}")
+    raise error
+
+@bot.event
+async def on_slash_command_error(ctx: slasher.SlashContext, ex):
+    await ctx.send(f"<:No:833293106198872094> {ex}")
     raise error
 
 extensions = ["cogs.core", "cogs.developer", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility", "jishaku"]
