@@ -59,8 +59,10 @@ class Core(commands.Cog):
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e, components=[
-            components.Button(label="Invite", id="invite"),
-            components.Button(label="Support", style=components.ButtonStyle.URL, url="https://discord.gg/DsARcGwwdM")
+            [
+                components.Button(label="Invite", id="invite"),
+                components.Button(label="Support", style=components.ButtonStyle.URL, url="https://discord.gg/DsARcGwwdM")
+            ]
         ])
 
         if luckyint == 8:

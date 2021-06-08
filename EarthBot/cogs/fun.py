@@ -247,6 +247,12 @@ class Fun(commands.Cog):
         e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
+    
+    @commands.command(name="calculator", aliases=["calc"])
+    async def calculator(self, ctx: commands.Context):
+        """As a normal command could create confusion, this command is only available in Slash. Use `/calculator`."""
+
+        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/calculator`.")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))

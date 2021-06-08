@@ -68,7 +68,7 @@ class Slash(commands.Cog):
         while 0 == 0:
             waitfor = await self.bot.wait_for("component")
             if waitfor.custom_id == "invite":
-                await waitfor.send("**Coming soon...**")
+                await waitfor.send("**Coming soon...**", hidden=True)
     
     @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], options=[
         slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[
@@ -338,8 +338,9 @@ class Slash(commands.Cog):
         
         e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.add_field(name=option1, value=f"{vote1} / 0%")
-        e.add_field(name=option2, value=f"{vote2} / 0%")
+        e.add_field(name=option1, value=f"{vote1}")
+        e.add_field(name=option2, value=f"{vote2}")
+        e.add_field(name="Percentages", value=f"{option1}: 0%\n{option2}: 0%", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
@@ -361,8 +362,9 @@ class Slash(commands.Cog):
                 operation1 = round(operation1)
             if str(operation2).endswith(".0"):
                 operation2 = round(operation2)
-            e.add_field(name=option1, value=f"{vote1} / {operation1}%")
-            e.add_field(name=option2, value=f"{vote2} / {operation2}%")
+            e.add_field(name=option1, value=f"{vote1}")
+            e.add_field(name=option2, value=f"{vote2}")
+            e.add_field(name="Percentages", value=f"{option1}: {operation1}%\n{option2}: {operation2}%")
             await waitfor.edit_origin(embed=e)
         
     @slashcog.cog_slash(name="skittles", description="Gets info about a random Skittle.\nRequested by `skittlez#8168`.")
@@ -379,6 +381,44 @@ class Slash(commands.Cog):
         e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
+    
+    # @slashcog.cog_slash(name="calculator", description="Calculate.")
+    # async def _calculator(self, ctx: slash.SlashContext):
+    #     string = ""
+
+    #     e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=0x00a8ff, description="```\n \n```")
+    #     e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+    #     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+    #     await ctx.send(embed=e, components=[
+    #         slash.utils.manage_components.create_actionrow(
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "8", None, "8"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "9", None, "9"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "+", None, "+"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Close", None, "exit")
+    #         ),
+    #         slash.utils.manage_components.create_actionrow(
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "4", None, "4"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "5", None, "5"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "6", None, "6"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "-", None, "-"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←-", None, "back")
+    #         ),
+    #         slash.utils.manage_components.create_actionrow(
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "1", None, "1"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "2", None, "2"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "3", None, "3"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "*", None, "*"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Clear", None, "clear")
+    #         ),
+    #         slash.utils.manage_components.create_actionrow(
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "00", None, "00"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "0", None, "0"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, ".", None, "."),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "/", None, "/"),
+    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "=", None, "=")
+    #         )
+    #     ])
     
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
@@ -540,16 +580,16 @@ class Slash(commands.Cog):
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="getupdates", description="Get updates about the Earth!", options=[
-        slash.utils.manage_commands.create_option("updates", "The updates you want.", 4, True, choices=[
-            slash.utils.manage_commands.create_choice(832660792397791262, "Global Warming Updates"),
-            slash.utils.manage_commands.create_choice(832661047398760450, "Endangered Species Updates"),
-            slash.utils.manage_commands.create_choice(832671013753454602, "Evil Companies Updates")
+        slash.utils.manage_commands.create_option("updates", "The updates you want.", 3, True, choices=[
+            slash.utils.manage_commands.create_choice("832660792397791262", "Global Warming Updates"),
+            slash.utils.manage_commands.create_choice("832661047398760450", "Endangered Species Updates"),
+            slash.utils.manage_commands.create_choice("832671013753454602", "Evil Companies Updates")
         ]),
         slash.utils.manage_commands.create_option("to", "The channel to get the news at.", 3, True)
     ])
     @commands.has_guild_permissions(manage_guild=True)
-    async def _getupdates(self, ctx: slash.SlashContext, updates: int, to: str):
-        tofollow = self.bot.get_channel(updates)
+    async def _getupdates(self, ctx: slash.SlashContext, updates: str, to: str):
+        tofollow = self.bot.get_channel(int(updates))
         try:
             to = int(to)
         except:
