@@ -598,14 +598,16 @@ class Slash(commands.Cog):
             to = to.rstrip(">")
             to = int(to)
         to = ctx.guild.get_channel(to)
-        await tofollow.follow(destination=to, reason="GetUpdates command.")
+        webhook = await tofollow.follow(destination=to, reason="GetUpdates command.")
 
+        followed = ""
         if updates == 832660792397791262:
             followed = "Global Warming Updates"
         elif updates == 832661047398760450:
             followed = "Endangered Species Updates"
         elif updates == 832671013753454602:
             followed = "Evil Companies Updates"
+        webhook.edit(name=followed, reason="GetUpdates command.")
         await ctx.send(f"Successfully followed {followed}.")
     
     @slashcog.cog_slash(name="nitro", description="Sends animated emojis (from this server) with your name.", options=[
