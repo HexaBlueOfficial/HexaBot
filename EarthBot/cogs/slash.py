@@ -51,10 +51,10 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.2.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
-        e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
+        e.add_field(name="Versions", value=f"Earth: v1.3.0\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e, components=[
+        info = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, None, "https://discord.gg/DsARcGwwdM")
@@ -66,7 +66,7 @@ class Slash(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component")
+            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == info.id)
             if waitfor.custom_id == "invite":
                 await waitfor.send("**Coming soon...**", hidden=True)
     
@@ -142,10 +142,10 @@ class Slash(commands.Cog):
                 webhook = await channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Say command.")
 
         if not uwu:
-            webhook.send(message)
+            await webhook.send(message)
         else:
-            webhook.send(self.uwufy(message))
-        webhook.delete()
+            await webhook.send(self.uwufy(message))
+        await webhook.delete()
         slashbug = await ctx.send("Successfully executed command!")
         await asyncio.sleep(1.0)
         await slashbug.delete()
@@ -382,43 +382,174 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    # @slashcog.cog_slash(name="calculator", description="Calculate.")
-    # async def _calculator(self, ctx: slash.SlashContext):
-    #     string = ""
+    @slashcog.cog_slash(name="calculator", description="Calculate.")
+    async def _calculator(self, ctx: slash.SlashContext):
+        string = ""
 
-    #     e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=0x00a8ff, description="```\n \n```")
-    #     e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-    #     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-    #     await ctx.send(embed=e, components=[
-    #         slash.utils.manage_components.create_actionrow(
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "8", None, "8"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "9", None, "9"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "+", None, "+"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Close", None, "exit")
-    #         ),
-    #         slash.utils.manage_components.create_actionrow(
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "4", None, "4"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "5", None, "5"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "6", None, "6"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "-", None, "-"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←-", None, "back")
-    #         ),
-    #         slash.utils.manage_components.create_actionrow(
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "1", None, "1"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "2", None, "2"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "3", None, "3"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "*", None, "*"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Clear", None, "clear")
-    #         ),
-    #         slash.utils.manage_components.create_actionrow(
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "00", None, "00"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "0", None, "0"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, ".", None, "."),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "/", None, "/"),
-    #             slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "=", None, "=")
-    #         )
-    #     ])
+        e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=0x00a8ff, description="```\n \n```")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "8", None, "8"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "9", None, "9"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "+", None, "+"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Close", None, "exit")
+            ),
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "4", None, "4"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "5", None, "5"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "6", None, "6"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "-", None, "-"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←-", None, "back")
+            ),
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "1", None, "1"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "2", None, "2"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "3", None, "3"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "*", None, "*"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Clear", None, "clear")
+            ),
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "00", None, "00"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "0", None, "0"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, ".", None, "."),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "/", None, "/"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "=", None, "=")
+            )
+        ])
+
+        async def check1(waitfor, string):
+            if string.split("|")[-2] == "+":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "-":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "*":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "/":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            else:
+                return True
+        
+        async def check2(waitfor, string):
+            if string.split("|")[-2] == "+":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "-":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "*":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif string.split("|")[-2] == "/":
+                await waitfor.send("Invalid syntax.", hidden=True)
+            elif "+" in string.split("|"):
+                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+            elif "-" in string.split("|"):
+                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+            elif "*" in string.split("|"):
+                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+            elif "/" in string.split("|"):
+                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+            else:
+                return True
+        
+        while 0 == 0:
+            waitfor = await self.bot.wait_for("component")
+            try:
+                int(waitfor.custom_id)
+            except:
+                if waitfor.custom_id == "exit":
+                    e.description = "```\nThis Calculator has been closed.\n```"
+                    await waitfor.edit_origin(embed=e)
+                    await waitfor.send("Calculator Closed.", hidden=True)
+                    break
+                elif waitfor.custom_id == "back":
+                    stringx = string.split("").pop()
+                    string = ""
+                    for character in stringx:
+                        string += character
+                    e.description = f"```\n{string}\n```"
+                    await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "clear":
+                    string = ""
+                    e.description = f"```\n \n```"
+                    await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "=":
+                    string = string.split("|")
+                    if string[1] == "+":
+                        e.description = f"```\n{int(string[0]) + int(string[2])}\n```"
+                    elif string[1] == "-":
+                        e.description = f"```\n{int(string[0]) - int(string[2])}\n```"
+                    elif string[1] == "*":
+                        e.description = f"```\n{int(string[0]) * int(string[2])}\n```"
+                    elif string[1] == "/":
+                        e.description = f"```\n{int(string[0]) / int(string[2])}\n```"
+                    await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "+":
+                    if await check2(waitfor, string):
+                        string += "|+|"
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "-":
+                    if await check2(waitfor, string):
+                        string += "|-|"
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "*":
+                    if await check2(waitfor, string):
+                        string += "|*|"
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == "/":
+                    if await check2(waitfor, string):
+                        string += "|/|"
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+                elif waitfor.custom_id == ".":
+                    if check1(waitfor, string):
+                        string += waitfor.custom_id
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+            else:
+                string += waitfor.custom_id
+                e.description = f"```\n{string}\n```"
+                await waitfor.edit_origin(embed=e)
+    
+    @slashcog.cog_slash(name="hack", description="Hack a member (100% real)!", options=[
+        slash.utils.manage_commands.create_option("user", "The member to hack.", 6, True)
+    ])
+    async def _hack(self, ctx: slash.SlashContext, user: discord.Member):
+        hacking = await ctx.send("<a:aLoading:833070225334206504> **Getting logins...**")
+        await asyncio.sleep(1.0)
+        await hacking.edit("<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
+        await asyncio.sleep(3.0)
+        await hacking.delete()
+        
+        e = discord.Embed(title=f"Hack {user.name}", color=0x00a8ff, description=f"**Hacking {user.name} ready.**")
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        hack = await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "Hack Twitter", None, custom_id="twitter")
+            )
+        ])
+
+        waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == hack.id)
+        if waitfor.user.id == ctx.author.id:
+            avatar = await user.avatar_url.read()
+            webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Hack command")
+            if waitfor.custom_id == "discord":
+                await webhook.send("I got hacked, oh fuck.")
+                await webhook.send(f"FUCK! {ctx.author} HACKED ME!")
+                e.description = "**DISCORD HACKED!**"
+            elif waitfor.custom_id == "youtube":
+                await webhook.send("I just posted a video!\nhttps://youtu.be/Blh2FCAIIgk")
+                e.description = "**YOUTUBE HACKED!**"
+            elif waitfor.custom_id == "twitter":
+                await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
+            await waitfor.edit_origin(embed=e)
+            await webhook.delete()
     
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
@@ -598,7 +729,7 @@ class Slash(commands.Cog):
             to = to.rstrip(">")
             to = int(to)
         to = ctx.guild.get_channel(to)
-        webhook = await tofollow.follow(destination=to, reason="GetUpdates command.")
+        await tofollow.follow(destination=to, reason="GetUpdates command.")
 
         followed = ""
         if updates == "832660792397791262":
