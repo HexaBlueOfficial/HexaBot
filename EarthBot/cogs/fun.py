@@ -263,7 +263,7 @@ class Fun(commands.Cog):
 
         hacking = await ctx.send("<a:aLoading:833070225334206504> **Getting logins...**")
         await asyncio.sleep(1.0)
-        await hacking.edit("<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
+        await hacking.edit(content="<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
         await asyncio.sleep(3.0)
         await hacking.delete()
         
