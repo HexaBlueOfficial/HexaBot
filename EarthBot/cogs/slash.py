@@ -422,97 +422,108 @@ class Slash(commands.Cog):
 
         async def check1(waitfor, string):
             if string.split("|")[-2] == "+":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "-":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "*":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "/":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             else:
                 return True
         
         async def check2(waitfor, string):
             if string.split("|")[-2] == "+":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "-":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "*":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif string.split("|")[-2] == "/":
-                await waitfor.send("Invalid syntax.", hidden=True)
+                return False
             elif "+" in string.split("|"):
-                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+                return False
             elif "-" in string.split("|"):
-                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+                return False
             elif "*" in string.split("|"):
-                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+                return False
             elif "/" in string.split("|"):
-                await waitfor.send("As of now, this calculator only supports one operation at a time.", hidden=True)
+                return False
             else:
                 return True
         
         while 0 == 0:
             waitfor = await self.bot.wait_for("component")
-            try:
-                int(waitfor.custom_id)
-            except:
-                if waitfor.custom_id == "exit":
-                    e.description = "```\nThis Calculator has been closed.\n```"
-                    await waitfor.edit_origin(embed=e)
-                    await waitfor.send("Calculator Closed.", hidden=True)
-                    break
-                elif waitfor.custom_id == "back":
-                    stringx = string.split("").pop()
-                    string = ""
-                    for character in stringx:
-                        string += character
+            if waitfor.author.id == ctx.author.id:
+                try:
+                    int(waitfor.custom_id)
+                except:
+                    if waitfor.custom_id == "exit":
+                        e.description = "```\nThis Calculator has been closed.\n```"
+                        await waitfor.edit_origin(embed=e)
+                        await waitfor.send("Calculator Closed.", hidden=True)
+                        break
+                    elif waitfor.custom_id == "back":
+                        stringx = string.split("").pop()
+                        string = ""
+                        for character in stringx:
+                            string += character
+                        e.description = f"```\n{string}\n```"
+                        await waitfor.edit_origin(embed=e)
+                    elif waitfor.custom_id == "clear":
+                        string = ""
+                        e.description = f"```\n \n```"
+                        await waitfor.edit_origin(embed=e)
+                    elif waitfor.custom_id == "=":
+                        string = string.split("|")
+                        if string[1] == "+":
+                            e.description = f"```\n{int(string[0]) + int(string[2])}\n```"
+                        elif string[1] == "-":
+                            e.description = f"```\n{int(string[0]) - int(string[2])}\n```"
+                        elif string[1] == "*":
+                            e.description = f"```\n{int(string[0]) * int(string[2])}\n```"
+                        elif string[1] == "/":
+                            e.description = f"```\n{int(string[0]) / int(string[2])}\n```"
+                        await waitfor.edit_origin(embed=e)
+                    elif waitfor.custom_id == "+":
+                        if await check2(waitfor, string):
+                            string += "|+|"
+                            e.description = f"```\n{string}\n```"
+                            await waitfor.edit_origin(embed=e)
+                        else:
+                            await waitfor.send("**This interaction failed.**", hidden=True)
+                    elif waitfor.custom_id == "-":
+                        if await check2(waitfor, string):
+                            string += "|-|"
+                            e.description = f"```\n{string}\n```"
+                            await waitfor.edit_origin(embed=e)
+                        else:
+                            await waitfor.send("**This interaction failed.**", hidden=True)
+                    elif waitfor.custom_id == "*":
+                        if await check2(waitfor, string):
+                            string += "|*|"
+                            e.description = f"```\n{string}\n```"
+                            await waitfor.edit_origin(embed=e)
+                        else:
+                            await waitfor.send("**This interaction failed.**", hidden=True)
+                    elif waitfor.custom_id == "/":
+                        if await check2(waitfor, string):
+                            string += "|/|"
+                            e.description = f"```\n{string}\n```"
+                            await waitfor.edit_origin(embed=e)
+                        else:
+                            await waitfor.send("**This interaction failed.**", hidden=True)
+                    elif waitfor.custom_id == ".":
+                        if check1(waitfor, string):
+                            string += waitfor.custom_id
+                            e.description = f"```\n{string}\n```"
+                            await waitfor.edit_origin(embed=e)
+                        else:
+                            await waitfor.send("**This interaction failed.**", hidden=True)
+                else:
+                    string += waitfor.custom_id
                     e.description = f"```\n{string}\n```"
                     await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "clear":
-                    string = ""
-                    e.description = f"```\n \n```"
-                    await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "=":
-                    string = string.split("|")
-                    if string[1] == "+":
-                        e.description = f"```\n{int(string[0]) + int(string[2])}\n```"
-                    elif string[1] == "-":
-                        e.description = f"```\n{int(string[0]) - int(string[2])}\n```"
-                    elif string[1] == "*":
-                        e.description = f"```\n{int(string[0]) * int(string[2])}\n```"
-                    elif string[1] == "/":
-                        e.description = f"```\n{int(string[0]) / int(string[2])}\n```"
-                    await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "+":
-                    if await check2(waitfor, string):
-                        string += "|+|"
-                        e.description = f"```\n{string}\n```"
-                        await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "-":
-                    if await check2(waitfor, string):
-                        string += "|-|"
-                        e.description = f"```\n{string}\n```"
-                        await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "*":
-                    if await check2(waitfor, string):
-                        string += "|*|"
-                        e.description = f"```\n{string}\n```"
-                        await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == "/":
-                    if await check2(waitfor, string):
-                        string += "|/|"
-                        e.description = f"```\n{string}\n```"
-                        await waitfor.edit_origin(embed=e)
-                elif waitfor.custom_id == ".":
-                    if check1(waitfor, string):
-                        string += waitfor.custom_id
-                        e.description = f"```\n{string}\n```"
-                        await waitfor.edit_origin(embed=e)
-            else:
-                string += waitfor.custom_id
-                e.description = f"```\n{string}\n```"
-                await waitfor.edit_origin(embed=e)
     
     @slashcog.cog_slash(name="hack", description="Hack a member (100% real)!", options=[
         slash.utils.manage_commands.create_option("user", "The member to hack.", 6, True)
@@ -536,7 +547,7 @@ class Slash(commands.Cog):
         ])
 
         waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == hack.id)
-        if waitfor.user.id == ctx.author.id:
+        if waitfor.author_id == ctx.author.id:
             avatar = await user.avatar_url.read()
             webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Hack command")
             if waitfor.custom_id == "discord":
