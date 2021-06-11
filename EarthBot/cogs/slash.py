@@ -420,37 +420,43 @@ class Slash(commands.Cog):
             )
         ])
 
-        async def check1(waitfor, string):
-            if string.split("|")[-2] == "+":
-                return False
-            elif string.split("|")[-2] == "-":
-                return False
-            elif string.split("|")[-2] == "*":
-                return False
-            elif string.split("|")[-2] == "/":
-                return False
-            else:
+        async def check1(string):
+            try:
+                if string.split("|")[-2] == "+":
+                    return False
+                elif string.split("|")[-2] == "-":
+                    return False
+                elif string.split("|")[-2] == "*":
+                    return False
+                elif string.split("|")[-2] == "/":
+                    return False
+            except:
                 return True
+            else:
+                return False
         
-        async def check2(waitfor, string):
-            if string.split("|")[-2] == "+":
-                return False
-            elif string.split("|")[-2] == "-":
-                return False
-            elif string.split("|")[-2] == "*":
-                return False
-            elif string.split("|")[-2] == "/":
-                return False
-            elif "+" in string.split("|"):
-                return False
-            elif "-" in string.split("|"):
-                return False
-            elif "*" in string.split("|"):
-                return False
-            elif "/" in string.split("|"):
-                return False
-            else:
+        async def check2(string):
+            try:
+                if string.split("|")[-2] == "+":
+                    return False
+                elif string.split("|")[-2] == "-":
+                    return False
+                elif string.split("|")[-2] == "*":
+                    return False
+                elif string.split("|")[-2] == "/":
+                    return False
+                elif "+" in string.split("|"):
+                    return False
+                elif "-" in string.split("|"):
+                    return False
+                elif "*" in string.split("|"):
+                    return False
+                elif "/" in string.split("|"):
+                    return False
+            except:
                 return True
+            else:
+                return False
         
         while 0 == 0:
             waitfor = await self.bot.wait_for("component")
@@ -486,35 +492,35 @@ class Slash(commands.Cog):
                             e.description = f"```\n{int(string[0]) / int(string[2])}\n```"
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "+":
-                        if await check2(waitfor, string):
+                        if await check2(string):
                             string += "|+|"
                             e.description = f"```\n{string}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "-":
-                        if await check2(waitfor, string):
+                        if await check2(string):
                             string += "|-|"
                             e.description = f"```\n{string}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "*":
-                        if await check2(waitfor, string):
+                        if await check2(string):
                             string += "|*|"
                             e.description = f"```\n{string}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "/":
-                        if await check2(waitfor, string):
+                        if await check2(string):
                             string += "|/|"
                             e.description = f"```\n{string}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == ".":
-                        if check1(waitfor, string):
+                        if check1(string):
                             string += waitfor.custom_id
                             e.description = f"```\n{string}\n```"
                             await waitfor.edit_origin(embed=e)
