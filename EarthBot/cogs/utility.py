@@ -1,4 +1,6 @@
 import discord
+import discord_components as components
+import asyncio
 from datetime import datetime
 from discord.ext import commands
 
@@ -190,6 +192,33 @@ class Utility(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
+    @commands.command(name="emojiinfo")
+    async def emojiinfo(self, ctx: commands.Context, emoji):
+        """Shows information about an Emoji in this server."""
+
+        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
+
+        e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_thumbnail(url=emoji.url)
+        e.add_field(name="Name", value=f"{emoji.name}")
+        e.add_field(name="ID", value=f"{emoji.id}")
+        e.add_field(name="Animated", value=f"{emoji.animated}")
+        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e, components=[
+            [
+                components.Button(label="Use Emoji", style=components.ButtonStyle.blue, id="use", emoji=emoji)
+            ]
+        ])
+
+        waitfor = await self.bot.wait_for("button_click", check=lambda r: r.component.id == "use")
+        if waitfor.user.id == ctx.author.id:
+            componentbug = await waitfor.respond("Emoji used successfully!")
+            await self.nitro(ctx, emoji.name)
+            await asyncio.sleep(1.0)
+            await componentbug.delete()
+
     @commands.command(name="getupdates")
     async def getupdates(self, ctx: commands.Context):
         """As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`."""
@@ -197,10 +226,10 @@ class Utility(commands.Cog):
         await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`.")
     
     @commands.command(name="nitro")
-    async def nitro(self, ctx: commands.Context, emojiname):
+    async def nitro(self, ctx: commands.Context, emoji):
         """Sends animated emojis (from this server) with your name."""
 
-        emoji = discord.utils.get(ctx.guild.emojis, name=emojiname)
+        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
         avatar = await ctx.author.avatar_url.read()
         webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Nitro command.")
