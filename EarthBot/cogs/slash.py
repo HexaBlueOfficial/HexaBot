@@ -1,5 +1,4 @@
 import discord
-from discord.ext.commands.core import check
 import discord_slash as slash
 import json
 import random
@@ -44,15 +43,19 @@ class Slash(commands.Cog):
     async def on_ready(self):
         self.bot.launch_time = datetime.utcnow()
     
-    @slashcog.cog_slash(name="info", description="Shows information about Earth.")
+    @slashcog.cog_slash(name="info")
     async def _info(self, ctx: slash.SlashContext):
+        raise commands.MissingRequiredArgument
+    
+    @slashcog.cog_subcommand(base="info", name="bot", description="Shows information about the Earth bot.")
+    async def _bot(self, ctx: slash.SlashContext):
         luckyint = random.randint(1, 20)
         
         e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Earth: v1.3.0\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.3.0\nJS Earth: v0.1.0\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         info = await ctx.send(embed=e, components=[
@@ -591,10 +594,10 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    @slashcog.cog_slash(name="userinfo", description="Retrieves information about a user.", options=[
+    @slashcog.cog_subcommand(base="info", name="user", description="Retrieves information about a user.", options=[
         slash.utils.manage_commands.create_option("user", "The user to find.", 3, False)
     ])
-    async def _userinfo(self, ctx: slash.SlashContext, user=None):
+    async def _user(self, ctx: slash.SlashContext, user=None):
         if user is None:
             string = ""
             for role in ctx.author.roles:
@@ -695,8 +698,8 @@ class Slash(commands.Cog):
                     e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
                     await ctx.send(embed=e)
     
-    @slashcog.cog_slash(name="serverinfo", description="Shows information about the Context Guild.")
-    async def serverinfo(self, ctx: slash.SlashContext):
+    @slashcog.cog_subcommand(base="info", name="server", description="Shows information about the Context Guild.")
+    async def server(self, ctx: slash.SlashContext):
         memberCount = 0
         botCount = 0
         for member in ctx.guild.members:
@@ -728,10 +731,10 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    @slashcog.cog_slash(name="emojiinfo", description="Shows information about an Emoji in this server.", options=[
+    @slashcog.cog_subcommand(base="info", name="emoji", description="Shows information about an Emoji in this server.", options=[
         slash.utils.manage_commands.create_option("emoji", "The emoji's name.", 3, True)
     ])
-    async def _emojiinfo(self, ctx: slash.SlashContext, emoji: str):
+    async def _emoji(self, ctx: slash.SlashContext, emoji: str):
         emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
         e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)

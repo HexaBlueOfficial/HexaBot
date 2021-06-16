@@ -1,4 +1,3 @@
-from os import error
 import discord
 import discord_slash as slasher
 import tracemalloc
@@ -17,7 +16,7 @@ async def on_ready():
     components.DiscordComponents(bot)
     
     channel = bot.get_channel(832677639944667186)
-    await channel.send(f"Earth is ready and running on discord.py v{discord.__version__}!")
+    await channel.send(f"Python Earth is ready and running on discord.py v{discord.__version__}!")
 
 @bot.event
 async def on_command_error(ctx: commands.Context, error):
@@ -30,7 +29,7 @@ async def on_command_error(ctx: commands.Context, error):
 @bot.event
 async def on_slash_command_error(ctx: slasher.SlashContext, ex):
     await ctx.send(f"<:No:833293106198872094> {ex}")
-    raise error
+    raise ex
 
 extensions = ["cogs.core", "cogs.developer", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility", "jishaku"]
 for extension in extensions:
