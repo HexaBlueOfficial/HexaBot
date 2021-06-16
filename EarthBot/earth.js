@@ -46,5 +46,7 @@ bot.on("message", async message => {
     }
 });
 
-const token = require("./token.json");
-bot.run(JSON.parse(token).token)
+const tokenfile = require("./token.json");
+const stringified = JSON.stringify(tokenfile)
+const token = JSON.parse(stringified)
+bot.run(token["token"])
