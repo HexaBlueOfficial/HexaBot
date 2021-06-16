@@ -1,7 +1,7 @@
-import {Client} from "discord.js";
-import ytdl, {validateURL, getInfo} from "ytdl-core";
+const discord = require("discord.js");
+const ytdl = require("ytdl-core");
 
-const bot = new Client();
+const bot = new discord.Client();
 
 bot.on("ready", () => {
     const guild = bot.guilds.cache.get(832594030264975420);
@@ -23,7 +23,7 @@ bot.on("message", async message => {
     
     if (message.content.startsWith("e.play")) {
         const url = message.content.split(" ")[1];
-        if (validateURL(url)) {
+        if (ytdl.validateURL(url)) {
             if (message.member.voice.channel) {
                 const connection = message.member.voice.channel.join();
                 connection.play(ytdl(url, {filter: "audioonly"}));
@@ -32,9 +32,9 @@ bot.on("message", async message => {
                     .setTitle("Now Playing")
                     .setColor(0x00a8ff)
                     .setAuthor("Earth", "https://this.is-for.me/i/gxe1.png")
-                    .setThumbnail(getInfo(url).thumbnail.url)
-                    .addField("Title", getInfo(url).title)
-                    .addField("Length in Seconds", getInfo(url).lengthSeconds)
+                    .setThumbnail(ytdl.getInfo(url).thumbnail.url)
+                    .addField("Title", ytdl.getInfo(url).title)
+                    .addField("Length in Seconds", ytdl.getInfo(url).lengthSeconds)
                     .setFooter("Earth by Earth Development", "https://this.is-for.me/i/gxe1.png")
                 message.channel.send({embed: e})
             } else {
@@ -46,5 +46,5 @@ bot.on("message", async message => {
     }
 });
 
-import token from "./token.json";
+const token = require("./token.json");
 bot.run(JSON.parse(token).token)
