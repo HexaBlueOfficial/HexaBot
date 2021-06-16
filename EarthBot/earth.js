@@ -49,4 +49,4 @@ bot.on("message", async message => {
 const tokenfile = require("./token.json");
 const stringified = JSON.stringify(tokenfile);
 const token = JSON.parse(stringified);
-bot.run(token["token"])
+bot.login(token["token"])
