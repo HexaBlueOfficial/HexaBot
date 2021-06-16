@@ -35,7 +35,7 @@ bot.on("message", async message => {
                     .setThumbnail(ytdl.getInfo(url).thumbnail.url)
                     .addField("Title", ytdl.getInfo(url).title)
                     .addField("Length in Seconds", ytdl.getInfo(url).lengthSeconds)
-                    .setFooter("Earth by Earth Development", "https://this.is-for.me/i/gxe1.png")
+                    .setFooter("Earth by Earth Development", "https://this.is-for.me/i/gxe1.png");
                 message.channel.send({embed: e})
             } else {
                 message.channel.send("<:No:833293106198872094> Join a Voice Channel first.")
