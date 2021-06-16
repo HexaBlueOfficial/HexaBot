@@ -1,5 +1,6 @@
 const discord = require("discord.js");
 const ytdl = require("ytdl-core");
+const fs = require("fs");
 
 const bot = new discord.Client();
 
@@ -46,7 +47,6 @@ bot.on("message", async message => {
     }
 });
 
-const tokenfile = require("./token.json");
-const stringified = JSON.stringify(tokenfile);
-const token = JSON.parse(stringified);
-bot.login(token["token"])
+const tokenfile = fs.readFileSync("./token.json")
+const token = JSON.parse(tokenfile);
+bot.login(token.token)
