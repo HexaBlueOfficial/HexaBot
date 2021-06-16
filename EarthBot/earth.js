@@ -5,8 +5,8 @@ const fs = require("fs");
 const bot = new discord.Client();
 
 bot.on("ready", () => {
-    const guild = bot.guilds.cache.get(832594030264975420);
-    const channel = guild.channels.cache.get(832677639944667186);
+    const guild = bot.guilds.cache.get("832594030264975420");
+    const channel = guild.channels.cache.get("832677639944667186");
     
     channel.send("JS Earth is ready and running on discord.js v12.5.3!")
 });
