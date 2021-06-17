@@ -26,7 +26,7 @@ bot.on("message", async message => {
         const url = message.content.split(" ")[1];
         if (ytdl.validateURL(url)) {
             if (message.member.voice.channel) {
-                const connection = message.member.voice.channel.join();
+                const connection = await message.member.voice.channel.join();
                 connection.play(ytdl(url, {filter: "audioonly"}));
     
                 const e = new discord.MessageEmbed()
