@@ -58,7 +58,7 @@ class Slash(commands.Cog):
         e.add_field(name="Versions", value=f"Python Earth: v1.4.0\nJS Earth: v0.1.0 (disabled)\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        info = await ctx.send(embed=e, components=[
+        infomessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, None, "https://discord.gg/DsARcGwwdM")
@@ -70,7 +70,7 @@ class Slash(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == info.id)
+            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == infomessage.id)
             if waitfor.custom_id == "invite":
                 await waitfor.send("**Coming soon...**", hidden=True)
     
@@ -736,7 +736,7 @@ class Slash(commands.Cog):
                     await ctx.send(embed=e)
     
     @slashcog.cog_subcommand(base="info", name="server", description="Shows information about the Context Guild.")
-    async def server(self, ctx: slash.SlashContext):
+    async def _server(self, ctx: slash.SlashContext):
         memberCount = 0
         botCount = 0
         for member in ctx.guild.members:
