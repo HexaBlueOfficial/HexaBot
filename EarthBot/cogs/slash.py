@@ -817,7 +817,7 @@ class Slash(commands.Cog):
         if luckyint == 8:
             e.add_field(name="quikblend", value="No official description.\nAn official Discord Staff's server.", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e, components=components)
+        await ctx.send(embed=e, components=[components])
     
     @slashcog.cog_subcommand(base="discord", name="downloads", description="Download links for all Desktop editions.", options=[
         slash.utils.manage_commands.create_option("os", "The Operating System you use and the installer file format.", 3, True, choices=[
