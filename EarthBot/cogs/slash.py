@@ -43,10 +43,6 @@ class Slash(commands.Cog):
     async def on_ready(self):
         self.bot.launch_time = datetime.utcnow()
     
-    @slashcog.cog_slash(name="info")
-    async def _info(self, ctx: slash.SlashContext):
-        raise commands.MissingRequiredArgument
-    
     @slashcog.cog_subcommand(base="info", name="bot", description="Shows information about the Earth bot.")
     async def _bot(self, ctx: slash.SlashContext):
         luckyint = random.randint(1, 20)
@@ -794,10 +790,6 @@ class Slash(commands.Cog):
             await self._nitro(ctx, emoji.name)
             await asyncio.sleep(1.0)
             await componentbug.delete()
-    
-    @slashcog.cog_slash(name="discord")
-    async def _discord(self, ctx: slash.SlashContext):
-        raise commands.MissingRequiredArgument
     
     @slashcog.cog_subcommand(base="discord", name="servers", description="Discord's Official servers.")
     async def _servers(self, ctx: slash.SlashContext):
