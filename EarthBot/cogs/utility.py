@@ -218,12 +218,12 @@ class Utility(commands.Cog):
             await self.nitro(ctx, emoji.name)
             await asyncio.sleep(1.0)
             await componentbug.delete()
+    
+    @commands.command(name="discord")
+    async def discord(self, ctx: commands.Context):
+        """As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`."""
 
-    @commands.command(name="getupdates")
-    async def getupdates(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`."""
-
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`.")
+        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`.")
     
     @commands.command(name="nitro")
     async def nitro(self, ctx: commands.Context, emoji):

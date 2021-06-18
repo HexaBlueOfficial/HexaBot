@@ -55,7 +55,7 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Python Earth: v1.3.0\nJS Earth: v0.1.0\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.4.0\nJS Earth: v0.1.0 (disabled)\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         info = await ctx.send(embed=e, components=[
@@ -106,6 +106,43 @@ class Slash(commands.Cog):
         data = data.rstrip()
         
         e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=0x00a8ff, description=data)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e)
+    
+    @slashcog.cog_slash(name="getupdates", description="Get updates about the Earth!", options=[
+        slash.utils.manage_commands.create_option("updates", "The updates you want.", 3, True, choices=[
+            slash.utils.manage_commands.create_choice("832660792397791262", "Global Warming Updates"),
+            slash.utils.manage_commands.create_choice("832661047398760450", "Endangered Species Updates"),
+            slash.utils.manage_commands.create_choice("832671013753454602", "Evil Companies Updates")
+        ]),
+        slash.utils.manage_commands.create_option("to", "The channel to get the news at.", 3, True)
+    ])
+    @commands.has_guild_permissions(manage_guild=True)
+    async def _getupdates(self, ctx: slash.SlashContext, updates: str, to: str):
+        earthnet = self.bot.get_guild(832594030264975420)
+        tofollow = earthnet.get_channel(int(updates))
+        try:
+            to = int(to)
+        except:
+            to = to.lstrip("<#")
+            to = to.rstrip(">")
+            to = int(to)
+        to = ctx.guild.get_channel(to)
+        await tofollow.follow(destination=to, reason="GetUpdates command.")
+
+        followed = ""
+        if updates == "832660792397791262":
+            followed = "Global Warming Updates"
+        elif updates == "832661047398760450":
+            followed = "Endangered Species Updates"
+        elif updates == "832671013753454602":
+            followed = "Evil Companies Updates"
+        await ctx.send(f"Successfully followed {followed}.")
+    
+    @slashcog.cog_slash(name="fundraiser", description="This command gets updated everytime a new Fundraiser starts in the EarthNetwork server.")
+    async def _fundraiser(self, ctx: slash.SlashContext):
+        e = discord.Embed(title="How to donate to WWF", color=0x00a8ff, description="**How to donate to WWF:**\n\n**Step 1:** Go to https://worldwildlife.org (WWF's official website).\n**Step 2:** Hover over the big, red, \"DONATE\" button.\n**Step 3:** Select \"Make a One-time Donation\" from the dropdown.\n**Step 4:** Select what you prefer and enter your info.\n**Step 5:** Press \"Submit\".\n\nCongratulations: you helped our Planet!")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
@@ -758,35 +795,72 @@ class Slash(commands.Cog):
             await asyncio.sleep(1.0)
             await componentbug.delete()
     
-    @slashcog.cog_slash(name="getupdates", description="Get updates about the Earth!", options=[
-        slash.utils.manage_commands.create_option("updates", "The updates you want.", 3, True, choices=[
-            slash.utils.manage_commands.create_choice("832660792397791262", "Global Warming Updates"),
-            slash.utils.manage_commands.create_choice("832661047398760450", "Endangered Species Updates"),
-            slash.utils.manage_commands.create_choice("832671013753454602", "Evil Companies Updates")
-        ]),
-        slash.utils.manage_commands.create_option("to", "The channel to get the news at.", 3, True)
-    ])
-    @commands.has_guild_permissions(manage_guild=True)
-    async def _getupdates(self, ctx: slash.SlashContext, updates: str, to: str):
-        earthnet = self.bot.get_guild(832594030264975420)
-        tofollow = earthnet.get_channel(int(updates))
-        try:
-            to = int(to)
-        except:
-            to = to.lstrip("<#")
-            to = to.rstrip(">")
-            to = int(to)
-        to = ctx.guild.get_channel(to)
-        await tofollow.follow(destination=to, reason="GetUpdates command.")
+    @slashcog.cog_slash(name="discord")
+    async def _discord(self, ctx: slash.SlashContext):
+        raise commands.MissingRequiredArgument
+    
+    @slashcog.cog_subcommand(base="discord", name="servers", description="Discord's Official servers.")
+    async def _servers(self, ctx: slash.SlashContext):
+        luckyint = random.randint(1, 10)
 
-        followed = ""
-        if updates == "832660792397791262":
-            followed = "Global Warming Updates"
-        elif updates == "832661047398760450":
-            followed = "Endangered Species Updates"
-        elif updates == "832671013753454602":
-            followed = "Evil Companies Updates"
-        await ctx.send(f"Successfully followed {followed}.")
+        if luckyint == 8:
+            components = slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Testers", None, None, "https://discord.gg/discord-testers"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Townhall", None, None, "https://discord.gg/discord-townhall"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Developers", None, None, "https://discord.gg/discord-developers"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join quikblend", None, None, "https://discord.gg/quikblend")
+            )
+        else:
+            components = slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Testers", None, None, "https://discord.gg/discord-testers"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Townhall", None, None, "https://discord.gg/discord-townhall"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Developers", None, None, "https://discord.gg/discord-developers")
+            )
+
+        e = discord.Embed(title="Discord's Official Servers", color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Discord Testers", value="The official place to report Discord Bugs! Help find bugs, chat with others and be a part of the testers community!", inline=False)
+        e.add_field(name="Discord Townhall", value="Discord is your place to talk. Talk with other users, share your latest adventures and make some new ones.", inline=False)
+        e.add_field(name="Discord Developers (previously GameSDK)", value="A place to discuss Discord's API and SDKs with community developers and Discord staff alike!", inline=False)
+        if luckyint == 8:
+            e.add_field(name="quikblend", value="No official description.\nAn official Discord Staff's server.", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e, components=components)
+    
+    @slashcog.cog_subcommand(base="discord", name="downloads", description="Download links for all Desktop editions.", options=[
+        slash.utils.manage_commands.create_option("os", "The Operating System you use and the installer file format.", 3, True, choices=[
+            slash.utils.manage_commands.create_choice("win", "Windows (.exe)"),
+            slash.utils.manage_commands.create_choice("mac", "macOS (.dmg)"),
+            slash.utils.manage_commands.create_choice("tar", "Linux (.tar.gz)"),
+            slash.utils.manage_commands.create_choice("deb", "Linux (.deb)")
+        ])
+    ])
+    async def _downloads(self, ctx: slash.SlashContext, os: str):
+        links = []
+        if os == "win":
+            links = ["https://discord.com/api/download?platform=win", "https://discord.com/api/download/ptb?platform=win", "https://discord.com/api/download/canary?platform=win", "https://discord.com/api/download/development?platform=win"]
+        elif os == "mac":
+            links = ["https://discord.com/api/download?platform=osx", "https://discord.com/api/download/ptb?platform=osx", "https://discord.com/api/download/canary?platform=osx", "https://discord.com/api/download/development?platform=osx"]
+        elif os == "tar":
+            links = ["https://discord.com/api/download?platform=linux&format=tar.gz", "https://discord.com/api/download/ptb?platform=linux&format=tar.gz", "https://discord.com/api/download/canary?platform=linux&format=tar.gz", "https://discord.com/api/download/development?platform=linux&format=tar.gz"]
+        elif os == "deb":
+            links = ["https://discord.com/api/download?platform=linux&format=deb", "https://discord.com/api/download/ptb?platform=linux&format=deb", "https://discord.com/api/download/canary?platform=linux&format=deb", "https://discord.com/api/download/development?platform=linux&format=deb"]
+        
+        e = discord.Embed(title="Discord's Downloads", color=0x00a8ff)
+        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.add_field(name="Stable", value="The most popular edition of Discord. You'll almost never find a bug on this one.\nMISSING ESSENTIAL FEATURE: Ability to see Component type \"Select\" (dropdown menus).", inline=False)
+        e.add_field(name="Public Test Build (PTB)", value="This edition can be called Beta. It is possible to find bugs on this one.", inline=False)
+        e.add_field(name="Canary", value="This editon is basically an Alpha: you get the newest features. It is likely you'll find bugs on this one.", inline=False)
+        e.add_field(name="Development", value="This edition is used by the very Discord Staff for testing. Very high risk of encountering bugs.\nMISSING ESSENTIAL FEATURE: Ability to report bugs in [Discord Testers](https://discord.gg/discord-testers). Reports on Development will immediately be denied.", inline=False)
+        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Download Stable", None, None, links[0]),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Download PTB", None, None, links[1]),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Download Canary", None, None, links[2]),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Download Development", None, None, links[3])
+            )
+        ])
     
     @slashcog.cog_slash(name="nitro", description="Sends animated emojis (from this server) with your name.", options=[
         slash.utils.manage_commands.create_option("emoji", "The emoji's name.", 3, True)
