@@ -531,28 +531,32 @@ class Slash(commands.Cog):
                     elif waitfor.custom_id == "+":
                         if await check2(string):
                             string += "|+|"
-                            e.description = f"```\n{string.replace("|", "")}\n```"
+                            stringe = string.replace("|", "")
+                            e.description = f"```\n{stringe}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "-":
                         if await check2(string):
                             string += "|-|"
-                            e.description = f"```\n{string.replace("|", "")}\n```"
+                            stringe = string.replace("|", "")
+                            e.description = f"```\n{stringe}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "*":
                         if await check2(string):
                             string += "|*|"
-                            e.description = f"```\n{string.replace("|", "")}\n```"
+                            stringe = string.replace("|", "")
+                            e.description = f"```\n{stringe}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "/":
                         if await check2(string):
                             string += "|/|"
-                            e.description = f"```\n{string.replace("|", "")}\n```"
+                            stringe = string.replace("|", "")
+                            e.description = f"```\n{stringe}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
