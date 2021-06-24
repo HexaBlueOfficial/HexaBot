@@ -381,17 +381,17 @@ class Slash(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         poll = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option", None, "1"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option", None, "2")
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option", None, "opt1"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option", None, "opt2")
             )
         ])
 
         while 0 == 0:
             waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == poll.id)
             e.clear_fields()
-            if waitfor.custom_id == "1":
+            if waitfor.custom_id == "opt1":
                 vote1 += 1
-            elif waitfor.custom_id == "2":
+            elif waitfor.custom_id == "opt2":
                 vote2 += 1
             operation1 = round((vote1 * 100) / (vote1 + vote2), 1)
             operation2 = round((vote2 * 100) / (vote1 + vote2), 1)
@@ -531,28 +531,28 @@ class Slash(commands.Cog):
                     elif waitfor.custom_id == "+":
                         if await check2(string):
                             string += "|+|"
-                            e.description = f"```\n{string}\n```"
+                            e.description = f"```\n{string.replace("|", "")}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "-":
                         if await check2(string):
                             string += "|-|"
-                            e.description = f"```\n{string}\n```"
+                            e.description = f"```\n{string.replace("|", "")}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "*":
                         if await check2(string):
                             string += "|*|"
-                            e.description = f"```\n{string}\n```"
+                            e.description = f"```\n{string.replace("|", "")}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
                     elif waitfor.custom_id == "/":
                         if await check2(string):
                             string += "|/|"
-                            e.description = f"```\n{string}\n```"
+                            e.description = f"```\n{string.replace("|", "")}\n```"
                             await waitfor.edit_origin(embed=e)
                         else:
                             await waitfor.send("**This interaction failed.**", hidden=True)
