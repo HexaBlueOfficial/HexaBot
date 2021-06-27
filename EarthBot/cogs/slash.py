@@ -510,7 +510,7 @@ class Slash(commands.Cog):
                         await waitfor.send("Calculator Closed.", hidden=True)
                         break
                     elif waitfor.custom_id == "back":
-                        stringx = string.split("").pop()
+                        stringx = [character for character in string].pop()
                         string = ""
                         for character in stringx:
                             string += character
@@ -523,14 +523,18 @@ class Slash(commands.Cog):
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "=":
                         stringx = string.split("|")
+                        operation = 0
                         if stringx[1] == "+":
-                            string = f"{int(stringx[0]) + int(stringx[2])}"
+                            operation = float(stringx[0]) + float(stringx[2])
                         elif stringx[1] == "-":
-                            string = f"{int(stringx[0]) - int(stringx[2])}"
+                            operation = float(stringx[0]) - float(stringx[2])
                         elif stringx[1] == "*":
-                            string = f"{int(stringx[0]) * int(stringx[2])}"
+                            operation = float(stringx[0]) * float(stringx[2])
                         elif stringx[1] == "/":
-                            string = f"{int(stringx[0]) / int(stringx[2])}"
+                            operation = float(stringx[0]) / float(stringx[2])
+                        if str(operation).endswith(".0"):
+                            operation = int(operation)
+                        string = f"{operation}"
                         e.description = f"```\n{string}\n```"
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "+":
