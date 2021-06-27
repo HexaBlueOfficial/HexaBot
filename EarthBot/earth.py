@@ -21,10 +21,7 @@ async def on_ready():
 @bot.event
 async def on_command_error(ctx: commands.Context, error):
     if isinstance(error, commands.CommandNotFound):
-        if ctx.message.content == "e.join" or ctx.message.content.startswith("e.play"):
-            await ctx.send("<:No:833293106198872094> JS Earth is temporarily disabled.")
-        else:
-            await ctx.send("<:No:833293106198872094> The command was not found. You may want to run `e.help` for a list of commands.")
+        await ctx.send("<:No:833293106198872094> The command was not found. You may want to run `e.help` for a list of commands.")
     else:
         await ctx.send(f"<:No:833293106198872094> {error}")
     raise error

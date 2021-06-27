@@ -1,7 +1,7 @@
 import discord
 import random
 import platform
-import discord_components as components
+import discord_slash as slash
 import asyncio
 from discord.ext import commands, tasks
 
@@ -55,14 +55,14 @@ class Core(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Python Earth: v1.4.0\nJS Earth: v0.1.0 (disabled)\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.hack`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e, components=[
-            [
-                components.Button(label="Invite", id="invite"),
-                components.Button(label="Support", style=components.ButtonStyle.URL, url="https://discord.gg/DsARcGwwdM")
-            ]
+        infomessage = await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, None, "https://discord.gg/DsARcGwwdM")
+            )
         ])
 
         if luckyint == 8:
@@ -70,8 +70,8 @@ class Core(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("button_click", check=lambda r: r.component.id == "invite")
-            await waitfor.respond(content="**Coming soon...**")
+            waitfor = await slash.utils.manage_components.wait_for_component(self.bot, infomessage, "invite")
+            await waitfor.send("**Coming soon...**", hidden=True)
     
     @commands.command(name="arth", hidden=True)
     async def arth(self, ctx: commands.Context):

@@ -49,14 +49,12 @@ class Developer(commands.Cog):
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
-    @commands.command(name="restart")
+    @commands.command(name="restart", hidden=True)
     @commands.is_owner()
     async def restart(self, ctx: commands.Context):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
 
-        restarting = await ctx.send(self.loading("Restarting..."))
-        await asyncio.sleep(2.0)
-        await restarting.edit(content="**See you in a bit!**")
+        await ctx.send(self.loading("Restarting... See you in a bit!"))
 
         await self.bot.close()
         await self.bot.login(self.token)

@@ -51,7 +51,7 @@ class Slash(commands.Cog):
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Python Earth: v1.4.0\nJS Earth: v0.1.0 (disabled)\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
         infomessage = await ctx.send(embed=e, components=[
@@ -66,9 +66,8 @@ class Slash(commands.Cog):
             await ctx.author.send("You should try running `e.arth`!")
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == infomessage.id)
-            if waitfor.custom_id == "invite":
-                await waitfor.send("**Coming soon...**", hidden=True)
+            waitfor = await slash.utils.manage_components.wait_for_component(self.bot, infomessage, "invite")
+            await waitfor.send("**Coming soon...**", hidden=True)
     
     @slashcog.cog_slash(name="guilds", description="You found a Developer command!\nThere's a good chance you can't use this.", guild_ids=[832594030264975420], options=[
         slash.utils.manage_commands.create_option("datatype", "Data to find.", 3, True, choices=[
@@ -78,8 +77,14 @@ class Slash(commands.Cog):
             slash.utils.manage_commands.create_choice("owner", "Guild Owners' Username and Discriminator"),
             slash.utils.manage_commands.create_choice("invite", "Guild Invites")
         ])
-    ])
-    @commands.is_owner()
+    ], default_permission=False, permissions={
+        832594030264975420: [
+            slash.utils.manage_commands.create_permission(450678229192278036, slash.utils.manage_commands.SlashCommandPermissionType.USER, True)
+        ],
+        838718002412912661: [
+            slash.utils.manage_commands.create_permission(450678229192278036, slash.utils.manage_commands.SlashCommandPermissionType.USER, True)
+        ]
+    })
     async def _guilds(self, ctx: slash.SlashContext, datatype: str):
         typex = datatype
         
@@ -183,9 +188,7 @@ class Slash(commands.Cog):
         else:
             await webhook.send(self.uwufy(message))
         await webhook.delete()
-        slashbug = await ctx.send("Successfully executed command!")
-        await asyncio.sleep(1.0)
-        await slashbug.delete()
+        await ctx.send("Successfully executed command!", hidden=True)
     
     @slashcog.cog_slash(name="uwu", description="Reject English, evolve to Furry.", options=[
         slash.utils.manage_commands.create_option("sentence", "This is what will be turned into the UwU language.", 3, True)
@@ -379,7 +382,7 @@ class Slash(commands.Cog):
         e.add_field(name=option2, value=f"{vote2}")
         e.add_field(name="Percentages", value=f"{option1}: 0%\n{option2}: 0%", inline=False)
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        poll = await ctx.send(embed=e, components=[
+        pollmessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option", None, "opt1"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "2nd Option", None, "opt2")
@@ -387,7 +390,7 @@ class Slash(commands.Cog):
         ])
 
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == poll.id)
+            waitfor = await slash.utils.manage_components.wait_for_component(self.bot, pollmessage, ["opt1", "opt2"])
             e.clear_fields()
             if waitfor.custom_id == "opt1":
                 vote1 += 1
@@ -426,7 +429,7 @@ class Slash(commands.Cog):
         e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=0x00a8ff, description="```\n \n```")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e, components=[
+        calculatormessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "8", None, "8"),
@@ -439,7 +442,7 @@ class Slash(commands.Cog):
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "5", None, "5"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "6", None, "6"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "-", None, "-"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←-", None, "back")
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←", None, "back")
             ),
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "1", None, "1"),
@@ -496,7 +499,7 @@ class Slash(commands.Cog):
                 return False
         
         while 0 == 0:
-            waitfor = await self.bot.wait_for("component")
+            waitfor = await slash.utils.manage_components.wait_for_component(self.bot, calculatormessage, ["00", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "=", "exit", "back", "clear"])
             if waitfor.author.id == ctx.author.id:
                 try:
                     int(waitfor.custom_id)
@@ -511,22 +514,24 @@ class Slash(commands.Cog):
                         string = ""
                         for character in stringx:
                             string += character
-                        e.description = f"```\n{string}\n```"
+                        stringe = string.replace("|", "")
+                        e.description = f"```\n{stringe}\n```"
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "clear":
                         string = ""
                         e.description = f"```\n \n```"
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "=":
-                        string = string.split("|")
-                        if string[1] == "+":
-                            e.description = f"```\n{int(string[0]) + int(string[2])}\n```"
-                        elif string[1] == "-":
-                            e.description = f"```\n{int(string[0]) - int(string[2])}\n```"
-                        elif string[1] == "*":
-                            e.description = f"```\n{int(string[0]) * int(string[2])}\n```"
-                        elif string[1] == "/":
-                            e.description = f"```\n{int(string[0]) / int(string[2])}\n```"
+                        stringx = string.split("|")
+                        if stringx[1] == "+":
+                            string = f"{int(stringx[0]) + int(stringx[2])}"
+                        elif stringx[1] == "-":
+                            string = f"{int(stringx[0]) - int(stringx[2])}"
+                        elif stringx[1] == "*":
+                            string = f"{int(stringx[0]) * int(stringx[2])}"
+                        elif stringx[1] == "/":
+                            string = f"{int(stringx[0]) / int(stringx[2])}"
+                        e.description = f"```\n{string}\n```"
                         await waitfor.edit_origin(embed=e)
                     elif waitfor.custom_id == "+":
                         if await check2(string):
@@ -569,7 +574,8 @@ class Slash(commands.Cog):
                             await waitfor.send("**This interaction failed.**", hidden=True)
                 else:
                     string += waitfor.custom_id
-                    e.description = f"```\n{string}\n```"
+                    stringe = string.replace("|", "")
+                    e.description = f"```\n{stringe}\n```"
                     await waitfor.edit_origin(embed=e)
     
     @slashcog.cog_slash(name="hack", description="Hack a member (100% real)!", options=[
@@ -585,7 +591,7 @@ class Slash(commands.Cog):
         e = discord.Embed(title=f"Hack {user.name}", color=0x00a8ff, description=f"**Hacking {user.name} ready.**")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        hack = await ctx.send(embed=e, components=[
+        hackmessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
@@ -593,7 +599,7 @@ class Slash(commands.Cog):
             )
         ])
 
-        waitfor = await self.bot.wait_for("component", check=lambda button_context: button_context.origin_message_id == hack.id)
+        waitfor = await slash.utils.manage_components.wait_for_component(self.bot, hackmessage, ["discord", "youtube", "twitter"])
         if waitfor.author_id == ctx.author.id:
             avatar = await user.avatar_url.read()
             webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Hack command")
@@ -606,6 +612,7 @@ class Slash(commands.Cog):
                 e.description = "**YOUTUBE HACKED!**"
             elif waitfor.custom_id == "twitter":
                 await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
+                e.description = "**TWITTER HACKED!**"
             await waitfor.edit_origin(embed=e)
             await webhook.delete()
     
@@ -772,28 +779,30 @@ class Slash(commands.Cog):
         slash.utils.manage_commands.create_option("emoji", "The emoji's name.", 3, True)
     ])
     async def _emoji(self, ctx: slash.SlashContext, emoji: str):
-        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
+        await ctx.send("<:No:833293106198872094> This command is broken at the moment.")
 
-        e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_thumbnail(url=emoji.url)
-        e.add_field(name="Name", value=f"{emoji.name}")
-        e.add_field(name="ID", value=f"{emoji.id}")
-        e.add_field(name="Animated", value=f"{emoji.animated}")
-        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e, components=[
-            slash.utils.manage_components.create_actionrow(
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Use Emoji", emoji, "use")
-            )
-        ])
+#       emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
-        waitfor = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "use")
-        if waitfor.author_id == ctx.author.id:
-            componentbug = await waitfor.send("Emoji used successfully!", hidden=True)
-            await self._nitro(ctx, emoji.name)
-            await asyncio.sleep(1.0)
-            await componentbug.delete()
+#        e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)
+#        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+#        e.set_thumbnail(url=emoji.url)
+#        e.add_field(name="Name", value=f"{emoji.name}")
+#        e.add_field(name="ID", value=f"{emoji.id}")
+#        e.add_field(name="Animated", value=f"{emoji.animated}")
+#        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
+#        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+#        await ctx.send(embed=e, components=[
+#            slash.utils.manage_components.create_actionrow(
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Use Emoji", emoji, "use")
+#            )
+#        ])
+
+#        waitfor = await self.bot.wait_for("component", check=lambda ctx: ctx.custom_id == "use")
+#        if waitfor.author_id == ctx.author.id:
+#            componentbug = await waitfor.send("Emoji used successfully!", hidden=True)
+#            await self._nitro(ctx, emoji.name)
+#            await asyncio.sleep(1.0)
+#            await componentbug.delete()
     
     @slashcog.cog_subcommand(base="discord", name="servers", description="Discord's Official servers.")
     async def _servers(self, ctx: slash.SlashContext):
@@ -862,15 +871,17 @@ class Slash(commands.Cog):
         slash.utils.manage_commands.create_option("emoji", "The emoji's name.", 3, True)
     ])
     async def _nitro(self, ctx: slash.SlashContext, emoji: str):
-        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
+        await ctx.send("<:No:833293106198872094> This command is broken at the moment.")
 
-        avatar = await ctx.author.avatar_url.read()
-        webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Nitro command.")
+#        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
-        await webhook.send(f"<a:{emoji.name}:{emoji.id}>")
-        slashbug = await ctx.send("Command executed successfully!")
-        await slashbug.delete()
-        await webhook.delete()
+#        avatar = await ctx.author.avatar_url.read()
+#        webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Nitro command.")
+
+#        await webhook.send(f"<a:{emoji.name}:{emoji.id}>")
+#        slashbug = await ctx.send("Command executed successfully!")
+#        await slashbug.delete()
+#        await webhook.delete()
 
 def setup(bot: commands.Bot):
     bot.add_cog(Slash(bot))

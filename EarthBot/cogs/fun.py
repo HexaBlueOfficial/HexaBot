@@ -4,7 +4,7 @@ import json
 import aiohttp
 import random
 import asyncio
-import discord_components as components
+import discord_slash as slash
 from discord.ext import commands
 
 class Fun(commands.Cog):
@@ -270,29 +270,30 @@ class Fun(commands.Cog):
         e = discord.Embed(title=f"Hack {user.name}", color=0x00a8ff, description=f"**Hacking {user.name} ready.**")
         e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        hack = await ctx.send(embed=e, components=[
-            [
-                components.Button(label="Hack Discord", style=components.ButtonStyle.blue, id="discord"),
-                components.Button(label="Hack YouTube", style=components.ButtonStyle.red, id="youtube"),
-                components.Button(label="Hack Twitter", style=components.ButtonStyle.green, id="twitter")
-            ]
+        hackmessage = await ctx.send(embed=e, components=[
+            slash.utils.manage_components.create_actionrow(
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
+                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "Hack Twitter", None, custom_id="twitter")
+            )
         ])
 
-        waitfor = await self.bot.wait_for("button_click")
-        if waitfor.user.id == ctx.author.id:
+        waitfor = await slash.utils.manage_components.wait_for_component(self.bot, hackmessage, ["discord", "youtube", "twitter"])
+        if waitfor.author_id == ctx.author.id:
             avatar = await user.avatar_url.read()
             webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Hack command")
-            if waitfor.id == "discord":
+            if waitfor.custom_id == "discord":
                 await webhook.send("I got hacked, oh fuck.")
                 await webhook.send(f"FUCK! {ctx.author} HACKED ME!")
                 e.description = "**DISCORD HACKED!**"
-            elif waitfor.id == "youtube":
+            elif waitfor.custom_id == "youtube":
                 await webhook.send("I just posted a video!\nhttps://youtu.be/Blh2FCAIIgk")
                 e.description = "**YOUTUBE HACKED!**"
-            elif waitfor.id == "twitter":
+            elif waitfor.custom_id == "twitter":
                 await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
-            await hack.edit(embed=e)
+                e.description = "**TWITTER HACKED!**"
+            await waitfor.edit_origin(embed=e)
             await webhook.delete()
-
+            
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
