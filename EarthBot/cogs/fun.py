@@ -1,4 +1,3 @@
-from os import name
 import discord
 import json
 import aiohttp
@@ -12,16 +11,18 @@ class Fun(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open("./Earth/EarthBot/misc/hug.json") as hugs:
+        with open("./Earth/EarthBot/misc/lines/hug.json") as hugs:
             self.huglines = json.load(hugs)
-        with open("./Earth/EarthBot/misc/kill.json") as kills:
+        with open("./Earth/EarthBot/misc/lines/kill.json") as kills:
             self.killlines = json.load(kills)
-        with open("./Earth/EarthBot/misc/gay.json") as gays:
+        with open("./Earth/EarthBot/misc/lines/gay.json") as gays:
             self.gaylines = json.load(gays)
-        with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
+        with open("./Earth/EarthBot/misc/lines/8ball.json") as eightballs:
             self.balllines = json.load(eightballs)
-        with open("./Earth/EarthBot/misc/skittles.json") as skittles:
+        with open("./Earth/EarthBot/misc/lines/skittles.json") as skittles:
             self.skittles = json.load(skittles)
+        with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
+            self.embed = json.load(embeds)
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
@@ -54,10 +55,10 @@ class Fun(commands.Cog):
                 cat = await response.json()
                 catpic = cat[0]["url"]
         
-        e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=0x00a8ff, description="Check out TheCatAPI [here](https://thecatapi.com)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheCatAPI [here](https://thecatapi.com)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=catpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="dog")
@@ -71,10 +72,10 @@ class Fun(commands.Cog):
                 dog = await response.json()
                 dogpic = dog[0]["url"]
         
-        e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=0x00a8ff, description="Check out TheDogAPI [here](https://thedogapi.com)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheDogAPI [here](https://thedogapi.com)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=dogpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="fox")
@@ -88,10 +89,10 @@ class Fun(commands.Cog):
                 fox = await response.json()
                 foxpic = fox["image"]
         
-        e = discord.Embed(title="Random Fox (from Random Fox by xinitrc)", color=0x00a8ff, description="Check out Random Fox [here](https://randomfox.ca)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Fox (from Random Fox by xinitrc)", color=int(self.embed["color"], 16), description="Check out Random Fox [here](https://randomfox.ca)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=foxpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
 
     @commands.command(name="hug")
@@ -102,11 +103,11 @@ class Fun(commands.Cog):
         halfpoint = self.huglines[str(huglineint)].replace("author", ctx.author.mention)
         hugline = halfpoint.replace("member", member.mention)
         
-        e = discord.Embed(title="Hug", color=0x00a8ff, description=f"{hugline}")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Hug", color=int(self.embed["color"], 16), description=f"{hugline}")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         if message is not None:
             e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
         await ctx.message.delete()
     
@@ -118,9 +119,9 @@ class Fun(commands.Cog):
         halfpoint = self.killlines[str(killlineint)].replace("author", ctx.author.mention)
         killline = halfpoint.replace("member", member.mention)
         
-        e = discord.Embed(title="Murder", color=0x00a8ff, description=f"{killline}")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Murder", color=int(self.embed["color"], 16), description=f"{killline}")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="gaypercent", aliases=["gay", "howgay"])
@@ -156,9 +157,9 @@ class Fun(commands.Cog):
             elif gay > 100:
                 gayline = makeline("over100")
             
-            e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-            e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-            e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+            e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+            e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+            e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
             await ctx.send(embed=e)
         else:
             try:
@@ -182,9 +183,9 @@ class Fun(commands.Cog):
                 elif gay > 100:
                     gayline = makeline("over100")
             
-                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.send(embed=e)
             else:
                 thing = self.bot.fetch_user(gayid)
@@ -207,9 +208,9 @@ class Fun(commands.Cog):
                 elif gay > 100:
                     gayline = makeline("over100")
             
-                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.send(embed=e)
     
     @commands.command(name="8ball", aliases=["eightball"])
@@ -219,11 +220,11 @@ class Fun(commands.Cog):
         balllineint = random.randint(0, 4)
         ballline = self.balllines[str(balllineint)]
 
-        e = discord.Embed(title="Magic 8 Ball", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Magic 8 Ball", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name="Your Question", value=f"{question}", inline=False)
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="poll")
@@ -241,14 +242,14 @@ class Fun(commands.Cog):
         skittleint = random.randint(0, 4)
         skittle = self.skittles[str(skittleint)]
         
-        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url=skittle["thumbnail"])
         e.add_field(name="Color", value=skittle["color"], inline=False)
         e.add_field(name="Flavor", value=skittle["flavor"], inline=False)
         e.add_field(name="Developer's Rating", value=skittle["devrate"], inline=False)
         e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="calculator", aliases=["calc"])
@@ -264,13 +265,11 @@ class Fun(commands.Cog):
         hacking = await ctx.send("<a:aLoading:833070225334206504> **Getting logins...**")
         await asyncio.sleep(1.0)
         await hacking.edit(content="<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
-        await asyncio.sleep(3.0)
-        await hacking.delete()
         
-        e = discord.Embed(title=f"Hack {user.name}", color=0x00a8ff, description=f"**Hacking {user.name} ready.**")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        hackmessage = await ctx.send(embed=e, components=[
+        e = discord.Embed(title=f"Hack {user.name}", color=int(self.embed["color"], 16), description=f"**Hacking {user.name} ready.**")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
+        hackmessage = await hacking.reply(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
@@ -294,6 +293,12 @@ class Fun(commands.Cog):
                 e.description = "**TWITTER HACKED!**"
             await waitfor.edit_origin(embed=e)
             await webhook.delete()
+            
+    @commands.command(name="tictactoe", aliases=["ttt", "tic_tac_toe", "tic-tac-toe"])
+    async def tictactoe(self, ctx: commands.Context):
+        """As a normal command could create confusion, this command is only available in Slash. Use `/tictactoe`."""
+
+        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/tictactoe`.")
             
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))

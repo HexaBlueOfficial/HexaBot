@@ -1,6 +1,5 @@
 import discord
 import json
-import asyncio
 from discord.ext import commands, flags
 
 class TypeNotRecognised(Exception):
@@ -11,6 +10,8 @@ class Developer(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
+            self.embed = json.load(embeds)
         with open("./token.json") as tokenfile:
             tokendict = json.load(tokenfile)
         self.token = tokendict["token"]
@@ -44,9 +45,9 @@ class Developer(commands.Cog):
                 raise TypeNotRecognised
         data = data.rstrip()
         
-        e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=0x00a8ff, description=data)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @commands.command(name="restart", hidden=True)

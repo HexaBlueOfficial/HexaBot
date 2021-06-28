@@ -1,4 +1,5 @@
 import discord
+import json
 import random
 import platform
 import discord_slash as slash
@@ -11,6 +12,8 @@ class Core(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.presence.start()
+        with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
+            self.embed = json.load(embeds)
     
     @tasks.loop(seconds=60.0)
     async def presence(self):
@@ -51,13 +54,13 @@ class Core(commands.Cog):
 
         luckyint = random.randint(1, 20)
 
-        e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="About Earth", color=int(self.embed["color"], 16), description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
         e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.hack`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         infomessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),

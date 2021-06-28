@@ -17,19 +17,18 @@ class Slash(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open("./Earth/EarthBot/misc/hug.json") as hugs:
+        with open("./Earth/EarthBot/misc/lines/hug.json") as hugs:
             self.huglines = json.load(hugs)
-        with open("./Earth/EarthBot/misc/kill.json") as kills:
+        with open("./Earth/EarthBot/misc/lines/kill.json") as kills:
             self.killlines = json.load(kills)
-        with open("./Earth/EarthBot/misc/gay.json") as gays:
+        with open("./Earth/EarthBot/misc/lines/gay.json") as gays:
             self.gaylines = json.load(gays)
-        with open("./Earth/EarthBot/misc/8ball.json") as eightballs:
+        with open("./Earth/EarthBot/misc/lines/8ball.json") as eightballs:
             self.balllines = json.load(eightballs)
-        with open("./Earth/EarthBot/misc/skittles.json") as skittles:
+        with open("./Earth/EarthBot/misc/lines/skittles.json") as skittles:
             self.skittles = json.load(skittles)
-        with open("./token.json") as tokenfile:
-            tokendict = json.load(tokenfile)
-        self.token = tokendict["token"]
+        with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
+            self.embed = json.load(embeds)
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
@@ -47,13 +46,13 @@ class Slash(commands.Cog):
     async def _bot(self, ctx: slash.SlashContext):
         luckyint = random.randint(1, 20)
         
-        e = discord.Embed(title="About Earth", color=0x00a8ff, description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="About Earth", color=int(self.embed["color"], 16), description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands.\n<@598325949808771083>: `/help`.\nOther: `/jishaku` (External Extension).", inline=False)
         e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `/kill`, `/hack`, `/gaypercent` and `/8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `/uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         infomessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
@@ -106,9 +105,9 @@ class Slash(commands.Cog):
                 raise TypeNotRecognised
         data = data.rstrip()
         
-        e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=0x00a8ff, description=data)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="getupdates", description="Get updates about the Earth!", options=[
@@ -143,9 +142,9 @@ class Slash(commands.Cog):
     
     @slashcog.cog_slash(name="fundraiser", description="This command gets updated everytime a new Fundraiser starts in the EarthNetwork server.")
     async def _fundraiser(self, ctx: slash.SlashContext):
-        e = discord.Embed(title="How to donate to WWF", color=0x00a8ff, description="**How to donate to WWF:**\n\n**Step 1:** Go to https://worldwildlife.org (WWF's official website).\n**Step 2:** Hover over the big, red, \"DONATE\" button.\n**Step 3:** Select \"Make a One-time Donation\" from the dropdown.\n**Step 4:** Select what you prefer and enter your info.\n**Step 5:** Press \"Submit\".\n\nCongratulations: you helped our Planet!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="How to donate to WWF", color=int(self.embed["color"], 16), description="**How to donate to WWF:**\n\n**Step 1:** Go to https://worldwildlife.org (WWF's official website).\n**Step 2:** Hover over the big, red, \"DONATE\" button.\n**Step 3:** Select \"Make a One-time Donation\" from the dropdown.\n**Step 4:** Select what you prefer and enter your info.\n**Step 5:** Press \"Submit\".\n\nCongratulations: you helped our Planet!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="say", description="The bot will say what you tell it to.", options=[
@@ -203,10 +202,10 @@ class Slash(commands.Cog):
                 cat = await response.json()
                 catpic = cat[0]["url"]
         
-        e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=0x00a8ff, description="Check out TheCatAPI [here](https://thecatapi.com)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheCatAPI [here](https://thecatapi.com)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=catpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="dog", description="Shows a random image of a dog.")
@@ -216,10 +215,10 @@ class Slash(commands.Cog):
                 dog = await response.json()
                 dogpic = dog[0]["url"]
         
-        e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=0x00a8ff, description="Check out TheDogAPI [here](https://thedogapi.com)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheDogAPI [here](https://thedogapi.com)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=dogpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="fox", description="Shows a random image of a fox.")
@@ -229,10 +228,10 @@ class Slash(commands.Cog):
                 fox = await response.json()
                 foxpic = fox["image"]
         
-        e = discord.Embed(title="Random Fox (from Random Fox by xinitrc)", color=0x00a8ff, description="Check out Random Fox [here](https://randomfox.ca)!")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Random Fox (from Random Fox by xinitrc)", color=int(self.embed["color"], 16), description="Check out Random Fox [here](https://randomfox.ca)!")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=foxpic)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="hug", description="Hugs the user you want.", options=[
@@ -244,11 +243,11 @@ class Slash(commands.Cog):
         halfpoint = self.huglines[str(huglineint)].replace("author", ctx.author.mention)
         hugline = halfpoint.replace("member", member.mention)
         
-        e = discord.Embed(title="Hug", color=0x00a8ff, description=f"{hugline}")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Hug", color=int(self.embed["color"], 16), description=f"{hugline}")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         if message is not None:
             e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="kill", description="Kills the user you want.", options=[
@@ -259,9 +258,9 @@ class Slash(commands.Cog):
         halfpoint = self.killlines[str(killlineint)].replace("author", ctx.author.mention)
         killline = halfpoint.replace("member", member.mention)
         
-        e = discord.Embed(title="Murder", color=0x00a8ff, description=f"{killline}")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Murder", color=int(self.embed["color"], 16), description=f"{killline}")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="gaypercent", description="Wanna find out how gay something is? This command is for you.", options=[
@@ -297,9 +296,9 @@ class Slash(commands.Cog):
             elif gay > 100:
                 gayline = makeline("over100")
             
-            e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-            e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-            e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+            e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+            e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+            e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
             await ctx.send(embed=e)
         else:
             try:
@@ -323,9 +322,9 @@ class Slash(commands.Cog):
                 elif gay > 100:
                     gayline = makeline("over100")
             
-                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.send(embed=e)
             else:
                 thing = self.bot.fetch_user(gayid)
@@ -348,9 +347,9 @@ class Slash(commands.Cog):
                 elif gay > 100:
                     gayline = makeline("over100")
             
-                e = discord.Embed(title="Gay Percentage", color=0x00a8ff, description=f"{gayline}")
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
+                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="8ball", description="Seek an answer from the Magic 8 Ball.", options=[
@@ -360,11 +359,11 @@ class Slash(commands.Cog):
         balllineint = random.randint(0, 4)
         ballline = self.balllines[str(balllineint)]
 
-        e = discord.Embed(title="Magic 8 Ball", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Magic 8 Ball", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name="Your Question", value=f"{question}", inline=False)
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="poll", description="Create a poll. Currently only supports two options.", options=[
@@ -376,12 +375,12 @@ class Slash(commands.Cog):
         vote1 = 0
         vote2 = 0
         
-        e = discord.Embed(title=f"Poll: {name}", color=0x00a8ff, description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"Poll: {name}", color=int(self.embed["color"], 16), description=f"**Poll by {ctx.author.mention}.**\nThink and choose.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name=option1, value=f"{vote1}")
         e.add_field(name=option2, value=f"{vote2}")
         e.add_field(name="Percentages", value=f"{option1}: 0%\n{option2}: 0%", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         pollmessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "1st Option", None, "opt1"),
@@ -412,23 +411,23 @@ class Slash(commands.Cog):
         skittleint = random.randint(0, 4)
         skittle = self.skittles[str(skittleint)]
         
-        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url=skittle["thumbnail"])
         e.add_field(name="Color", value=skittle["color"], inline=False)
         e.add_field(name="Flavor", value=skittle["flavor"], inline=False)
         e.add_field(name="Developer's Rating", value=skittle["devrate"], inline=False)
         e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="calculator", description="Calculate.")
     async def _calculator(self, ctx: slash.SlashContext):
         string = ""
 
-        e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=0x00a8ff, description="```\n \n```")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"{ctx.author.name}'s Calculator", color=int(self.embed["color"], 16), description="```\n \n```")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         calculatormessage = await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7"),
@@ -507,10 +506,40 @@ class Slash(commands.Cog):
                     if waitfor.custom_id == "exit":
                         e.description = "```\nThis Calculator has been closed.\n```"
                         await waitfor.edit_origin(embed=e)
-                        await waitfor.send("Calculator Closed.", hidden=True)
+                        await calculatormessage.edit(components=[
+                            slash.utils.manage_components.create_actionrow(
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "7", None, "7", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "8", None, "8", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "9", None, "9", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "+", None, "+", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Close", None, "exit", None, True)
+                            ),
+                            slash.utils.manage_components.create_actionrow(
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "4", None, "4", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "5", None, "5", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "6", None, "6", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "-", None, "-", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "←", None, "back", None, True)
+                            ),
+                            slash.utils.manage_components.create_actionrow(
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "1", None, "1", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "2", None, "2", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "3", None, "3", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "*", None, "*", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Clear", None, "clear", None, True)
+                            ),
+                            slash.utils.manage_components.create_actionrow(
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "00", None, "00", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "0", None, "0", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, ".", None, ".", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "/", None, "/", None, True),
+                                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "=", None, "=", None, True)
+                            )
+                            ])
+                        await waitfor.send("Calculator closed.", hidden=True)
                         break
                     elif waitfor.custom_id == "back":
-                        stringx = [character for character in string].pop()
+                        stringx = list(string).pop()
                         string = ""
                         for character in stringx:
                             string += character
@@ -589,13 +618,11 @@ class Slash(commands.Cog):
         hacking = await ctx.send("<a:aLoading:833070225334206504> **Getting logins...**")
         await asyncio.sleep(1.0)
         await hacking.edit(content="<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
-        await asyncio.sleep(3.0)
-        await hacking.delete()
         
-        e = discord.Embed(title=f"Hack {user.name}", color=0x00a8ff, description=f"**Hacking {user.name} ready.**")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
-        hackmessage = await ctx.send(embed=e, components=[
+        e = discord.Embed(title=f"Hack {user.name}", color=int(self.embed["color"], 16), description=f"**Hacking {user.name} ready.**")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
+        hackmessage = await hacking.reply(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
@@ -620,6 +647,52 @@ class Slash(commands.Cog):
             await waitfor.edit_origin(embed=e)
             await webhook.delete()
     
+    @slashcog.cog_slash(name="tictactoe", description="Play Tic-Tac-Toe!")
+    async def _tictactoe(self, ctx: slash.SlashContext):
+        await ctx.send("**Coming soon...**", hidden=True)
+
+#        e = discord.Embed(title="Tic-Tac-Toe", color=self.embed["color"], description="Play below.")
+#        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+#        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
+#        tttmessage = await ctx.send(embed=e, components=[
+#            slash.utils.manage_components.create_actionrow(
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "0.0"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "0.1"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "0.2")
+#            ),
+#            slash.utils.manage_components.create_actionrow(
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.0"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.1"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.2")
+#            ),
+#            slash.utils.manage_components.create_actionrow(
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.0"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.1"),
+#                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.2")
+#            )
+#        ])
+
+#        waitfor = await slash.utils.manage_components.wait_for_component(self.bot, tttmessage, ["0.0", "0.1", "0.2", "1.0", "1.1", "1.2", "2.0", "2.1", "2.2"])
+#        if waitfor.author.id == ctx.author.id:
+#            if waitfor.custom_id == "0.0":
+#                await tttmessage.edit(components=[
+#                    slash.utils.manage_components.create_actionrow(
+#                    slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "", None, "0.0"),
+#                    slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "0.1"),
+#                    slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "0.2")
+#                    ),
+#                    slash.utils.manage_components.create_actionrow(
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.0"),
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.1"),
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "1.2")
+#                    ),
+#                    slash.utils.manage_components.create_actionrow(
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.0"),
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.1"),
+#                        slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "", None, "2.2")
+#                    )
+#                ])
+    
     @slashcog.cog_slash(name="uptime", description="Shows an Embed with Earth's uptime.")
     async def _uptime(self, ctx: slash.SlashContext):
         delta_uptime = datetime.utcnow() - self.bot.launch_time
@@ -627,19 +700,19 @@ class Slash(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         days, hours = divmod(hours, 24)
         
-        e = discord.Embed(title="Uptime", color=0x00a8ff, description=f"The bot has been online for:\n{days} days, {hours} hours, {minutes} minutes and {seconds} seconds.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Uptime", color=int(self.embed["color"], 16), description=f"The bot has been online for:\n{days} days, {hours} hours, {minutes} minutes and {seconds} seconds.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name="Last Restart", value="The bot was last restarted on {} UTC".format(self.bot.launch_time.strftime("%A, %d %B %Y at %H:%M")), inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_slash(name="ping", description="Shows an Embed with Earth's ping latency.")
     async def _ping(self, ctx: slash.SlashContext):
         ping = self.bot.latency * 1000
         pingr = round(ping, 1)
-        e = discord.Embed(title="Ping Latency", color=0x00a8ff, description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Ping Latency", color=int(self.embed["color"], 16), description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_subcommand(base="info", name="user", description="Retrieves information about a user.", options=[
@@ -653,8 +726,8 @@ class Slash(commands.Cog):
                     continue
                 string = string + f"{role.mention} "
 
-            e = discord.Embed(title=f"Information for {str(ctx.author)}", color=0x00a8ff)
-            e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+            e = discord.Embed(title=f"Information for {str(ctx.author)}", color=int(self.embed["color"], 16))
+            e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
             e.set_thumbnail(url=ctx.author.avatar_url)
             e.add_field(name="Username", value=f"{ctx.author.name}")
             e.add_field(name="Discriminator", value=f"{ctx.author.discriminator}")
@@ -668,7 +741,7 @@ class Slash(commands.Cog):
             e.add_field(name="Joined At", value="{} UTC".format(ctx.author.joined_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Created At", value="{} UTC".format(ctx.author.created_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Roles", value=string)
-            e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+            e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
             await ctx.send(embed=e)
         else:
             try:
@@ -689,8 +762,8 @@ class Slash(commands.Cog):
                         continue
                     string = string + f"{role.mention} "
 
-                e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
                 e.set_thumbnail(url=user.avatar_url)
                 e.add_field(name="Username", value=f"{user.name}")
                 e.add_field(name="Discriminator", value=f"{user.discriminator}")
@@ -704,7 +777,7 @@ class Slash(commands.Cog):
                 e.add_field(name="Joined At", value="{} UTC".format(user.joined_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Roles", value=string)
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.send(embed=e)
             else:
                 user = await self.bot.fetch_user(user)
@@ -718,8 +791,8 @@ class Slash(commands.Cog):
                             continue
                         string = string + f"{role.mention} "
 
-                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                    e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
                     e.set_thumbnail(url=user.avatar_url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
@@ -733,17 +806,17 @@ class Slash(commands.Cog):
                     e.add_field(name="Joined At", value="{} UTC".format(user.joined_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Roles", value=string)
-                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                     await ctx.send(embed=e)
                 else:
-                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                    e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
                     e.set_thumbnail(url=user.avatar_url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
                     e.add_field(name="ID", value=f"{user.id}")
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
-                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                     await ctx.send(embed=e)
     
     @slashcog.cog_subcommand(base="info", name="server", description="Shows information about the Context Guild.")
@@ -764,8 +837,8 @@ class Slash(commands.Cog):
                 continue
             string = string + f"{role.mention} "
             
-        e = discord.Embed(title=f"Information for {ctx.guild.name}", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"Information for {ctx.guild.name}", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url=ctx.guild.icon_url)
         e.add_field(name="Name", value=f"{ctx.guild.name}")
         e.add_field(name="Owner", value=f"{str(ctx.guild.owner)}")
@@ -776,7 +849,7 @@ class Slash(commands.Cog):
         e.add_field(name="Emojis", value=f"{len(ctx.guild.emojis)}")
         e.add_field(name="Created At", value="{} UTC".format(ctx.guild.created_at.strftime("%A, %d %B %Y at %H:%M")))
         e.add_field(name="Roles", value=string)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e)
     
     @slashcog.cog_subcommand(base="info", name="emoji", description="Shows information about an Emoji in this server.", options=[
@@ -787,14 +860,14 @@ class Slash(commands.Cog):
 
 #       emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
-#        e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)
-#        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+#        e = discord.Embed(title=f"Information about {emoji.name}", color=int(self.embed["color"], 16))
+#        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
 #        e.set_thumbnail(url=emoji.url)
 #        e.add_field(name="Name", value=f"{emoji.name}")
 #        e.add_field(name="ID", value=f"{emoji.id}")
 #        e.add_field(name="Animated", value=f"{emoji.animated}")
 #        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
-#        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+#        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
 #        await ctx.send(embed=e, components=[
 #            slash.utils.manage_components.create_actionrow(
 #                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Use Emoji", emoji, "use")
@@ -826,14 +899,14 @@ class Slash(commands.Cog):
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Join Discord Developers", None, None, "https://discord.gg/discord-developers")
             )
 
-        e = discord.Embed(title="Discord's Official Servers", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Discord's Official Servers", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name="Discord Testers", value="The official place to report Discord Bugs! Help find bugs, chat with others and be a part of the testers community!", inline=False)
         e.add_field(name="Discord Townhall", value="Discord is your place to talk. Talk with other users, share your latest adventures and make some new ones.", inline=False)
         e.add_field(name="Discord Developers (previously GameSDK)", value="A place to discuss Discord's API and SDKs with community developers and Discord staff alike!", inline=False)
         if luckyint == 8:
             e.add_field(name="quikblend", value="No official description.\nAn official Discord Staff's server.", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e, components=[components])
     
     @slashcog.cog_subcommand(base="discord", name="downloads", description="Download links for all Desktop editions.", options=[
@@ -855,13 +928,13 @@ class Slash(commands.Cog):
         elif os == "deb":
             links = ["https://discord.com/api/download?platform=linux&format=deb", "https://discord.com/api/download/ptb?platform=linux&format=deb", "https://discord.com/api/download/canary?platform=linux&format=deb", "https://discord.com/api/download/development?platform=linux&format=deb"]
         
-        e = discord.Embed(title="Discord's Downloads", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Discord's Downloads", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.add_field(name="Stable", value="The most popular edition of Discord. You'll almost never find a bug on this one.\nMISSING ESSENTIAL FEATURE: Ability to see Component type \"Select\" (dropdown menus).", inline=False)
         e.add_field(name="Public Test Build (PTB)", value="This edition can be called Beta. It is possible to find bugs on this one.", inline=False)
         e.add_field(name="Canary", value="This editon is basically an Alpha: you get the newest features. It is likely you'll find bugs on this one.", inline=False)
         e.add_field(name="Development", value="This edition is used by the very Discord Staff for testing. Very high risk of encountering bugs.\nMISSING ESSENTIAL FEATURE: Ability to report bugs in [Discord Testers](https://discord.gg/discord-testers). Reports on Development will immediately be denied.", inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e, components=[
             slash.utils.manage_components.create_actionrow(
                 slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Download Stable", None, None, links[0]),

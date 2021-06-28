@@ -1,5 +1,5 @@
 import discord
-import asyncio
+import json
 from datetime import datetime
 from discord.ext import commands
 
@@ -8,6 +8,8 @@ class Utility(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
+            self.embed = json.load(embeds)
     
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
@@ -25,10 +27,10 @@ class Utility(commands.Cog):
         minutes, seconds = divmod(remainder, 60)
         days, hours = divmod(hours, 24)
         
-        e = discord.Embed(title="Uptime", color=0x00a8ff, description=f"The bot has been online for:\n{days} days, {hours} hours, {minutes} minutes and {seconds} seconds.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Uptime", color=int(self.embed["color"], 16), description=f"The bot has been online for:\n{days} days, {hours} hours, {minutes} minutes and {seconds} seconds.")
+        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Last Restart", value="The bot was last restarted on {} UTC".format(self.bot.launch_time.strftime("%A, %d %B %Y at %H:%M")), inline=False)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
     @commands.command(name="ping", aliases=["latency", "lat"])
@@ -37,9 +39,9 @@ class Utility(commands.Cog):
 
         ping = self.bot.latency * 1000
         pingr = round(ping, 1)
-        e = discord.Embed(title="Ping Latency", color=0x00a8ff, description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title="Ping Latency", color=int(self.embed["color"], 16), description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
+        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
     @commands.command(name="userinfo", aliases=["ui", "memberinfo", "mi"])
@@ -55,8 +57,8 @@ class Utility(commands.Cog):
                     continue
                 string = string + f"{role.mention} "
 
-            e = discord.Embed(title=f"Information for {str(ctx.author)}", color=0x00a8ff)
-            e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+            e = discord.Embed(title=f"Information for {str(ctx.author)}", color=int(self.embed["color"], 16))
+            e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
             e.set_thumbnail(url=ctx.author.avatar_url)
             e.add_field(name="Username", value=f"{ctx.author.name}")
             e.add_field(name="Discriminator", value=f"{ctx.author.discriminator}")
@@ -70,7 +72,7 @@ class Utility(commands.Cog):
             e.add_field(name="Joined At", value="{} UTC".format(ctx.author.joined_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Created At", value="{} UTC".format(ctx.author.created_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Roles", value=string)
-            e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+            e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
             await ctx.send(embed=e)
         else:
             try:
@@ -93,8 +95,8 @@ class Utility(commands.Cog):
                         continue
                     string = string + f"{role.mention} "
 
-                e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
                 e.set_thumbnail(url=user.avatar_url)
                 e.add_field(name="Username", value=f"{user.name}")
                 e.add_field(name="Discriminator", value=f"{user.discriminator}")
@@ -108,7 +110,7 @@ class Utility(commands.Cog):
                 e.add_field(name="Joined At", value="{} UTC".format(user.joined_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Roles", value=string)
-                e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
                 await ctx.send(embed=e)
             else:
                 user = await self.bot.fetch_user(user)
@@ -124,8 +126,8 @@ class Utility(commands.Cog):
                             continue
                         string = string + f"{role.mention} "
 
-                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                    e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
                     e.set_thumbnail(url=user.avatar_url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
@@ -139,19 +141,19 @@ class Utility(commands.Cog):
                     e.add_field(name="Joined At", value="{} UTC".format(user.joined_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Roles", value=string)
-                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
                     await ctx.send(embed=e)
                 else:
                     await ctx.trigger_typing()
 
-                    e = discord.Embed(title=f"Information for {str(user)}", color=0x00a8ff)
-                    e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
+                    e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
                     e.set_thumbnail(url=user.avatar_url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
                     e.add_field(name="ID", value=f"{user.id}")
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
-                    e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
                     await ctx.send(embed=e)
     
     @commands.command(name="serverinfo", aliases=["si", "guildinfo", "gi"])
@@ -176,8 +178,8 @@ class Utility(commands.Cog):
                 continue
             string = string + f"{role.mention} "
             
-        e = discord.Embed(title=f"Information for {ctx.guild.name}", color=0x00a8ff)
-        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+        e = discord.Embed(title=f"Information for {ctx.guild.name}", color=int(self.embed["color"], 16))
+        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_thumbnail(url=ctx.guild.icon_url)
         e.add_field(name="Name", value=f"{ctx.guild.name}")
         e.add_field(name="Owner", value=f"{str(ctx.guild.owner)}")
@@ -188,7 +190,7 @@ class Utility(commands.Cog):
         e.add_field(name="Emojis", value=f"{len(ctx.guild.emojis)}")
         e.add_field(name="Created At", value="{} UTC".format(ctx.guild.created_at.strftime("%A, %d %B %Y at %H:%M")))
         e.add_field(name="Roles", value=string)
-        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.send(embed=e)
     
     @commands.command(name="emojiinfo")
@@ -199,14 +201,14 @@ class Utility(commands.Cog):
 
 #        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
-#        e = discord.Embed(title=f"Information about {emoji.name}", color=0x00a8ff)
-#        e.set_author(name="Earth", icon_url="https://this.is-for.me/i/gxe1.png")
+#        e = discord.Embed(title=f"Information about {emoji.name}", color=int(self.embed["color"], 16))
+#        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
 #        e.set_thumbnail(url=emoji.url)
 #        e.add_field(name="Name", value=f"{emoji.name}")
 #        e.add_field(name="ID", value=f"{emoji.id}")
 #        e.add_field(name="Animated", value=f"{emoji.animated}")
 #        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
-#        e.set_footer(text="Earth by Earth Development", icon_url="https://this.is-for.me/i/gxe1.png")
+#        e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
 #        await ctx.send(embed=e, components=[
 #            [
 #                components.Button(label="Use Emoji", style=components.ButtonStyle.blue, id="use", emoji=emoji)
