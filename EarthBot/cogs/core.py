@@ -10,12 +10,11 @@ class InfoView(discord.ui.View):
 
     def __init__(self):
         super().__init__(timeout=None)
+        super().add_item(discord.ui.Button(style=discord.ButtonStyle.link, label="Support", url="https://discord.gg/DsARcGwwdM", row=0))
 
     @discord.ui.button(label="Invite", style=discord.ButtonStyle.grey, row=0)
     async def invite(self, button: discord.ui.Button, interaction: discord.Interaction):
         await interaction.response.send_message(f"**Coming soon...**\n(response to \"{button.label}\" Button click)", ephemeral=True)
-    
-    super().add_item(discord.ui.Button(style=discord.ButtonStyle.link, label="Support", url="https://discord.gg/DsARcGwwdM", row=0))
 
 class Core(commands.Cog):
     """The cog for Earth's core commands."""
