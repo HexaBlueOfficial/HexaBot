@@ -6,6 +6,68 @@ import asyncio
 import discord_slash as slash
 from discord.ext import commands
 
+class HackView(discord.ui.View):
+    """`e.hack`'s Buttons."""
+
+    def __init__(self, hacker: discord.User, hacked: discord.User):
+        self.hacker = hacker
+        self.hacked = hacked
+
+    @discord.ui.button(label="Hack Discord", style=discord.ButtonStyle.blurple, row=0)
+    async def hdiscord(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if interaction.user.id == self.hacker.id:
+            e = interaction.message.embeds[0].description = "**DISCORD HACKED!**"
+            await interaction.response.edit_message(embed=e)
+
+            await interaction.response.send_message(f"Discord hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
+
+            avatar = self.hacked.avatar.url.read()
+            webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
+
+            await webhook.send("I got hacked, oh fuck.")
+            await webhook.send(f"FUCK! {str(self.hacker)} HACKED ME!")
+
+            await webhook.delete()
+
+            for button in self.children:
+                button.disabled = True
+    
+    @discord.ui.button(label="Hack YouTube", style=discord.ButtonStyle.red, row=0)
+    async def hyoutube(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if interaction.user.id == self.hacker.id:
+            e = interaction.message.embeds[0].description = "**YOUTUBE HACKED!**"
+            await interaction.response.edit_message(embed=e)
+
+            await interaction.response.send_message(f"YouTube hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
+
+            avatar = self.hacked.avatar.url.read()
+            webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
+
+            await webhook.send("I just posted a video!\nhttps://youtu.be/Blh2FCAIIgk")
+
+            await webhook.delete()
+
+            for button in self.children:
+                button.disabled = True
+    
+    @discord.ui.button(label="Hack Twitter", style=discord.ButtonStyle.green, row=0)
+    async def htwitter(self, button: discord.ui.Button, interaction: discord.Interaction):
+        if interaction.user.id == self.hacker.id:
+            e = interaction.message.embeds[0].description = "**TWITTER HACKED!**"
+            await interaction.response.edit_message(embed=e)
+
+            await interaction.response.send_message(f"Twitter hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
+
+            avatar = self.hacked.avatar.url.read()
+            webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
+
+            await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
+
+            await webhook.delete()
+
+            for button in self.children:
+                button.disabled = True
+
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
 
@@ -269,30 +331,7 @@ class Fun(commands.Cog):
         e = discord.Embed(title=f"Hack {user.name}", color=int(self.embed["color"], 16), description=f"**Hacking {user.name} ready.**")
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        hackmessage = await hacking.reply(embed=e, components=[
-            slash.utils.manage_components.create_actionrow(
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.blue, "Hack Discord", None, custom_id="discord"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.red, "Hack YouTube", None, custom_id="youtube"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.green, "Hack Twitter", None, custom_id="twitter")
-            )
-        ])
-
-        waitfor = await slash.utils.manage_components.wait_for_component(self.bot, hackmessage, ["discord", "youtube", "twitter"])
-        if waitfor.author_id == ctx.author.id:
-            avatar = await user.avatar_url.read()
-            webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Hack command")
-            if waitfor.custom_id == "discord":
-                await webhook.send("I got hacked, oh fuck.")
-                await webhook.send(f"FUCK! {ctx.author} HACKED ME!")
-                e.description = "**DISCORD HACKED!**"
-            elif waitfor.custom_id == "youtube":
-                await webhook.send("I just posted a video!\nhttps://youtu.be/Blh2FCAIIgk")
-                e.description = "**YOUTUBE HACKED!**"
-            elif waitfor.custom_id == "twitter":
-                await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
-                e.description = "**TWITTER HACKED!**"
-            await waitfor.edit_origin(embed=e)
-            await webhook.delete()
+        await hacking.reply(embed=e, view=HackView(ctx.author, user))
             
     @commands.command(name="tictactoe", aliases=["ttt", "tic_tac_toe", "tic-tac-toe"])
     async def tictactoe(self, ctx: commands.Context):

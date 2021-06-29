@@ -2,9 +2,19 @@ import discord
 import json
 import random
 import platform
-import discord_slash as slash
 import asyncio
 from discord.ext import commands, tasks
+
+class InfoView(discord.ui.View):
+    """`e.info`'s Buttons."""
+
+    super().__init__(timeout=None)
+
+    @discord.ui.button(label="Invite", style=discord.ButtonStyle.grey, row=0)
+    async def invite(self, button: discord.ui.Button, interaction: discord.Interaction):
+        await interaction.response.send_message(f"**Coming soon...**\n(response to \"{button.label}\" Button click)", ephemeral=True)
+    
+    super().add_item(discord.ui.Button(style=discord.ButtonStyle.link, label="Support", url="https://discord.gg/DsARcGwwdM", row=0))
 
 class Core(commands.Cog):
     """The cog for Earth's core commands."""
@@ -61,20 +71,11 @@ class Core(commands.Cog):
         e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.hack`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        infomessage = await ctx.send(embed=e, components=[
-            slash.utils.manage_components.create_actionrow(
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.grey, "Invite", None, "invite"),
-                slash.utils.manage_components.create_button(slash.utils.manage_components.ButtonStyle.URL, "Support", None, None, "https://discord.gg/DsARcGwwdM")
-            )
-        ])
+        await ctx.send(embed=e, view=InfoView())
 
         if luckyint == 8:
             await ctx.author.send("Hey!")
             await ctx.author.send("You should try running `e.arth`!")
-        
-        while 0 == 0:
-            waitfor = await slash.utils.manage_components.wait_for_component(self.bot, infomessage, "invite")
-            await waitfor.send("**Coming soon...**", hidden=True)
     
     @commands.command(name="arth", hidden=True)
     async def arth(self, ctx: commands.Context):

@@ -9,9 +9,6 @@ from datetime import datetime
 from discord_slash import cog_ext as slashcog
 from discord.ext import commands
 
-class TypeNotRecognised(Exception):
-    pass
-
 class Slash(commands.Cog):
     """Slash commands."""
 
@@ -101,8 +98,6 @@ class Slash(commands.Cog):
             elif typex == "all":
                 invite = await guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
                 data += f"{guild.name} | {guild.id} | {str(guild.owner)} | {invite.url}\n"
-            else:
-                raise TypeNotRecognised
         data = data.rstrip()
         
         e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)
