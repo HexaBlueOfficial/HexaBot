@@ -8,7 +8,8 @@ from discord.ext import commands, tasks
 class InfoView(discord.ui.View):
     """`e.info`'s Buttons."""
 
-    super().__init__(timeout=None)
+    def __init__(self):
+        super().__init__(timeout=None)
 
     @discord.ui.button(label="Invite", style=discord.ButtonStyle.grey, row=0)
     async def invite(self, button: discord.ui.Button, interaction: discord.Interaction):
