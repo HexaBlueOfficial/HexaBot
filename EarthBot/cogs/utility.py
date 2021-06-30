@@ -265,7 +265,7 @@ class Utility(commands.Cog):
     async def roles(self, ctx: commands.Context):
         """Add/remove Roles to/from yourself via a Select."""
 
-        e = discord.Embed(title="Add/Remove Roles", color=self.embed["color"], description="Select the Roles to add/remove to/from yourself.")
+        e = discord.Embed(title="Add/Remove Roles", color=int(self.embed["color"], 16), description="Select the Roles to add/remove to/from yourself.")
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.send(embed=e, view=RolesView())
