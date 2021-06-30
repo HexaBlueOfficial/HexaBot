@@ -9,6 +9,7 @@ class HackView(discord.ui.View):
     """`e.hack`'s Buttons."""
 
     def __init__(self, hacker: discord.User, hacked: discord.User):
+        super().__init__()
         self.hacker = hacker
         self.hacked = hacked
 
@@ -20,7 +21,7 @@ class HackView(discord.ui.View):
 
             await interaction.response.send_message(f"Discord hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
-            avatar = self.hacked.avatar.url.read()
+            avatar = self.hacked.avatar
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
 
             await webhook.send("I got hacked, oh fuck.")
@@ -39,7 +40,7 @@ class HackView(discord.ui.View):
 
             await interaction.response.send_message(f"YouTube hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
-            avatar = self.hacked.avatar.url.read()
+            avatar = self.hacked.avatar
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
 
             await webhook.send("I just posted a video!\nhttps://youtu.be/Blh2FCAIIgk")
@@ -57,7 +58,7 @@ class HackView(discord.ui.View):
 
             await interaction.response.send_message(f"Twitter hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
-            avatar = self.hacked.avatar.url.read()
+            avatar = self.hacked.avatar.url
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
 
             await webhook.send("I just tweeted!\nhttps://twitter.com/theEarthNet/status/1402642068200165383")
@@ -109,13 +110,13 @@ class Fun(commands.Cog):
         user = flags.user
 
         if anonymous:
-            avatar = await self.bot.user.avatar.url.read()
+            avatar = await self.bot.user.avatar
             webhook = await ctx.channel.create_webhook(name="Anonymous", avatar=avatar, reason="Say command.")
         elif user is None:
-            avatar = await ctx.author.avatar.url.read()
+            avatar = await ctx.author.avatar
             webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Say command.")
         else:
-            avatar = await user.avatar.url.read()
+            avatar = await user.avatar
             webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Say command.")
         
         if uwu:
