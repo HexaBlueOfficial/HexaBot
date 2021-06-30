@@ -91,7 +91,7 @@ class Core(commands.Cog):
         except asyncio.TimeoutError:
             return
         else:
-            await ctx.send(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
+            await waitfor.reply(f"Huzzah! A man of quality! Nice one, {waitfor.author.name}!")
 
 def setup(bot: commands.Bot):
     bot.add_cog(Core(bot))

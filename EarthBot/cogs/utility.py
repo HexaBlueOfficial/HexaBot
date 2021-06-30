@@ -3,6 +3,24 @@ import json
 from datetime import datetime
 from discord.ext import commands
 
+class RolesView(discord.ui.View):
+    """`e.roles`'s Select"""
+
+    @discord.ui.select(placeholder="Select 1 or more Role(s).", max_values=3, options=[
+        discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
+        discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
+        discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
+    ])
+    async def role(self, select: discord.ui.Select, interaction: discord.Interaction):
+        for selected in select.values:
+            role = interaction.guild.get_role(int(selected))
+            if role in interaction.user.roles:
+                await interaction.user.remove_roles(role, reason="Roles command.")
+                await interaction.response.send_message(f"{role.name} removed successfully.", ephemeral=True)
+            else:
+                await interaction.user.add_roles(role, reason="Roles command.")
+                await interaction.response.send_message(f"{role.name} added successfully.", ephemeral=True)
+
 class Utility(commands.Cog):
     """The cog for Earth's utilities."""
 
@@ -242,6 +260,15 @@ class Utility(commands.Cog):
 #        await webhook.send(f"<a:{emoji.name}:{emoji.id}>")
 #        await ctx.message.delete()
 #        await webhook.delete()
+
+    @commands.command(name="roles")
+    async def roles(self, ctx: commands.Context):
+        """Add/remove Roles to/from yourself via a Select."""
+
+        e = discord.Embed(title="Add/Remove Roles", color=self.embed["color"], description="Select the Roles to add/remove to/from yourself.")
+        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
+        await ctx.send(embed=e, view=RolesView())
 
 def setup(bot: commands.Bot):
     bot.add_cog(Utility(bot))

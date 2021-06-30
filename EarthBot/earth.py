@@ -1,11 +1,11 @@
 import discord
-import discord_slash as slasher
+#import discord_slash as slasher
 import tracemalloc
 import json
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or("e."), intents=discord.Intents.all())
-slash = slasher.SlashCommand(bot, True, False, True, True)
+#slash = slasher.SlashCommand(bot, True, False, True, True)
 bot.remove_command("help")
 
 tracemalloc.start()
@@ -23,12 +23,12 @@ async def on_command_error(ctx: commands.Context, error):
         await ctx.send(f"<:No:833293106198872094> {error}")
     raise error
 
-@bot.event
-async def on_slash_command_error(ctx: slasher.SlashContext, ex):
-    await ctx.send(f"<:No:833293106198872094> {ex}")
-    raise ex
+#@bot.event
+#async def on_slash_command_error(ctx: slasher.SlashContext, ex):
+#    await ctx.send(f"<:No:833293106198872094> {ex}")
+#    raise ex
 
-extensions = ["cogs.core", "cogs.developer", "cogs.environment", "cogs.fun", "cogs.help", "cogs.slash", "cogs.utility", "jishaku"]
+extensions = ["cogs.core", "cogs.developer", "cogs.environment", "cogs.fun", "cogs.help", "cogs.utility", "jishaku"]
 for extension in extensions:
     bot.load_extension(extension)
 

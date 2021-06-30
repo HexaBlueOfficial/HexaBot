@@ -1,9 +1,13 @@
 import discord
 import json
-from discord.ext import commands, flags
+from discord.ext import commands
 
-class TypeNotRecognised(Exception):
-    pass
+class GuildsFlags(commands.FlagConverter):
+    datatype: str = commands.flag(aliases=["type"], default="name", max_args=1)
+
+class UnrecognisedType(Exception):
+    def __init__(self):
+        super().__init__("Type not recognised.")
 
 class Developer(commands.Cog):
     """Developer stuff."""
@@ -19,13 +23,12 @@ class Developer(commands.Cog):
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
     
-    @flags.add_flag("--type", type=str, default="all")
-    @flags.command(name="guilds", hidden=True)
+    @commands.command(name="guilds", hidden=True)
     @commands.is_owner()
-    async def guilds(self, ctx: commands.Context, **flags):
+    async def guilds(self, ctx: commands.Context, flags: GuildsFlags):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
         
-        typex = flags["type"]
+        typex = flags.datatype
         
         data = f""
         for guild in self.bot.guilds:
@@ -42,7 +45,7 @@ class Developer(commands.Cog):
                 invite = await guild.text_channels[0].create_invite(reason="Developer \"Guilds\" Command", max_uses=3)
                 data += f"{guild.name} | {guild.id} | {str(guild.owner)} | {invite.url}\n"
             else:
-                raise TypeNotRecognised
+                raise UnrecognisedType
         data = data.rstrip()
         
         e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)

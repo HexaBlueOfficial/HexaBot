@@ -3,7 +3,6 @@ import json
 import aiohttp
 import random
 import asyncio
-import discord_slash as slash
 from discord.ext import commands
 
 class HackView(discord.ui.View):
@@ -68,6 +67,12 @@ class HackView(discord.ui.View):
             for button in self.children:
                 button.disabled = True
 
+class SayFlags(commands.FlagConverter):
+    message: str = commands.flag(aliases=["m"], default="https://discord.gg/DsARcGwwdM")
+    anonymous: bool = commands.flag(aliases=["a"], default=False)
+    uwu: bool = commands.flag(default=False)
+    user: discord.Member = commands.flag(aliases=["u"], default=None)
+
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
 
@@ -95,10 +100,29 @@ class Fun(commands.Cog):
         return f"{uwu}, uwu *rawr* XD!"
 
     @commands.command(name="say")
-    async def say(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/say`."""
+    async def say(self, ctx: commands.Context, flags: SayFlags):
+        """The bot will say what you tell it to.\n\nFlags:\n`message:` - Your message.\n`anonymous:` If the message has to be anonymised or not (`True`, `False`). Defaults to `False`.\n`uwu:` - If the message has to be UwUfied or not (`True`, `False`). Defaults to `False`.\n`user:` The member you want to \"steal the identity\" of, if you want to."""
 
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/say`.")
+        message = flags.message
+        anonymous = flags.anonymous
+        uwu = flags.uwu
+        user = flags.user
+
+        if anonymous:
+            avatar = await self.bot.user.avatar.url.read()
+            webhook = await ctx.channel.create_webhook(name="Anonymous", avatar=avatar, reason="Say command.")
+        elif user is None:
+            avatar = await ctx.author.avatar.url.read()
+            webhook = await ctx.channel.create_webhook(name=ctx.author.name, avatar=avatar, reason="Say command.")
+        else:
+            avatar = await user.avatar.url.read()
+            webhook = await ctx.channel.create_webhook(name=user.name, avatar=avatar, reason="Say command.")
+        
+        if uwu:
+            await webhook.send(self.uwufy(message))
+        else:
+            await webhook.send(message)
+        await webhook.delete()
     
     @commands.command(name="uwu")
     async def uwu(self, ctx: commands.Context, *, sentence: str):
@@ -291,9 +315,9 @@ class Fun(commands.Cog):
     
     @commands.command(name="poll")
     async def poll(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/poll`."""
+        """Soon..."""
 
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/poll`.")
+        await ctx.send("**Soon...**")
     
     @commands.command(name="skittles", aliases=["skittleinfo", "skittlesinfo", "skittle"])
     async def skittles(self, ctx: commands.Context):
@@ -332,12 +356,6 @@ class Fun(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await hacking.reply(embed=e, view=HackView(ctx.author, user))
-            
-    @commands.command(name="tictactoe", aliases=["ttt", "tic_tac_toe", "tic-tac-toe"])
-    async def tictactoe(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/tictactoe`."""
-
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/tictactoe`.")
             
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))

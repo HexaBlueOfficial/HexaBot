@@ -2,19 +2,52 @@ import discord
 import json
 from discord.ext import commands
 
+class GetUpdatesFlags(commands.FlagConverter):
+    updates: str = commands.flag(aliases=["from"], max_args=1)
+    to: discord.TextChannel
+
+class UnrecognisedUpdates(Exception):
+    def __init__(self):
+        super().__init__("Updates type was not recognised")
+
 class Environment(commands.Cog):
     """Commands for the Environment!"""
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open("./Earth/EarthBot/misc/assets/embed.json") as embeds:
             self.embed = json.load(embeds)
 
     @commands.command(name="getupdates")
-    async def getupdates(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`."""
+    @commands.has_permissions(manage_channels=True)
+    async def getupdates(self, ctx: commands.Context, flags: GetUpdatesFlags):
+        """Get updates about the Earth.\n\nFlags:\n`updates:`/`from:` - The Updates to get. (`globalwarming`, `endangeredspecies`, `evilcompanies`)\n`to:` - The channel where to get them.\n\nExample command:\n`e.getupdates updates: globalwarming to: #mycoolchannel`"""
 
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/getupdates`.")
+        updates = flags.updates
+        to = flags.to
+
+        if updates == "globalwarming":
+            updates = 832660792397791262
+        elif updates == "endangeredspecies":
+            updates = 832661047398760450
+        elif updates == "evilcompanies":
+            updates = 832671013753454602
+        else:
+            raise UnrecognisedUpdates
+        
+        earthnet = self.bot.get_guild(832594030264975420)
+        channel = earthnet.get_channel(updates)
+
+        await channel.follow(destination=to, reason="GetUpdates command.")
+        
+        followed = ""
+        if updates == 832660792397791262:
+            followed = "Global Warming Updates"
+        elif updates == 832661047398760450:
+            followed = "Endangered Species Updates"
+        elif updates == 832671013753454602:
+            followed = "Evil Companies Updates"
+        await ctx.send(f"Successfully followed {followed}.")
     
     @commands.command(name="fundraiser")
     async def fundraiser(self, ctx: commands.Context):
