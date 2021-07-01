@@ -47,7 +47,7 @@ class Environment(commands.Cog):
             followed = "Endangered Species Updates"
         elif updates == 832671013753454602:
             followed = "Evil Companies Updates"
-        await ctx.send(f"Successfully followed {followed}.")
+        await ctx.message.reply(f"Successfully followed {followed}.")
     
     @commands.command(name="fundraiser")
     async def fundraiser(self, ctx: commands.Context):
@@ -56,7 +56,7 @@ class Environment(commands.Cog):
         e = discord.Embed(title="How to donate to WWF", color=int(self.embed["color"], 16), description="**How to donate to WWF:**\n\n**Step 1:** Go to https://worldwildlife.org (WWF's official website).\n**Step 2:** Hover over the big, red, \"DONATE\" button.\n**Step 3:** Select \"Make a One-time Donation\" from the dropdown.\n**Step 4:** Select what you prefer and enter your info.\n**Step 5:** Press \"Submit\".\n\nCongratulations: you helped our Planet!")
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
 
 def setup(bot):
     bot.add_cog(Environment(bot))

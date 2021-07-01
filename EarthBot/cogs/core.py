@@ -6,7 +6,7 @@ import asyncio
 from discord.ext import commands, tasks
 
 class InfoView(discord.ui.View):
-    """`e.info`'s Buttons."""
+    """`e.info`'s View."""
 
     def __init__(self):
         super().__init__(timeout=None)
@@ -68,10 +68,10 @@ class Core(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Python Earth: v1.4.1\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.4.2\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.hack`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e, view=InfoView())
+        await ctx.message.reply(embed=e, view=InfoView())
 
         if luckyint == 8:
             await ctx.author.send("Hey!")
@@ -81,7 +81,7 @@ class Core(commands.Cog):
     async def arth(self, ctx: commands.Context):
         """???"""
 
-        await ctx.send("hello there")
+        await ctx.message.reply("hello there")
 
         def check(m):
             return m.content.lower() == "general kenobi" and m.channel == ctx.channel

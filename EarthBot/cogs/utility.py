@@ -4,14 +4,12 @@ from datetime import datetime
 from discord.ext import commands
 
 class RolesView(discord.ui.View):
-    """`e.roles`'s Select"""
+    """`e.roles`'s View."""
 
-    @discord.ui.select(placeholder="Select 1 or more Role(s).", max_values=3, options=[
-        discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
-        discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
-        discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
-    ])
-    async def role(self, select: discord.ui.Select, interaction: discord.Interaction):
+    def __init__(self):
+        self.add_item(RolesSelect())
+    
+    async def process_inputs(self, select: discord.ui.Select, interaction: discord.Interaction):
         for selected in select.values:
             role = interaction.guild.get_role(int(selected))
             if role in interaction.user.roles:
@@ -20,6 +18,21 @@ class RolesView(discord.ui.View):
             else:
                 await interaction.user.add_roles(role, reason="Roles command.")
                 await interaction.response.send_message(f"{role.name} added successfully.", ephemeral=True)
+
+class RolesSelect(discord.ui.Select):
+    """`e.roles`'s Select."""
+
+    view: RolesView
+
+    def __init__(self):
+        super().__init__(placeholder="Select 1 or more Role(s).", options=[
+            discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
+            discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
+            discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
+        ])
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction)
 
 class Utility(commands.Cog):
     """The cog for Earth's utilities."""
@@ -49,7 +62,7 @@ class Utility(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Last Restart", value="The bot was last restarted on {} UTC".format(self.bot.launch_time.strftime("%A, %d %B %Y at %H:%M")), inline=False)
         e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="ping", aliases=["latency", "lat"])
     async def ping(self, ctx: commands.Context):
@@ -60,7 +73,7 @@ class Utility(commands.Cog):
         e = discord.Embed(title="Ping Latency", color=int(self.embed["color"], 16), description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
         e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="userinfo", aliases=["ui", "memberinfo", "mi"])
     async def userinfo(self, ctx: commands.Context, user=None):
@@ -91,7 +104,7 @@ class Utility(commands.Cog):
             e.add_field(name="Created At", value="{} UTC".format(ctx.author.created_at.strftime("%A, %d %B %Y at %H:%M")))
             e.add_field(name="Roles", value=string)
             e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-            await ctx.send(embed=e)
+            await ctx.message.reply(embed=e)
         else:
             try:
                 user = int(user)
@@ -129,7 +142,7 @@ class Utility(commands.Cog):
                 e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                 e.add_field(name="Roles", value=string)
                 e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-                await ctx.send(embed=e)
+                await ctx.message.reply(embed=e)
             else:
                 user = await self.bot.fetch_user(user)
 
@@ -160,7 +173,7 @@ class Utility(commands.Cog):
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.add_field(name="Roles", value=string)
                     e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-                    await ctx.send(embed=e)
+                    await ctx.message.reply(embed=e)
                 else:
                     await ctx.trigger_typing()
 
@@ -172,7 +185,7 @@ class Utility(commands.Cog):
                     e.add_field(name="ID", value=f"{user.id}")
                     e.add_field(name="Created At", value="{} UTC".format(user.created_at.strftime("%A, %d %B %Y at %H:%M")))
                     e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-                    await ctx.send(embed=e)
+                    await ctx.message.reply(embed=e)
     
     @commands.command(name="serverinfo", aliases=["si", "guildinfo", "gi"])
     async def serverinfo(self, ctx: commands.Context):
@@ -209,13 +222,13 @@ class Utility(commands.Cog):
         e.add_field(name="Created At", value="{} UTC".format(ctx.guild.created_at.strftime("%A, %d %B %Y at %H:%M")))
         e.add_field(name="Roles", value=string)
         e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="emojiinfo")
     async def emojiinfo(self, ctx: commands.Context, emoji):
         """Shows information about an Emoji in this server."""
 
-        await ctx.send("<:No:833293106198872094> This command is broken at the moment.")
+        await ctx.message.reply("<:No:833293106198872094> This command is broken at the moment.")
 
 #        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
@@ -227,7 +240,7 @@ class Utility(commands.Cog):
 #        e.add_field(name="Animated", value=f"{emoji.animated}")
 #        e.add_field(name="Created At", value="{} UTC".format(emoji.created_at.strftime("%A, %d %B %Y at %H:%M")))
 #        e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
-#        await ctx.send(embed=e, components=[
+#        await ctx.message.reply(embed=e, components=[
 #            [
 #                components.Button(label="Use Emoji", style=components.ButtonStyle.blue, id="use", emoji=emoji)
 #            ]
@@ -244,13 +257,13 @@ class Utility(commands.Cog):
     async def discord(self, ctx: commands.Context):
         """As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`."""
 
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`.")
+        await ctx.message.reply("As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`.")
     
     @commands.command(name="nitro")
     async def nitro(self, ctx: commands.Context, emoji):
         """Sends animated emojis (from this server) with your name."""
 
-        await ctx.send("<:No:833293106198872094> This command is broken at the moment.")
+        await ctx.message.reply("<:No:833293106198872094> This command is broken at the moment.")
 
 #        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
@@ -268,7 +281,7 @@ class Utility(commands.Cog):
         e = discord.Embed(title="Add/Remove Roles", color=int(self.embed["color"], 16), description="Select the Roles to add/remove to/from yourself.")
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e, view=RolesView())
+        await ctx.message.reply(embed=e, view=RolesView())
 
 def setup(bot: commands.Bot):
     bot.add_cog(Utility(bot))

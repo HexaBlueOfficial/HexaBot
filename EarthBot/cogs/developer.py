@@ -51,14 +51,14 @@ class Developer(commands.Cog):
         e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="restart", hidden=True)
     @commands.is_owner()
     async def restart(self, ctx: commands.Context):
         """You found a Developer command!\nYou can't use this command, so why seek help for it?"""
 
-        await ctx.send(self.loading("Restarting... See you in a bit!"))
+        await ctx.message.reply(self.loading("Restarting... See you in a bit!"))
 
         await self.bot.close()
         await self.bot.login(self.token)

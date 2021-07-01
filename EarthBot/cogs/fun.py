@@ -6,7 +6,7 @@ import asyncio
 from discord.ext import commands
 
 class HackView(discord.ui.View):
-    """`e.hack`'s Buttons."""
+    """`e.hack`'s View."""
 
     def __init__(self, hacker: discord.User, hacked: discord.User):
         super().__init__()
@@ -129,7 +129,7 @@ class Fun(commands.Cog):
     async def uwu(self, ctx: commands.Context, *, sentence: str):
         """Reject English, evolve to Furry."""
 
-        await ctx.send(self.uwufy(sentence))
+        await ctx.message.reply(self.uwufy(sentence))
     
     @commands.command(name="cat")
     async def cat(self, ctx: commands.Context):
@@ -146,7 +146,7 @@ class Fun(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=catpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="dog")
     async def dog(self, ctx: commands.Context):
@@ -163,7 +163,7 @@ class Fun(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=dogpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="fox")
     async def fox(self, ctx: commands.Context):
@@ -180,7 +180,7 @@ class Fun(commands.Cog):
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_image(url=foxpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
 
     @commands.command(name="hug")
     async def hug(self, ctx: commands.Context, member: discord.Member, *, message=None):
@@ -195,7 +195,7 @@ class Fun(commands.Cog):
         if message is not None:
             e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
         await ctx.message.delete()
     
     @commands.command(name="kill")
@@ -209,7 +209,7 @@ class Fun(commands.Cog):
         e = discord.Embed(title="Murder", color=int(self.embed["color"], 16), description=f"{killline}")
         e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="gaypercent", aliases=["gay", "howgay"])
     async def gaypercent(self, ctx: commands.Context, *, thing=None):
@@ -247,7 +247,7 @@ class Fun(commands.Cog):
             e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
             e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
             e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-            await ctx.send(embed=e)
+            await ctx.message.reply(embed=e)
         else:
             try:
                 gayid = int(thing)
@@ -273,7 +273,7 @@ class Fun(commands.Cog):
                 e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
                 e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
                 e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-                await ctx.send(embed=e)
+                await ctx.message.reply(embed=e)
             else:
                 thing = self.bot.fetch_user(gayid)
 
@@ -298,7 +298,7 @@ class Fun(commands.Cog):
                 e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
                 e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
                 e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-                await ctx.send(embed=e)
+                await ctx.message.reply(embed=e)
     
     @commands.command(name="8ball", aliases=["eightball"])
     async def eightball(self, ctx: commands.Context, *, question):
@@ -312,13 +312,13 @@ class Fun(commands.Cog):
         e.add_field(name="Your Question", value=f"{question}", inline=False)
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="poll")
     async def poll(self, ctx: commands.Context):
         """Soon..."""
 
-        await ctx.send("**Soon...**")
+        await ctx.message.reply("**Soon...**")
     
     @commands.command(name="skittles", aliases=["skittleinfo", "skittlesinfo", "skittle"])
     async def skittles(self, ctx: commands.Context):
@@ -337,19 +337,19 @@ class Fun(commands.Cog):
         e.add_field(name="Developer's Rating", value=skittle["devrate"], inline=False)
         e.add_field(name="Developer's Comment", value=skittle["devcomment"], inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await ctx.send(embed=e)
+        await ctx.message.reply(embed=e)
     
     @commands.command(name="calculator", aliases=["calc"])
     async def calculator(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/calculator`."""
+        """Soon..."""
 
-        await ctx.send("As a normal command could create confusion, this command is only available in Slash. Use `/calculator`.")
+        await ctx.message.reply("Soon...")
     
     @commands.command(name="hack")
     async def hack(self, ctx: commands.Context, user: discord.Member):
         """Hack a member (100% real)!"""
 
-        hacking = await ctx.send("<a:aLoading:833070225334206504> **Getting logins...**")
+        hacking = await ctx.message.reply("<a:aLoading:833070225334206504> **Getting logins...**")
         await asyncio.sleep(1.0)
         await hacking.edit(content="<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
         
