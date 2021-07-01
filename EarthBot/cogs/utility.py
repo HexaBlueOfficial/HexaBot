@@ -15,10 +15,10 @@ class RolesView(discord.ui.View):
             role = interaction.guild.get_role(int(selected))
             if role in interaction.user.roles:
                 await interaction.user.remove_roles(role, reason="Roles command.")
-                await interaction.response.send_message(f"{role.name} removed successfully.", ephemeral=True)
+                await interaction.response.send_message(f"{role.name} Role removed successfully.", ephemeral=True)
             else:
                 await interaction.user.add_roles(role, reason="Roles command.")
-                await interaction.response.send_message(f"{role.name} added successfully.", ephemeral=True)
+                await interaction.response.send_message(f"{role.name} Role added successfully.", ephemeral=True)
 
 class RolesSelect(discord.ui.Select):
     """`e.roles`'s Select."""
@@ -26,7 +26,7 @@ class RolesSelect(discord.ui.Select):
     view: RolesView
 
     def __init__(self):
-        super().__init__(placeholder="Select 1 or more Role(s).", options=[
+        super().__init__(placeholder="Select 1 or more Role(s).", max_values=25, options=[
             discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
             discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
             discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
