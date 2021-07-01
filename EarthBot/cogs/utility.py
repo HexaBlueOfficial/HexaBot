@@ -26,7 +26,7 @@ class RolesSelect(discord.ui.Select):
     view: RolesView
 
     def __init__(self):
-        super().__init__(placeholder="Select 1 or more Role(s).", max_values=25, options=[
+        super().__init__(placeholder="Select 1 or more Role(s).", max_values=3, options=[
             discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
             discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
             discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
