@@ -7,6 +7,7 @@ class RolesView(discord.ui.View):
     """`e.roles`'s View."""
 
     def __init__(self):
+        super().__init__()
         self.add_item(RolesSelect())
     
     async def process_inputs(self, select: discord.ui.Select, interaction: discord.Interaction):
