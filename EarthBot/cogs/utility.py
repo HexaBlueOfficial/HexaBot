@@ -6,7 +6,8 @@ from discord.ext import commands
 class RolesView(discord.ui.View):
     """`e.roles`'s View."""
 
-    def __init__(self):
+    def __init__(self, ctx: commands.Context):
+        self.ctx = ctx
         self.add_item(RolesSelect())
     
     async def process_inputs(self, select: discord.ui.Select, interaction: discord.Interaction):
