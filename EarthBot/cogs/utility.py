@@ -22,7 +22,7 @@ class RolesView(discord.ui.View):
 class RolesSelect(discord.ui.Select):
     """`e.roles`'s Select."""
 
-    view: RolesView
+    view: RolesView()
 
     def __init__(self):
         super().__init__(placeholder="Select 1 or more Role(s).", options=[
