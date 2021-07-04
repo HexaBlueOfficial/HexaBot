@@ -446,7 +446,7 @@ class Fun(commands.Cog):
             return m.author.id == ctx.author.id
         
         def check2(m):
-            return m.author.id == ctx.author.id and len(m.split(" & ")) <= 5
+            return m.author.id == ctx.author.id and len(m.content.split(" & ")) <= 5
 
         waitfor1 = await self.bot.wait_for("message", check=check1, timeout=30.0)
         await waitfor1.reply("What do you want your Poll's options to be?\nSplit them with space-ampersand-space (` & `). DON'T OMIT THE SPACES.\nMax options: 5.\nExample: `Very Sus & amog-uwu-s & Sussy Baka Amogus Impostor`\n(You have 2 minutes.)")
