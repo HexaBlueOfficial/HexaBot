@@ -16,9 +16,10 @@ class SayFlags(commands.FlagConverter):
 class PollView(discord.ui.View):
     """`e.poll`'s View."""
 
-    def __init__(self, ctx: commands.Context, options: list, counts: list, timeout: float):
+    def __init__(self, ctx: commands.Context, message: discord.Message, options: list, counts: list, timeout: float):
         super().__init__(timeout=timeout)
         self.ctx = ctx
+        self.message = message
         self.counts = counts
         for option in options:
             if option == options[0]:
@@ -49,6 +50,7 @@ class PollView(discord.ui.View):
     async def on_timeout(self):
         for child in self.children:
             child.disabled = True
+        await self.message.edit(view=self)
     
     async def process_inputs(self, button: discord.ui.Button, interaction: discord.Interaction, count: str):
         if interaction.user.id == self.ctx.author.id:
@@ -449,9 +451,9 @@ class Fun(commands.Cog):
             return m.author.id == ctx.author.id and len(m.content.split(" & ")) <= 5
 
         waitfor1 = await self.bot.wait_for("message", check=check1, timeout=30.0)
-        await waitfor1.reply("What do you want your Poll's options to be?\nSplit them with space-ampersand-space (` & `). DON'T OMIT THE SPACES.\nMax options: 5.\nExample: `Very Sus & amog-uwu-s & Sussy Baka Amogus Impostor`\n(You have 2 minutes.)")
+        e1 = await waitfor1.reply("What do you want your Poll's options to be?\nSplit them with space-ampersand-space (` & `). DON'T OMIT THE SPACES.\nMax options: 5.\nExample: `Very Sus & amog-uwu-s & Sussy Baka Amogus Impostor`\n(You have 2 minutes.)")
         waitfor2 = await self.bot.wait_for("message", check=check2, timeout=120.0)
-        await waitfor2.reply(self.loading("Your Poll will be available soon..."))
+        e2 = await waitfor2.reply(self.loading("Your Poll will be available soon..."))
         await asyncio.sleep(2.0)
         
         options = waitfor2.content.split(" & ")
@@ -465,13 +467,19 @@ class Fun(commands.Cog):
             counts.append(0)
 
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        if timeout is not None:
-            await ctx.send(embed=e, view=PollView(ctx, options, counts, float(timeout)))
-        else:
-            await ctx.send(embed=e, view=PollView(ctx, options, counts, None))
+
+        await ctx.message.delete()
         await initialise.delete()
         await waitfor1.delete()
+        await e1.delete()
         await waitfor2.delete()
+        await e2.delete()
+
+        if timeout is not None:
+            poll = await ctx.send(embed=e)
+            await poll.edit(view=PollView(ctx, poll, options, counts, float(timeout)))
+        else:
+            await ctx.send(embed=e, view=PollView(ctx, options, counts, None))
     
     @commands.command(name="skittles", aliases=["skittleinfo", "skittlesinfo", "skittle"])
     async def skittles(self, ctx: commands.Context):
