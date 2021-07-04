@@ -1,4 +1,3 @@
-from EarthBot.cogs.utility import RolesView
 import discord
 import json
 import aiohttp
