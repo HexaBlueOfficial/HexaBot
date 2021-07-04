@@ -49,7 +49,7 @@ class Developer(commands.Cog):
         data = data.rstrip()
         
         e = discord.Embed(title=f"Guilds [type=\"{typex}\"]", color=int(self.embed["color"], 16), description=data)
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Developer"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
     

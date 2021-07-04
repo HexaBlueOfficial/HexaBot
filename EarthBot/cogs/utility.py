@@ -15,10 +15,16 @@ class RolesView(discord.ui.View):
             role = interaction.guild.get_role(int(selected))
             if role in interaction.user.roles:
                 await interaction.user.remove_roles(role, reason="Roles command.")
-                await interaction.response.send_message(f"{role.name} Role removed successfully.", ephemeral=True)
+                if len(select.values) == 1:
+                    await interaction.response.send_message(f"{role.name} Role removed successfully.", ephemeral=True)
+                else:
+                    await interaction.response.send_message(f"Roles removed successfully.", ephemeral=True)
             else:
                 await interaction.user.add_roles(role, reason="Roles command.")
-                await interaction.response.send_message(f"{role.name} Role added successfully.", ephemeral=True)
+                if len(select.values) == 1:
+                    await interaction.response.send_message(f"{role.name} Role added successfully.", ephemeral=True)
+                else:
+                    await interaction.response.send_message(f"Roles added successfully.", ephemeral=True)
 
 class RolesSelect(discord.ui.Select):
     """`e.roles`'s Select."""
@@ -29,7 +35,12 @@ class RolesSelect(discord.ui.Select):
         super().__init__(placeholder="Select 1 or more Role(s).", max_values=3, options=[
             discord.SelectOption(label="Planet Earth", value="858825115672379423", description="News, Events, and Fundraisers"),
             discord.SelectOption(label="Earth Development", value="858825487522463784", description="Earth Bot Updates and Coding Help"),
-            discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon...")
+            discord.SelectOption(label="Earth Games", value="858825447059882014", description="Soon..."),
+            discord.SelectOption(label="Global Warming News", value="833421078239510528", description="Ping Role for news about Global Warming."),
+            discord.SelectOption(label="Endangered Species News", value="833421049587564655", description="Ping Role for news about Endangered Species."),
+            discord.SelectOption(label="Evil Companies News", value="833420855282237453", description="Ping Role for news about Evil Companies."),
+            discord.SelectOption(label="Server Updates", value="833420855282237453", description="Ping Role for news about this Server's Updates."),
+            discord.SelectOption(label="Earth Bot Updates", value="833420690018271323", description="Ping Role for news about Earth bot's Updates.")
         ])
     
     async def callback(self, interaction: discord.Interaction):
@@ -60,7 +71,7 @@ class Utility(commands.Cog):
         days, hours = divmod(hours, 24)
         
         e = discord.Embed(title="Uptime", color=int(self.embed["color"], 16), description=f"The bot has been online for:\n{days} days, {hours} hours, {minutes} minutes and {seconds} seconds.")
-        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Last Restart", value="The bot was last restarted on {} UTC".format(self.bot.launch_time.strftime("%A, %d %B %Y at %H:%M")), inline=False)
         e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.message.reply(embed=e)
@@ -72,7 +83,7 @@ class Utility(commands.Cog):
         ping = self.bot.latency * 1000
         pingr = round(ping, 1)
         e = discord.Embed(title="Ping Latency", color=int(self.embed["color"], 16), description=f"My ping latency is {pingr}ms. It's the time it takes for my host's servers to reach Discord.")
-        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
         e.set_footer(text=self.embed["footer"], icon_url="https://this.is-for.me/i/gxe1.png")
         await ctx.message.reply(embed=e)
     
@@ -90,8 +101,8 @@ class Utility(commands.Cog):
                 string = string + f"{role.mention} "
 
             e = discord.Embed(title=f"Information for {str(ctx.author)}", color=int(self.embed["color"], 16))
-            e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
-            e.set_thumbnail(url=ctx.author.avatar_url)
+            e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
+            e.set_thumbnail(url=ctx.author.avatar.url)
             e.add_field(name="Username", value=f"{ctx.author.name}")
             e.add_field(name="Discriminator", value=f"{ctx.author.discriminator}")
             e.add_field(name="ID", value=f"{ctx.author.id}")
@@ -128,8 +139,8 @@ class Utility(commands.Cog):
                     string = string + f"{role.mention} "
 
                 e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
-                e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
-                e.set_thumbnail(url=user.avatar_url)
+                e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
+                e.set_thumbnail(url=user.avatar.url)
                 e.add_field(name="Username", value=f"{user.name}")
                 e.add_field(name="Discriminator", value=f"{user.discriminator}")
                 e.add_field(name="ID", value=f"{user.id}")
@@ -159,8 +170,8 @@ class Utility(commands.Cog):
                         string = string + f"{role.mention} "
 
                     e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
-                    e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
-                    e.set_thumbnail(url=user.avatar_url)
+                    e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_thumbnail(url=user.avatar.url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
                     e.add_field(name="ID", value=f"{user.id}")
@@ -179,8 +190,8 @@ class Utility(commands.Cog):
                     await ctx.trigger_typing()
 
                     e = discord.Embed(title=f"Information for {str(user)}", color=int(self.embed["color"], 16))
-                    e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
-                    e.set_thumbnail(url=user.avatar_url)
+                    e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
+                    e.set_thumbnail(url=user.avatar.url)
                     e.add_field(name="Username", value=f"{user.name}")
                     e.add_field(name="Discriminator", value=f"{user.discriminator}")
                     e.add_field(name="ID", value=f"{user.id}")
@@ -211,8 +222,8 @@ class Utility(commands.Cog):
             string = string + f"{role.mention} "
             
         e = discord.Embed(title=f"Information for {ctx.guild.name}", color=int(self.embed["color"], 16))
-        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
-        e.set_thumbnail(url=ctx.guild.icon_url)
+        e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
+        e.set_thumbnail(url=ctx.guild.icon.url)
         e.add_field(name="Name", value=f"{ctx.guild.name}")
         e.add_field(name="Owner", value=f"{str(ctx.guild.owner)}")
         e.add_field(name="ID", value=f"{ctx.guild.id}")
@@ -234,7 +245,7 @@ class Utility(commands.Cog):
 #        emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
 
 #        e = discord.Embed(title=f"Information about {emoji.name}", color=int(self.embed["color"], 16))
-#        e.set_author(name=self.embed["authorname"], icon_url="https://this.is-for.me/i/gxe1.png")
+#        e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url="https://this.is-for.me/i/gxe1.png")
 #        e.set_thumbnail(url=emoji.url)
 #        e.add_field(name="Name", value=f"{emoji.name}")
 #        e.add_field(name="ID", value=f"{emoji.id}")
@@ -256,9 +267,9 @@ class Utility(commands.Cog):
     
     @commands.command(name="discord")
     async def discord(self, ctx: commands.Context):
-        """As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`."""
+        """Soon..."""
 
-        await ctx.message.reply("As a normal command could create confusion, this command is only available in Slash. Use `/discord <subcommand>`.")
+        await ctx.message.reply("Soon...")
     
     @commands.command(name="nitro")
     async def nitro(self, ctx: commands.Context, emoji):
@@ -280,7 +291,7 @@ class Utility(commands.Cog):
         """Add/remove Roles to/from yourself via a Select."""
 
         e = discord.Embed(title="Add/Remove Roles", color=int(self.embed["color"], 16), description="Select the Roles to add/remove to/from yourself.")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Utility"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e, view=RolesView())
 

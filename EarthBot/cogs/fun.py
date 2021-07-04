@@ -1,9 +1,135 @@
+from EarthBot.cogs.utility import RolesView
 import discord
 import json
 import aiohttp
 import random
 import asyncio
 from discord.ext import commands
+
+class SayFlags(commands.FlagConverter):
+    """`e.say`'s Flags."""
+
+    message: str = commands.flag(aliases=["m"], default="https://discord.gg/DsARcGwwdM")
+    anonymous: bool = commands.flag(aliases=["a"], default=False)
+    uwu: bool = commands.flag(default=False)
+    user: discord.Member = commands.flag(aliases=["u"], default=None)
+
+class PollView(discord.ui.View):
+    """`e.poll`'s View."""
+
+    def __init__(self, ctx: commands.Context, options: list, counts: list, timeout: float):
+        super().__init__(timeout=timeout)
+        self.ctx = ctx
+        self.counts = counts
+        for option in options:
+            if option == options[0]:
+                self.add_item(PollOption1(option, f"0\n{self.counts[0]}"))
+            elif option == options[1]:
+                self.add_item(PollOption2(option, f"1\n{self.counts[1]}"))
+            else:
+                try:
+                    if option == options[2]:
+                        self.add_item(PollOption3(option, f"2\n{self.counts[2]}"))
+                except:
+                    break
+                else:
+                    try:
+                        if option == options[3]:
+                            self.add_item(PollOption4(option, f"3\n{self.counts[3]}"))
+                    except:
+                        break
+                    else:
+                        try:
+                            if option == options[4]:
+                                self.add_item(PollOption5(option, f"4\n{self.counts[4]}"))
+                        except:
+                            break
+                        else:
+                            break
+    
+    async def on_timeout(self):
+        for child in self.children:
+            child.disabled = True
+    
+    async def process_inputs(self, button: discord.ui.Button, interaction: discord.Interaction, count: str):
+        if interaction.user.id == self.ctx.author.id:
+            await interaction.response.send_message("The Poll author can't vote on their own Poll.", ephemeral=True)
+        else:
+            countx = count.splitlines()
+            self.counts[countx[0]] = countx[1] + 1
+
+            thing = 0
+            for count in self.counts:
+                thing += count
+            
+            operation = round((self.counts[countx[0]] * 100) / thing, 1)
+            if str(operation).endswith(".0"):
+                operation = round(operation)
+
+            e = interaction.message.embeds[0]
+            e.set_field_at(countx[0] + 1, value=f"{self.counts[countx[0]]} | {operation}%")
+            await interaction.response.edit_message(embed=e)
+            await interaction.response.send_message(f"Vote registered for {button.label}.", ephemeral=True)
+
+class PollOption1(discord.ui.Button):
+    """`e.poll`'s 1st Button."""
+
+    view: PollView
+
+    def __init__(self, option: str, count: str):
+        super().__init__(style=discord.ButtonStyle.blurple, label=option, row=0)
+        self.count = count
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction, self.count)
+
+class PollOption2(discord.ui.Button):
+    """`e.poll`'s 2nd Button."""
+
+    view: PollView
+
+    def __init__(self, option: str, count: str):
+        super().__init__(style=discord.ButtonStyle.blurple, label=option, row=0)
+        self.count = count
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction, self.count)
+
+class PollOption3(discord.ui.Button):
+    """`e.poll`'s 3rd Button."""
+
+    view: PollView
+
+    def __init__(self, option: str, count: str):
+        super().__init__(style=discord.ButtonStyle.blurple, label=option, row=0)
+        self.count = count
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction, self.count)
+
+class PollOption4(discord.ui.Button):
+    """`e.poll`'s 4th Button."""
+
+    view: PollView
+
+    def __init__(self, option: str, count: str):
+        super().__init__(style=discord.ButtonStyle.blurple, label=option, row=0)
+        self.count = count
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction, self.count)
+
+class PollOption5(discord.ui.Button):
+    """`e.poll`'s 5th Button."""
+
+    view: PollView
+
+    def __init__(self, option: str, count: str):
+        super().__init__(style=discord.ButtonStyle.blurple, label=option, row=0)
+        self.count = count
+    
+    async def callback(self, interaction: discord.Interaction):
+        await self.view.process_inputs(self, interaction, self.count)
 
 class HackView(discord.ui.View):
     """`e.hack`'s View."""
@@ -29,8 +155,8 @@ class HackView(discord.ui.View):
 
             await webhook.delete()
 
-            for button in self.children:
-                button.disabled = True
+            for child in self.children:
+                child.disabled = True
     
     @discord.ui.button(label="Hack YouTube", style=discord.ButtonStyle.red, row=0)
     async def hyoutube(self, button: discord.ui.Button, interaction: discord.Interaction):
@@ -47,8 +173,8 @@ class HackView(discord.ui.View):
 
             await webhook.delete()
 
-            for button in self.children:
-                button.disabled = True
+            for child in self.children:
+                child.disabled = True
     
     @discord.ui.button(label="Hack Twitter", style=discord.ButtonStyle.green, row=0)
     async def htwitter(self, button: discord.ui.Button, interaction: discord.Interaction):
@@ -65,14 +191,8 @@ class HackView(discord.ui.View):
 
             await webhook.delete()
 
-            for button in self.children:
-                button.disabled = True
-
-class SayFlags(commands.FlagConverter):
-    message: str = commands.flag(aliases=["m"], default="https://discord.gg/DsARcGwwdM")
-    anonymous: bool = commands.flag(aliases=["a"], default=False)
-    uwu: bool = commands.flag(default=False)
-    user: discord.Member = commands.flag(aliases=["u"], default=None)
+            for child in self.children:
+                child.disabled = True
 
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
@@ -99,6 +219,9 @@ class Fun(commands.Cog):
         uwu = uwu.replace("th", "d")
         uwu = uwu.replace("ove", "uv")
         return f"{uwu}, uwu *rawr* XD!"
+    
+    def loading(self, sentence):
+        return f"<a:aLoading:833070225334206504> **{sentence}**"
 
     @commands.command(name="say")
     async def say(self, ctx: commands.Context, flags: SayFlags):
@@ -143,7 +266,7 @@ class Fun(commands.Cog):
                 catpic = cat[0]["url"]
         
         e = discord.Embed(title="Random Cat (from TheCatAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheCatAPI [here](https://thecatapi.com)!")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_image(url=catpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
@@ -160,7 +283,7 @@ class Fun(commands.Cog):
                 dogpic = dog[0]["url"]
         
         e = discord.Embed(title="Random Dog (from TheDogAPI by Aden)", color=int(self.embed["color"], 16), description="Check out TheDogAPI [here](https://thedogapi.com)!")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_image(url=dogpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
@@ -177,7 +300,7 @@ class Fun(commands.Cog):
                 foxpic = fox["image"]
         
         e = discord.Embed(title="Random Fox (from Random Fox by xinitrc)", color=int(self.embed["color"], 16), description="Check out Random Fox [here](https://randomfox.ca)!")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_image(url=foxpic)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
@@ -191,7 +314,7 @@ class Fun(commands.Cog):
         hugline = halfpoint.replace("member", member.mention)
         
         e = discord.Embed(title="Hug", color=int(self.embed["color"], 16), description=f"{hugline}")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         if message is not None:
             e.add_field(name=f"{ctx.author.name} included a message! They said...", value=f"{message}", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
@@ -207,7 +330,7 @@ class Fun(commands.Cog):
         killline = halfpoint.replace("member", member.mention)
         
         e = discord.Embed(title="Murder", color=int(self.embed["color"], 16), description=f"{killline}")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
     
@@ -245,7 +368,7 @@ class Fun(commands.Cog):
                 gayline = makeline("over100")
             
             e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
-            e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+            e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
             e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
             await ctx.message.reply(embed=e)
         else:
@@ -271,7 +394,7 @@ class Fun(commands.Cog):
                     gayline = makeline("over100")
             
                 e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
-                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
                 e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.message.reply(embed=e)
             else:
@@ -296,7 +419,7 @@ class Fun(commands.Cog):
                     gayline = makeline("over100")
             
                 e = discord.Embed(title="Gay Percentage", color=int(self.embed["color"], 16), description=f"{gayline}")
-                e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+                e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
                 e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
                 await ctx.message.reply(embed=e)
     
@@ -308,17 +431,44 @@ class Fun(commands.Cog):
         ballline = self.balllines[str(balllineint)]
 
         e = discord.Embed(title="Magic 8 Ball", color=int(self.embed["color"], 16))
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.add_field(name="Your Question", value=f"{question}", inline=False)
         e.add_field(name="The 8 Ball's Answer", value=f"{ballline}", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
     
     @commands.command(name="poll")
-    async def poll(self, ctx: commands.Context):
-        """Soon..."""
+    async def poll(self, ctx: commands.Context, timeout: int=None):
+        """Create a Poll."""
 
-        await ctx.message.reply("**Soon...**")
+        initialise = await ctx.message.reply("What do you want the Poll's name to be?\n(You have 30 seconds.)")
+
+        def check1(m):
+            return m.author.id == ctx.author.id
+        
+        def check2(m):
+            return m.author.id == ctx.author.id and len(m.split(" & ")) <= 5
+
+        waitfor1 = await self.bot.wait_for("message", check=check1, timeout=30.0)
+        await waitfor1.reply("What do you want your Poll's options to be?\nSplit them with space-ampersand-space (` & `). DON'T OMIT THE SPACES.\nMax options: 5.\nExample: `Very Sus & amog-uwu-s & Sussy Baka Amogus Impostor`\n(You have 2 minutes.)")
+        waitfor2 = await self.bot.wait_for("message", check=check2, timeout=120.0)
+        await waitfor2.reply()
+        
+        options = waitfor2.content.split(" & ")
+        
+        e = discord.Embed(title=f"Poll: {waitfor1.content}", color=int(self.embed["color"], 16), description=f"**Created by {ctx.author.mention}.**\nThink and give your answer.")
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
+
+        counts = []
+        for option in options:
+            e.add_field(name=option, value="0 | 0%", inline=False)
+            counts.append(0)
+
+        e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
+        await ctx.send(embed=e, view=PollView(ctx, options, counts, float(timeout)))
+        await initialise.delete()
+        await waitfor1.delete()
+        await waitfor2.delete()
     
     @commands.command(name="skittles", aliases=["skittleinfo", "skittlesinfo", "skittle"])
     async def skittles(self, ctx: commands.Context):
@@ -330,7 +480,7 @@ class Fun(commands.Cog):
         skittle = self.skittles[str(skittleint)]
         
         e = discord.Embed(title="Information about {} Skittle".format(skittle["color"]), color=int(self.embed["color"], 16))
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_thumbnail(url=skittle["thumbnail"])
         e.add_field(name="Color", value=skittle["color"], inline=False)
         e.add_field(name="Flavor", value=skittle["flavor"], inline=False)
@@ -354,7 +504,7 @@ class Fun(commands.Cog):
         await hacking.edit(content="<:Yes:833293078197829642> **Logins deciphered. Select what to hack below.**")
         
         e = discord.Embed(title=f"Hack {user.name}", color=int(self.embed["color"], 16), description=f"**Hacking {user.name} ready.**")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await hacking.reply(embed=e, view=HackView(ctx.author, user))
             

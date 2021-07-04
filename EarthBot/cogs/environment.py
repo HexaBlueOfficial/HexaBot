@@ -54,7 +54,7 @@ class Environment(commands.Cog):
         """This command gets updated everytime a new Fundraiser starts in the EarthNetwork server."""
 
         e = discord.Embed(title="How to donate to WWF", color=int(self.embed["color"], 16), description="**How to donate to WWF:**\n\n**Step 1:** Go to https://worldwildlife.org (WWF's official website).\n**Step 2:** Hover over the big, red, \"DONATE\" button.\n**Step 3:** Select \"Make a One-time Donation\" from the dropdown.\n**Step 4:** Select what you prefer and enter your info.\n**Step 5:** Press \"Submit\".\n\nCongratulations: you helped our Planet!")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Environment"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e)
 

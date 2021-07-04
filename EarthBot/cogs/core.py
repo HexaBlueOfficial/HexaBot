@@ -10,7 +10,7 @@ class InfoView(discord.ui.View):
 
     def __init__(self):
         super().__init__(timeout=None)
-        super().add_item(discord.ui.Button(style=discord.ButtonStyle.link, label="Support", url="https://discord.gg/DsARcGwwdM", row=0))
+        self.add_item(discord.ui.Button(style=discord.ButtonStyle.link, label="Support", url="https://discord.gg/DsARcGwwdM", row=0))
 
     @discord.ui.button(label="Invite", style=discord.ButtonStyle.grey, row=0)
     async def invite(self, button: discord.ui.Button, interaction: discord.Interaction):
@@ -65,10 +65,10 @@ class Core(commands.Cog):
         luckyint = random.randint(1, 20)
 
         e = discord.Embed(title="About Earth", color=int(self.embed["color"], 16), description="**Earth** is a private bot for the server **Planet Earth**. It has a few fun commands to keep you entertained while it also does more serious stuff.")
-        e.set_author(name=self.embed["authorname"], icon_url=self.embed["icon"])
+        e.set_author(name="{}".format(self.embed["authorname"] + "Core"), icon_url=self.embed["icon"])
         e.set_thumbnail(url="https://this.is-for.me/i/gxe1.png")
         e.add_field(name="Developers", value="<@450678229192278036>: All commands and their Slash equivalents.\n<@598325949808771083>: `e.help`.\nOther: `e.jishaku` (External Extension).", inline=False)
-        e.add_field(name="Versions", value=f"Python Earth: v1.4.2\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
+        e.add_field(name="Versions", value=f"Python Earth: v1.4.3\nPython: v{platform.python_version()}\ndiscord.py: v{discord.__version__}", inline=False)
         e.add_field(name="Credits", value="**Hosting:** [Library of Code](https://loc.sh/discord)\n**Inspiration for `e.kill`, `e.hack`, `e.gaypercent` and `e.8ball`:** [Dank Memer](https://dankmemer.lol) bot.\n**Inspiration for `e.uwu`:** [Reddit UwUtranslator bot](https://reddit.com/u/uwutranslator)\n**Cats:** [TheCatAPI](https://thecatapi.com)\n**Dogs:** [TheDogAPI](https://thedogapi.com)\n**Foxes:** [Random Fox](https://randomfox.ca)", inline=False)
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
         await ctx.message.reply(embed=e, view=InfoView())
