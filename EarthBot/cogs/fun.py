@@ -70,7 +70,6 @@ class PollView(discord.ui.View):
             e = interaction.message.embeds[0]
             e.set_field_at(countx[0] + 1, value=f"{self.counts[countx[0]]} | {operation}%")
             await interaction.response.edit_message(embed=e)
-            await interaction.response.send_message(f"Vote registered for {button.label}.", ephemeral=True)
 
 class PollOption1(discord.ui.Button):
     """`e.poll`'s 1st Button."""
