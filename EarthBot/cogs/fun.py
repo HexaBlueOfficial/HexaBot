@@ -134,7 +134,7 @@ class PollOption5(discord.ui.Button):
 class HackView(discord.ui.View):
     """`e.hack`'s View."""
 
-    def __init__(self, hacker: discord.User, hacked: discord.User):
+    def __init__(self, message: discord.Message, hacker: discord.User, hacked: discord.User):
         super().__init__()
         self.hacker = hacker
         self.hacked = hacked
@@ -144,8 +144,6 @@ class HackView(discord.ui.View):
         if interaction.user.id == self.hacker.id:
             e = interaction.message.embeds[0].description = "**DISCORD HACKED!**"
             await interaction.response.edit_message(embed=e)
-
-            await interaction.response.send_message(f"Discord hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
             avatar = self.hacked.avatar.read()
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
@@ -157,14 +155,13 @@ class HackView(discord.ui.View):
 
             for child in self.children:
                 child.disabled = True
+            await self.message.edit(view=self)
     
     @discord.ui.button(label="Hack YouTube", style=discord.ButtonStyle.red, row=0)
     async def hyoutube(self, button: discord.ui.Button, interaction: discord.Interaction):
         if interaction.user.id == self.hacker.id:
             e = interaction.message.embeds[0].description = "**YOUTUBE HACKED!**"
             await interaction.response.edit_message(embed=e)
-
-            await interaction.response.send_message(f"YouTube hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
             avatar = self.hacked.avatar.read()
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
@@ -175,14 +172,13 @@ class HackView(discord.ui.View):
 
             for child in self.children:
                 child.disabled = True
+            await self.message.edit(view=self)
     
     @discord.ui.button(label="Hack Twitter", style=discord.ButtonStyle.green, row=0)
     async def htwitter(self, button: discord.ui.Button, interaction: discord.Interaction):
         if interaction.user.id == self.hacker.id:
             e = interaction.message.embeds[0].description = "**TWITTER HACKED!**"
             await interaction.response.edit_message(embed=e)
-
-            await interaction.response.send_message(f"Twitter hacked successfully.\n(response to \"{button.label}\" Button click)", ephemeral=True)
 
             avatar = self.hacked.avatar.read()
             webhook = await interaction.channel.create_webhook(name=self.hacked.name, avatar=avatar, reason="Hack command.")
@@ -193,6 +189,7 @@ class HackView(discord.ui.View):
 
             for child in self.children:
                 child.disabled = True
+            await self.message.edit(view=self)
 
 class Fun(commands.Cog):
     """The cog for Earth's fun commands."""
@@ -516,7 +513,8 @@ class Fun(commands.Cog):
         e = discord.Embed(title=f"Hack {user.name}", color=int(self.embed["color"], 16), description=f"**Hacking {user.name} ready.**")
         e.set_author(name="{}".format(self.embed["authorname"] + "Fun"), icon_url=self.embed["icon"])
         e.set_footer(text=self.embed["footer"], icon_url=self.embed["icon"])
-        await hacking.reply(embed=e, view=HackView(ctx.author, user))
+        hack = await hacking.reply(embed=e)
+        await hack.edit(view=HackView(hack, ctx.author, user))
             
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
