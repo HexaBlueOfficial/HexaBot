@@ -17,7 +17,7 @@ class RolesView(discord.ui.View):
                 await interaction.user.remove_roles(role, reason="Roles command.")
             else:
                 await interaction.user.add_roles(role, reason="Roles command.")
-        await interaction.response.send_message("Actions performed successfully.")
+        await interaction.response.send_message("Actions performed successfully.", ephemeral=True)
 
 class RolesSelect(discord.ui.Select):
     """`e.roles`'s Select."""
