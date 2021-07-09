@@ -7,7 +7,7 @@ class RolesView(discord.ui.View):
     """`e.roles`'s View."""
 
     def __init__(self):
-        super().__init__()
+        super().__init__(timeout=None)
         self.add_item(RolesSelect())
     
     async def process_inputs(self, select: discord.ui.Select, interaction: discord.Interaction):
@@ -15,16 +15,9 @@ class RolesView(discord.ui.View):
             role = interaction.guild.get_role(int(selected))
             if role in interaction.user.roles:
                 await interaction.user.remove_roles(role, reason="Roles command.")
-                if len(select.values) == 1:
-                    await interaction.response.send_message(f"{role.name} Role removed successfully.", ephemeral=True)
-                else:
-                    await interaction.response.send_message(f"Roles removed successfully.", ephemeral=True)
             else:
                 await interaction.user.add_roles(role, reason="Roles command.")
-                if len(select.values) == 1:
-                    await interaction.response.send_message(f"{role.name} Role added successfully.", ephemeral=True)
-                else:
-                    await interaction.response.send_message(f"Roles added successfully.", ephemeral=True)
+        await interaction.response.send_message("Actions performed successfully.")
 
 class RolesSelect(discord.ui.Select):
     """`e.roles`'s Select."""
