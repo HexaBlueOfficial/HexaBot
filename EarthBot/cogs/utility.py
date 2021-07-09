@@ -39,7 +39,7 @@ class RolesSelect(discord.ui.Select):
             discord.SelectOption(label="Global Warming News", value="833421078239510528", description="Ping Role for news about Global Warming."),
             discord.SelectOption(label="Endangered Species News", value="833421049587564655", description="Ping Role for news about Endangered Species."),
             discord.SelectOption(label="Evil Companies News", value="833420855282237453", description="Ping Role for news about Evil Companies."),
-            discord.SelectOption(label="Server Updates", value="833420855282237453", description="Ping Role for news about this Server's Updates."),
+            discord.SelectOption(label="Server Updates", value="833420801759379476", description="Ping Role for news about this Server's Updates."),
             discord.SelectOption(label="Earth Bot Updates", value="833420690018271323", description="Ping Role for news about Earth bot's Updates.")
         ])
     
