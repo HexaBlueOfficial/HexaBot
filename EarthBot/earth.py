@@ -34,4 +34,4 @@ for extension in extensions:
 
 with open("./token.json") as tokenfile:
     token = json.load(tokenfile)
-bot.run(token["token"])
+bot.run(token["earth"])

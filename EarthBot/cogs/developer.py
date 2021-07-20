@@ -18,7 +18,7 @@ class Developer(commands.Cog):
             self.embed = json.load(embeds)
         with open("./token.json") as tokenfile:
             tokendict = json.load(tokenfile)
-        self.token = tokendict["token"]
+        self.token = tokendict["earth"]
     
     def loading(self, sentence):
         return f"<a:aLoading:833070225334206504> **{sentence}**"
