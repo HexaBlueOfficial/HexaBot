@@ -14,7 +14,7 @@ class Core(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.presence.start()
-        with open("./HexaBot/HexaBotBot/misc/assets/embed.json") as embedfile:
+        with open("./HexaBot/HexaBot/misc/assets/embed.json") as embedfile:
             self.embed = json.load(embedfile)
     
     @tasks.loop(seconds=400.0)
