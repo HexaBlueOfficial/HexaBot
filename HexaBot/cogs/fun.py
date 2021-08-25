@@ -23,8 +23,6 @@ class Fun(commands.Cog):
             self.hugg = json.load(hugfile)
         with open("./HexaBot/HexaBot/misc/lines/kill.json") as killfile:
             self.killl = json.load(killfile)
-        with open("./HexaBot/HexaBot/misc/lines/supermarket.json") as marketfile:
-            self.supermarkett = json.load(marketfile)
     
     def uwufy(self, sentence: str):
         uwu = sentence.lower()
