@@ -28,11 +28,11 @@ class Utility(commands.Cog):
     
     @commands.command(name="ping", aliases=["latency", "lat"])
     async def dpyping(self, ctx: commands.Context):
-        """Gets BuildABot's Ping Latency."""
+        """Gets HexaBot's Ping Latency."""
 
         await self.ping(ctx)
     
-    @cog_ext.cog_slash(name="ping", description="Gets BuildABot's Ping Latency.")
+    @cog_ext.cog_slash(name="ping", description="Gets HexaBot's Ping Latency.")
     async def slashping(self, ctx: interactions.SlashContext):
         await self.ping(ctx)
     
@@ -50,11 +50,11 @@ class Utility(commands.Cog):
     
     @commands.command(name="uptime")
     async def dpyuptime(self, ctx: commands.Context):
-        """Shows BuildABot's Uptime."""
+        """Shows HexaBot's Uptime."""
 
         await self.uptime(ctx)
     
-    @cog_ext.cog_slash(name="uptime", description="Shows BuildABot's Uptime.")
+    @cog_ext.cog_slash(name="uptime", description="Shows HexaBot's Uptime.")
     async def slashuptime(self, ctx: interactions.SlashContext):
         await self.uptime(ctx)
     
