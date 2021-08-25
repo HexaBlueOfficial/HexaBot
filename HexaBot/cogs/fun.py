@@ -539,7 +539,7 @@ class Fun(commands.Cog):
             await waitfor.edit_origin(embed=e)
             await webhook.delete()
     
-    @commands.context(name="hack")
+    @commands.command(name="hack")
     async def dpyhack(self, ctx: commands.Context, user: discord.Member):
         """Hack a Member (100% real)!"""
 
