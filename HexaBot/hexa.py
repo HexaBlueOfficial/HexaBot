@@ -34,7 +34,7 @@ async def on_slash_command_error(ctx: typing.Union[interactions.SlashContext, in
     e.set_footer(text=embed["footer"], icon_url=embed["icon"])
     await ctx.send(embed=e)
 
-extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.utility"]
+extensions = ["cogs.core", "cogs.fun", "cogs.help", "cogs.utility", "jishaku"]
 for extension in extensions:
     bot.load_extension(extension)
 
